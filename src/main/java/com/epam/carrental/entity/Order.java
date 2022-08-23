@@ -1,4 +1,4 @@
-package com.epam.carrental;
+package com.epam.carrental.entity;
 
 public class Order {
     Person person;

@@ -13,5 +13,11 @@
 
   <h1>Rent car in one minute</h1>
   <a href="auth">${auth}</a>
+
+  <%@ taglib prefix="c" uri="/" %>
+  <c:if test="${sessionScope.userRole == 'admin'}">
+    <a href="...">settings</a>
+  </c:if>
+
   </body>
 </html>
