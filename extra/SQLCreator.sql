@@ -13,11 +13,12 @@ create table cars
 (
     id            int unsigned auto_increment
         primary key,
-    brand_id      int unsigned not null,
-    info          varchar(200) null,
-    blocked       tinyint(1)   not null,
-    price         float        not null,
-    quality_class int          not null,
+    name          varchar(100)         not null,
+    description   varchar(200)         null,
+    blocked       tinyint(1) default 0 not null,
+    price         float                not null,
+    quality_class int                  not null,
+    brand_id      int unsigned         not null,
     constraint cars_id_uindex
         unique (id),
     constraint brand_id_fk
