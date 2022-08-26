@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,14 +6,34 @@
 </head>
 <body>
 <h1>Administration</h1>
-<a href="?page=cars">Cars</a>
-<a href="?page=users">Users</a>
-<a href="?page=managers">Managers</a>
+<jsp:include page="admin-menu.jsp"/>
 <h2>Cars</h2>
 <form action="" method="get">
     <input type="hidden" name="page" value="cars">
     <input type="hidden" name="action" value="add">
     <button type="submit">Add</button>
 </form>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Brand</th>
+        <th>Description</th>
+        <th>Blocked</th>
+        <th>Price</th>
+        <th>Quality</th>
+    </tr>
+    <c:forEach items="${cars}" var="car">
+        <tr>
+            <td>${car.getName()}</td>
+            <td>${car.getBrand().getName()}</td>
+            <td>${car.getDescription()}</td>
+            <td>${car.isBlocked()}</td>
+            <td>${car.getPrice()}</td>
+            <td>${car.getQuality().getName()}</td>
+        </tr>
+    </c:forEach>
+</table>
+
 </body>
 </html>

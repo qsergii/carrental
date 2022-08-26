@@ -1,20 +1,31 @@
 package com.epam.carrental.entity;
 
+import java.util.List;
+
 public class Car {
     int id;
     String name;
     String description;
+    boolean blocked;
     float price;
-    Brand brand;
+    CarBrand brand;
     CarQuality quality;
 
-    public Car(int id, String name, String description, float price, Brand brand, CarQuality quality) {
+    public Car(
+            int id,
+            String name,
+            String description,
+            boolean blocked,
+            float price,
+            CarQuality quality,
+            CarBrand brand) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.blocked = blocked;
         this.price = price;
-        this.brand = brand;
         this.quality = quality;
+        this.brand = brand;
     }
 
     public int getId() {
@@ -41,11 +52,11 @@ public class Car {
         this.price = price;
     }
 
-    public Brand getBrand() {
+    public CarBrand getBrand() {
         return brand;
     }
 
-    public void setBrand(Brand brand) {
+    public void setBrand(CarBrand brand) {
         this.brand = brand;
     }
 
@@ -63,5 +74,13 @@ public class Car {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 }

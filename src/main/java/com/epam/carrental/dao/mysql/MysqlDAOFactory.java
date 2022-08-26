@@ -1,10 +1,7 @@
 package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.AppSettings;
-import com.epam.carrental.dao.CarDao;
-import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.dao.OrderDao;
-import com.epam.carrental.dao.UserDao;
+import com.epam.carrental.dao.*;
 import com.epam.carrental.entity.Car;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
@@ -15,6 +12,7 @@ public class MysqlDAOFactory extends DAOFactory {
     private UserDao userDao;
     private OrderDao orderDao;
     private CarDao carDao;
+    private CarBrandDao carBrandDao;
 
     @Override
     public synchronized UserDao getUserDAO() {
@@ -25,7 +23,7 @@ public class MysqlDAOFactory extends DAOFactory {
     }
 
     @Override
-    public OrderDao getOrderDAO() {
+    public synchronized OrderDao getOrderDAO() {
         if(orderDao == null){
             orderDao = new MysqlOrderDAO();
         }
@@ -33,10 +31,18 @@ public class MysqlDAOFactory extends DAOFactory {
     }
 
     @Override
-    public CarDao getCarDAO() {
+    public synchronized CarDao getCarDAO() {
         if(carDao == null){
             carDao = new MysqlCarDAO();
         }
         return carDao;
+    }
+
+    @Override
+    public synchronized CarBrandDao getCarBrandDAO() {
+        if(carBrandDao == null){
+            carBrandDao = new MysqlCarBrandDAO();
+        }
+        return carBrandDao;
     }
 }
