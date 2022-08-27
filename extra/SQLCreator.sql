@@ -1,4 +1,4 @@
-create table cars_brands
+create table brands
 (
     id   int unsigned auto_increment
         primary key,
@@ -75,5 +75,4 @@ create table invoices
 
 create index users_persons_id_fk
     on users (person_id);
-
 

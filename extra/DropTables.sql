@@ -7,3 +7,4 @@ drop table cars;
 drop table brands;
 
 drop table users;
+
