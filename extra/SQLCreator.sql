@@ -22,7 +22,7 @@ create table cars
     constraint cars_id_uindex
         unique (id),
     constraint brand_id_fk
-        foreign key (brand_id) references cars_brands (id)
+        foreign key (brand_id) references brands (id)
 );
 
 create table users

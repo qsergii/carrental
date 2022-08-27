@@ -1,16 +1,16 @@
 package com.epam.carrental.dao.mysql;
 
-import com.epam.carrental.dao.CarBrandDao;
+import com.epam.carrental.dao.BrandDao;
 import com.epam.carrental.dao.Database;
-import com.epam.carrental.entity.CarBrand;
+import com.epam.carrental.entity.Brand;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MysqlCarBrandDAO extends CarBrandDao {
+public class MysqlBrandDAO extends BrandDao {
     @Override
-    public void create(CarBrand carBrand) {
+    public void create(Brand carBrand) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -41,38 +41,31 @@ public class MysqlCarBrandDAO extends CarBrandDao {
     }
 
     @Override
-    public List<CarBrand> getAll() {
+    public List<Brand> getAll() {
         Connection connection = null;
+        Statement statement = null;
+
+        List<Brand> list = new ArrayList<>();
         try {
             connection = Database.dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        Statement statement = null;
-        try {
             statement = connection.createStatement();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        List<CarBrand> carsBrands = new ArrayList<>();
-        try {
             if (statement.execute(MysqlConstants.GET_ALL_CAR_BRAND)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    carsBrands.add(new CarBrand(
+                    list.add(new Brand(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     ));
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        return carsBrands;
+        return list;
     }
 
     @Override
-    public CarBrand getById(int id) {
+    public Brand getById(int id) {
         try{
         Connection connection = Database.dataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_CAR_BRAND_BY_ID);
@@ -80,7 +73,7 @@ public class MysqlCarBrandDAO extends CarBrandDao {
         if(preparedStatement.execute()){
             ResultSet resultSet = preparedStatement.getResultSet();
             if(resultSet.next()){
-                return new CarBrand(
+                return new Brand(
                         resultSet.getInt("id"),
                         resultSet.getString("name")
                 );
@@ -89,5 +82,21 @@ public class MysqlCarBrandDAO extends CarBrandDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean delete(Brand carBrand) {
+        try {
+            Connection connection = Database.dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.DELETE_CAR_BRAND_BY_ID);
+            preparedStatement.setInt(1, carBrand.getId());
+            if(preparedStatement.execute()){
+                return true;
+            }
+            return false;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }

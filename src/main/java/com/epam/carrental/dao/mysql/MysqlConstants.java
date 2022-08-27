@@ -4,9 +4,11 @@ public abstract class MysqlConstants {
     private MysqlConstants(){}
 
     /* CARS BRANDS */
-    public static final String GET_ALL_CAR_BRAND = "SELECT * FROM cars_brands ORDER BY name";
-    public static final String GET_CAR_BRAND_BY_ID = "SELECT * FROM cars_brands WHERE id=?";
-    public static final String ADD_CAR_BRAND = "INSERT INTO cars_brands (name) VALUES (?)";
+    public static final String GET_ALL_CAR_BRAND = "SELECT * FROM brands ORDER BY name";
+    public static final String GET_CAR_BRAND_BY_ID = "SELECT * FROM brands WHERE id=?";
+    public static final String ADD_CAR_BRAND = "INSERT INTO brands (name) VALUES (?)";
+
+    public static final String DELETE_CAR_BRAND_BY_ID = "DELETE FROM brands WHERE id=?";
 
     /* CARS */
 

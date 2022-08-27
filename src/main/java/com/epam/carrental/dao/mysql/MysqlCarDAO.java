@@ -1,15 +1,11 @@
 package com.epam.carrental.dao.mysql;
 
-import com.epam.carrental.AppSettings;
 import com.epam.carrental.dao.CarDao;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.CarBrand;
 import com.epam.carrental.entity.CarQuality;
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +56,7 @@ public class MysqlCarDAO extends CarDao {
                             resultSet.getBoolean("blocked"),
                             resultSet.getFloat("price"),
                             new CarQuality(resultSet.getInt("quality_class")),
-                            DAOFactory.getInstance().getCarBrandDAO().getById(resultSet.getInt("brand_id"))
+                            DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id"))
                     ));
                 }
             }

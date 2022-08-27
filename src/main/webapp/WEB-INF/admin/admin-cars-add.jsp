@@ -12,12 +12,15 @@
     <label for="name">Name:</label><input id="name" name="name"/><br/>
     <label for="carBrand">Model:</label>
     <select id="carBrand" name="carBrand">
-        <c:forEach items="${carsBrands}" var="carsBrand">
-            <option value="${carsBrand.getId()}">${carsBrand.getName()}</option>
+        <c:forEach items="${carsBrands}" var="brand">
+            <option value="${brand.getId()}">
+                    ${brand.getName()}
+            </option>
         </c:forEach>
     </select><br/>
     <label for="price">Price:</label><input id="price" name="price" type="number" min="0.01" step="0.01"/><br/>
-    <label for="description">Description</label><textarea id="description" name="description" placeholder="Car suites for family trip and small bussiness"></textarea><br/>
+    <label for="description">Description</label><textarea id="description" name="description"
+                                                          placeholder="Car suites for family trip and small bussiness"></textarea><br/>
     <label for="blocked">Blocked:</label><input id="blocked" name="blocked" type="checkbox"><br/>
     <button type="submit">Add</button>
 </form>

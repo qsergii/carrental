@@ -1,23 +1,21 @@
 package com.epam.carrental.entity;
 
-import java.util.List;
-
-public class CarBrand {
+public class Brand {
     int id;
     String name;
 
-    public CarBrand() {
+    public Brand() {
     }
 
-    public CarBrand(int id) {
+    public Brand(int id) {
         this.id = id;
     }
 
-    public CarBrand(String name) {
+    public Brand(String name) {
         this.name = name;
     }
 
-    public CarBrand(int id, String name) {
+    public Brand(int id, String name) {
         this.id = id;
         this.name = name;
     }

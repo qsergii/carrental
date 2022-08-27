@@ -1,7 +1,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+    <jsp:include page="./../head.jsp"/>
     <title>Administration</title>
 </head>
 <body>
@@ -22,6 +24,7 @@
         <th>Blocked</th>
         <th>Price</th>
         <th>Quality</th>
+        <th>edit</th>
     </tr>
     <c:forEach items="${cars}" var="car">
         <tr>
@@ -31,6 +34,7 @@
             <td>${car.isBlocked()}</td>
             <td>${car.getPrice()}</td>
             <td>${car.getQuality().getName()}</td>
+            <td><a href="admin/car/${car.getId()}">edit</a></td>
         </tr>
     </c:forEach>
 </table>

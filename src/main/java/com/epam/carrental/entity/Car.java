@@ -1,14 +1,12 @@
 package com.epam.carrental.entity;
 
-import java.util.List;
-
 public class Car {
     int id;
     String name;
     String description;
     boolean blocked;
     float price;
-    CarBrand brand;
+    Brand brand;
     CarQuality quality;
 
     public Car(
@@ -18,7 +16,7 @@ public class Car {
             boolean blocked,
             float price,
             CarQuality quality,
-            CarBrand brand) {
+            Brand brand) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -52,11 +50,11 @@ public class Car {
         this.price = price;
     }
 
-    public CarBrand getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
-    public void setBrand(CarBrand brand) {
+    public void setBrand(Brand brand) {
         this.brand = brand;
     }
 

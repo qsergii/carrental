@@ -1,10 +1,8 @@
-package com.epam.carrental.controllers;
+package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.dao.Database;
-import com.epam.carrental.dao.mysql.MysqlConstants;
-import com.epam.carrental.entity.CarBrand;
 import com.epam.carrental.entity.Car;
+import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.CarQuality;
 
 import javax.servlet.ServletException;
@@ -13,16 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/admin")
-public class AdminController extends HttpServlet {
+@WebServlet("/admin/users")
+public class AdminUsersController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = Optional.ofNullable(request.getParameter("page")).orElse("");
@@ -33,14 +25,14 @@ public class AdminController extends HttpServlet {
                 switch (action) {
                     case "add":
                         try {
-                            request.setAttribute("carsBrands", DAOFactory.getInstance().getCarBrandDAO().getAll());
+                            request.setAttribute("carsBrands", DAOFactory.getInstance().getBrandDAO().getAll());
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        jspName = "WEB-INF/admin-cars-add.jsp";
+                        jspName = "WEB-INF/admin-cars-card.jsp";
                         break;
                     case "carsBrands-add":
-                        jspName = "WEB-INF/admin-cars-brands-add.jsp";
+                        jspName = "WEB-INF/card.jsp";
                         break;
                     default:
                         getCars(request, response);
@@ -57,7 +49,7 @@ public class AdminController extends HttpServlet {
                 jspName = "WEB-INF/admin-managers.jsp";
                 break;
             default:
-                jspName = "WEB-INF/admin-cars.jsp";
+                jspName = "WEB-INF/cars.jsp";
         }
         request.getRequestDispatcher(jspName).forward(request, response);
     }
@@ -71,7 +63,7 @@ public class AdminController extends HttpServlet {
         }
 
         try {
-            request.getRequestDispatcher("WEB-INF/admin-cars.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/cars.jsp").forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -81,8 +73,8 @@ public class AdminController extends HttpServlet {
 
     private void getCarsBrands(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setAttribute("carsBrands", DAOFactory.getInstance().getCarBrandDAO().getAll());
-            request.getRequestDispatcher("WEB-INF/admin-cars-brands.jsp").forward(request, response);
+            request.setAttribute("carsBrands", DAOFactory.getInstance().getBrandDAO().getAll());
+            request.getRequestDispatcher("WEB-INF/list.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,7 +111,7 @@ public class AdminController extends HttpServlet {
                 blocked,
                 price,
                 new CarQuality(),
-                new CarBrand(Integer.parseInt(carBrandId))
+                new Brand(Integer.parseInt(carBrandId))
         );
 
         try {
@@ -136,9 +128,9 @@ public class AdminController extends HttpServlet {
 
     private void postCarsBrandsAdd(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
-        CarBrand carBrand = new CarBrand(name);
+        Brand carBrand = new Brand(name);
         try {
-            DAOFactory.getInstance().getCarBrandDAO().create(carBrand);
+            DAOFactory.getInstance().getBrandDAO().create(carBrand);
             response.sendRedirect("admin?page=carsBrands");
         } catch (Exception e) {
             throw new RuntimeException(e);

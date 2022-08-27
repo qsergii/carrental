@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+    <jsp:include page="./../head.jsp"/>
     <title>Administration</title>
 </head>
 <body>

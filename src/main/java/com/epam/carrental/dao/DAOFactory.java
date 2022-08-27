@@ -1,9 +1,6 @@
 package com.epam.carrental.dao;
 
 import com.epam.carrental.AppSettings;
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-
-import javax.sql.DataSource;
 
 public abstract class DAOFactory {
 
@@ -31,6 +28,6 @@ public abstract class DAOFactory {
     public abstract UserDao getUserDAO();
     public abstract OrderDao getOrderDAO();
     public abstract CarDao getCarDAO();
-    public abstract CarBrandDao getCarBrandDAO();
+    public abstract BrandDao getBrandDAO();
 
 }
