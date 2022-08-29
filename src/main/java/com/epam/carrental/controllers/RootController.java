@@ -10,12 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 @WebServlet("/")
-public class MainController extends HttpServlet {
+public class RootController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -31,12 +30,9 @@ public class MainController extends HttpServlet {
             request.setAttribute("authNeeded", true);
         }
 
-
-
         // TODO
         ServletContext servletContext = request.getServletContext();
         servletContext = getServletContext();
-
 
         ResourceBundle bundleDefault = ResourceBundle.getBundle("resources");
         ResourceBundle bundleUa = ResourceBundle.getBundle("resources_ua", new Locale("uk", "UA"));

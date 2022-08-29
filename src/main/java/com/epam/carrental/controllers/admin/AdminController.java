@@ -4,6 +4,7 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.CarQuality;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,12 +13,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @WebServlet("/admin")
 public class AdminController extends HttpServlet {
+
+    static Logger log = Logger.getLogger(AdminController.class.getName());
+
+    static{
+        PropertyConfigurator.configure("log4j.properties");
+//        PropertyConfigurator.configure(getClass().getResource("/controlador/log4j.properties"));
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("admin/cars");
+//        response.sendRedirect("admin/cars");
+        log.info("redirect");
+        request.getRequestDispatcher("admin/cars").forward(request, response);
+
+
 //        String page = Optional.ofNullable(request.getParameter("page")).orElse("");
 //        String jspName = null;
 //        switch (page) {

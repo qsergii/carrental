@@ -2,12 +2,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <jsp:include page="./../head.jsp"/>
+    <jsp:include page="../head.jspf"/>
     <title>Administration</title>
 </head>
 <body>
 <h1>Administration</h1>
-<jsp:include page="admin-menu.jsp"/>
+<jsp:include page="admin-menu.jspf"/>
 <h2>Users</h2>
 </body>
 </html>

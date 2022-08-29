@@ -1,5 +1,5 @@
 package com.epam.carrental.entity;
 
 public class User {
-    Person person;
+    private int id;
 }
