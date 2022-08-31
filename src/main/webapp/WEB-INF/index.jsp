@@ -3,20 +3,16 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <html>
   <head>
+    <%@include file="jspf/head.jspf"%>
     <title>Car rental</title>
   </head>
   <body>
-  <label for="language">Language</label>
-
-  <select name="language" id="language">
-    <option value="EN">EN</option>
-    <option value="UA">UA</option>
-  </select>
+  <%@include file="jspf/main-menu.jspx"%>
 
   <h1>Rent car in one minute</h1>
-  <a href="auth">${auth}</a>
 
 <%--  <my:user id="123" />--%>
+
 
 <%--  <jsp:forward page="admin/cars.jsp" />--%>
 
@@ -35,4 +31,5 @@
 <%--  </c:if>--%>
 
   </body>
+  <%@include file="jspf/bottom.jspf"%>
 </html>

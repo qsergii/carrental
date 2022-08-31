@@ -17,41 +17,7 @@ import java.util.Optional;
 public class AdminUsersController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = Optional.ofNullable(request.getParameter("page")).orElse("");
-        String jspName = null;
-        switch (page) {
-            case "cars":
-                String action = Optional.ofNullable(request.getParameter("action")).orElse("");
-                switch (action) {
-                    case "add":
-                        try {
-                            request.setAttribute("carsBrands", DAOFactory.getInstance().getBrandDAO().getAll());
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                        jspName = "WEB-INF/admin-cars-card.jsp";
-                        break;
-                    case "carsBrands-add":
-                        jspName = "WEB-INF/card.jsp";
-                        break;
-                    default:
-                        getCars(request, response);
-                        return;
-                }
-                break;
-            case "carsBrands":
-                getCarsBrands(request, response);
-                return;
-            case "users":
-                jspName = "WEB-INF/admin-users.jsp";
-                break;
-            case "managers":
-                jspName = "WEB-INF/admin-managers.jsp";
-                break;
-            default:
-                jspName = "WEB-INF/cars.jsp";
-        }
-        request.getRequestDispatcher(jspName).forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/admin/users.jsp").forward(request, response);
     }
 
     private void getCars(HttpServletRequest request, HttpServletResponse response) {

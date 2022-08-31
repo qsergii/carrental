@@ -1,7 +1,12 @@
+drop table IF EXISTS invoices;
+drop table IF EXISTS orders;
+drop table IF EXISTS cars;
+drop table IF EXISTS brands;
+drop table IF EXISTS users;
+
 create table brands
 (
-    id   int unsigned auto_increment
-        primary key,
+    id   int auto_increment primary key,
     name varchar(100) not null,
     constraint cars_brands_id_uindex
         unique (id),
@@ -11,14 +16,13 @@ create table brands
 
 create table cars
 (
-    id            int unsigned auto_increment
-        primary key,
+    id            int auto_increment primary key,
     name          varchar(100)         not null,
     description   varchar(200)         null,
     blocked       tinyint(1) default 0 not null,
     price         float                not null,
     quality_class int                  not null,
-    brand_id      int unsigned         not null,
+    brand_id      int                  not null,
     constraint cars_id_uindex
         unique (id),
     constraint brand_id_fk
@@ -27,12 +31,11 @@ create table cars
 
 create table users
 (
-    id        int unsigned not null
-        primary key,
-    login     varchar(50)  not null,
-    person_id int unsigned not null,
-    role      int          not null,
-    blocked   tinyint(1)   not null,
+    id       int         not null primary key auto_increment,
+    login    varchar(50) not null,
+    password varchar(50) not null DEFAULT '',
+    role     int         not null DEFAULT 2,
+    blocked  tinyint(1)  not null DEFAULT 0,
     constraint id_UNIQUE
         unique (id),
     constraint login_UNIQUE
@@ -41,15 +44,14 @@ create table users
 
 create table orders
 (
-    id              int unsigned auto_increment
-        primary key,
-    user_id         int unsigned not null,
-    with_driver     tinyint(1)   null,
-    lease_term      int unsigned not null,
-    passport_number varchar(50)  not null,
-    passport_valid  date         not null,
-    car_id          int unsigned not null,
-    price           float        not null,
+    id              int auto_increment primary key,
+    user_id         int         not null,
+    with_driver     tinyint(1)  null,
+    lease_term      int         not null,
+    passport_number varchar(50) not null,
+    passport_valid  date        not null,
+    car_id          int         not null,
+    price           float       not null,
     constraint orders_id_uindex
         unique (id),
     constraint car_id_fk
@@ -60,19 +62,14 @@ create table orders
 
 create table invoices
 (
-    id       int unsigned auto_increment
-        primary key,
-    order_id int unsigned null,
-    type     int unsigned not null,
-    price    float        null,
-    payed    tinyint(1)   null,
-    date     date         not null,
+    id       int auto_increment primary key,
+    order_id int        null,
+    type     int        not null,
+    price    float      null,
+    payed    tinyint(1) null,
+    date     date       not null,
     constraint invoices_id_uindex
         unique (id),
     constraint order_id
         foreign key (order_id) references orders (id)
 );
-
-create index users_persons_id_fk
-    on users (person_id);
-

@@ -43,7 +43,7 @@ public class AdminManagersController extends HttpServlet {
                 getCarsBrands(request, response);
                 return;
             case "users":
-                jspName = "WEB-INF/admin-users.jsp";
+                jspName = "WEB-INF/users.jsp";
                 break;
             case "managers":
                 jspName = "WEB-INF/admin-managers.jsp";

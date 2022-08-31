@@ -7,10 +7,14 @@ public abstract class DAOFactory {
     private static DAOFactory instance;
     private static String daoFactoryFCN = AppSettings.PROPERTIES.getProperty("daoFactoryFCN");
 
-    public static synchronized DAOFactory getInstance() throws Exception{ // TODO Exception
+    public static synchronized DAOFactory getInstance(){
         if(instance == null){
-            Class<?> classExmp = Class.forName((DAOFactory.daoFactoryFCN));
-            instance = (DAOFactory) classExmp.getDeclaredConstructor().newInstance();
+            try {
+                Class<?> classExmp = Class.forName((DAOFactory.daoFactoryFCN));
+                instance = (DAOFactory) classExmp.getDeclaredConstructor().newInstance();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return instance;
     }

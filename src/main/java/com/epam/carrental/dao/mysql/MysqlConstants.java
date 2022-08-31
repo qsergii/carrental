@@ -14,4 +14,11 @@ public abstract class MysqlConstants {
 
     public static final String GET_ALL_CAR = "SELECT * FROM cars";
     public static final String ADD_CAR = "INSERT INTO cars (id, name, description, blocked, price, quality_class, brand_id) VALUES (default, ?, ?, ?, ?, ?, ?)";
+
+    /* USERS */
+
+    public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id=?";
+    public static final String GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login=?";
+
+    public static final String INSERT_USER = "INSERT INTO users (login, password, role, blocked) VALUES (?, ?, ?, ?)";
 }

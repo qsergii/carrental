@@ -2,12 +2,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <jsp:include page="../../head.jspf"/>
+    <%@include file="../../jspf/head.jspf"%>
     <title>Administration</title>
 </head>
 <body>
 <h1>Administration</h1>
-<jsp:include page="../admin-menu.jspf"/>
+<%@include file="../menu.jspf"%>
 <h2>Cars brands</h2>
 
 <form action="brands" method="post">

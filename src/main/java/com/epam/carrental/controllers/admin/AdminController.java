@@ -26,9 +26,9 @@ public class AdminController extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.sendRedirect("admin/cars");
+        response.sendRedirect("admin/cars");
         log.info("redirect");
-        request.getRequestDispatcher("admin/cars").forward(request, response);
+//        request.getRequestDispatcher("admin/cars").forward(request, response);
 
 
 //        String page = Optional.ofNullable(request.getParameter("page")).orElse("");
@@ -57,7 +57,7 @@ public class AdminController extends HttpServlet {
 //                getCarsBrands(request, response);
 //                return;
 //            case "users":
-//                jspName = "WEB-INF/admin/admin-users.jsp";
+//                jspName = "WEB-INF/admin/users.jsp";
 //                break;
 //            case "managers":
 //                jspName = "WEB-INF/admin/admin-managers.jsp";

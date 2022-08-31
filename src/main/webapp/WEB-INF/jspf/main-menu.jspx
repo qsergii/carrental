@@ -1,13 +1,28 @@
-<!--
-  Created by IntelliJ IDEA.
-  User: Sergey
-  Date: 31.08.2022
-  Time: 09:42
-  To change this template use File | Settings | File Templates.
--->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-<html>
-  <head><title>$Title$</title></head>
-  <body>$END$</body>
-</html>
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:my="urn:jsptagdir:/WEB-INF/tags"
+          version="2.0">
+
+    <a href="main">Main</a>
+    <c:choose>
+        <c:when test = "${requestScope.user == null}">
+            null
+        </c:when>
+        <c:when test = "${requestScope.user.role == 'ADMIN' }">
+            <a href="admin">Admin</a>
+        </c:when>
+        <c:otherwise>
+            ...
+        </c:otherwise>
+    </c:choose>
+
+    <label for="language">Language</label>
+    <select name="language" id="language">
+        <option value="EN">EN</option>
+        <option value="UA">UA</option>
+    </select>
+
+    <my:user user="${requestScope.user}"/>
+
 </jsp:root>
