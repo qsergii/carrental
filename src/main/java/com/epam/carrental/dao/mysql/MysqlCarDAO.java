@@ -12,12 +12,12 @@ import java.util.List;
 
 public class MysqlCarDAO extends CarDao {
     @Override
-    public void create(Car car) throws SQLException {
+    public void insert(Car car) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = Database.dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(MysqlConstants.ADD_CAR, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(MysqlConstants.CAR_INSERT, Statement.RETURN_GENERATED_KEYS);
 
             int paramNumber = 1;
             preparedStatement.setString(paramNumber++, car.getName());
@@ -35,9 +35,44 @@ public class MysqlCarDAO extends CarDao {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            connection.close();
+            try {
+                preparedStatement.close();
+                connection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
+    }
+
+    public boolean update(Car car) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(MysqlConstants.CAR_UPDATE);
+
+            int paramNumber = 1;
+            preparedStatement.setString(paramNumber++, car.getName());
+            preparedStatement.setString(paramNumber++, car.getDescription());
+            preparedStatement.setBoolean(paramNumber++, car.isBlocked());
+            preparedStatement.setFloat(paramNumber++, car.getPrice());
+            preparedStatement.setInt(paramNumber++, 1);
+            preparedStatement.setInt(paramNumber++, car.getBrand().getId());
+            preparedStatement.setInt(paramNumber++, car.getId());
+
+            return preparedStatement.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -49,15 +84,7 @@ public class MysqlCarDAO extends CarDao {
             if (statement.execute(MysqlConstants.GET_ALL_CAR)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(new Car(
-                            resultSet.getInt("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("description"),
-                            resultSet.getBoolean("blocked"),
-                            resultSet.getFloat("price"),
-                            new CarQuality(resultSet.getInt("quality_class")),
-                            DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id"))
-                    ));
+                    list.add(getCarByResultSet(resultSet));
                 }
             }
         } catch (Exception e) {
@@ -66,4 +93,34 @@ public class MysqlCarDAO extends CarDao {
         return list;
     }
 
+    @Override
+    public Car getById(int id) {
+        Car car = null;
+        try {
+            Connection connection = Database.dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(MysqlConstants.GET_CAR_BY_ID);
+            statement.setInt(1, id);
+            if (statement.execute()) {
+                ResultSet resultSet = statement.getResultSet();
+                if (resultSet.next()) {
+                    car = getCarByResultSet(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return car;
+    }
+
+    private Car getCarByResultSet(ResultSet resultSet) throws SQLException {
+        return new Car(
+                resultSet.getInt("id"),
+                resultSet.getString("name"),
+                resultSet.getString("description"),
+                resultSet.getBoolean("blocked"),
+                resultSet.getFloat("price"),
+                new CarQuality(resultSet.getInt("quality_class")),
+                DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id"))
+        );
+    }
 }

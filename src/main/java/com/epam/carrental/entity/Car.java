@@ -9,6 +9,9 @@ public class Car {
     Brand brand;
     CarQuality quality;
 
+    public Car() {
+    }
+
     public Car(
             int id,
             String name,

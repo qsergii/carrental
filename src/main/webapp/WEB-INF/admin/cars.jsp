@@ -12,11 +12,12 @@
 <%@ include file="menu.jspf" %>
 <h2>Cars</h2>
 
-<form action="" method="get">
-    <input type="hidden" name="page" value="cars">
-    <input type="hidden" name="action" value="add">
-    <button type="submit">Add</button>
-</form>
+<a href="cars?id=0">New</a>
+<%--<form action="" method="get">--%>
+<%--    <input type="hidden" name="page" value="cars">--%>
+<%--    <input type="hidden" name="action" value="add">--%>
+<%--    <button type="submit">Add</button>--%>
+<%--</form>--%>
 
 <table>
     <tr>
@@ -28,15 +29,15 @@
         <th>Quality</th>
         <th>edit</th>
     </tr>
-    <c:forEach items="${cars}" var="car">
+    <c:forEach items="${cars}" var="user">
         <tr>
-            <td>${car.name}</td>
-            <td>${car.getBrand().getName()}</td>
-            <td>${car.getDescription()}</td>
-            <td>${car.isBlocked()}</td>
-            <td>${car.price}</td>
-            <td>${car.getQuality().getName()}</td>
-            <td><a href="admin/car/${car.getId()}">edit</a></td>
+            <td>${user.name}</td>
+            <td>${user.getBrand().getName()}</td>
+            <td>${user.getDescription()}</td>
+            <td>${user.isBlocked()}</td>
+            <td>${user.price}</td>
+            <td>${user.getQuality().getName()}</td>
+            <td><a href="admin/car/${user.getId()}">edit</a></td>
         </tr>
     </c:forEach>
 </table>

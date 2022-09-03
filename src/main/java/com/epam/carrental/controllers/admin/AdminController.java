@@ -129,7 +129,7 @@ public class AdminController extends HttpServlet {
         );
 
         try {
-            DAOFactory.getInstance().getCarDAO().create(car);
+            DAOFactory.getInstance().getCarDAO().insert(car);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

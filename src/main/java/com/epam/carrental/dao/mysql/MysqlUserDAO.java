@@ -1,12 +1,16 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.UserDao;
+import com.epam.carrental.entity.Car;
+import com.epam.carrental.entity.CarQuality;
 import com.epam.carrental.entity.Role;
 import com.epam.carrental.entity.User;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MysqlUserDAO extends UserDao {
     public User validate(String login, String password) {
@@ -54,22 +58,6 @@ public class MysqlUserDAO extends UserDao {
         }
     }
 
-    private User getUserByResultSet(ResultSet resultSet) {
-        try {
-            int roleId = resultSet.getInt("role");
-            return new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("login"),
-                    resultSet.getString("password"),
-                    Role.getById(roleId),
-                    resultSet.getBoolean("blocked")
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     public boolean insert(User user) {
         try {
@@ -92,4 +80,72 @@ public class MysqlUserDAO extends UserDao {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public boolean update(User user) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(MysqlConstants.USER_UPDATE);
+
+            int paramNumber = 1;
+            preparedStatement.setString(paramNumber++, user.getLogin());
+            preparedStatement.setString(paramNumber++, user.getPassword());
+            preparedStatement.setInt(paramNumber++, user.getRole().getId());
+            preparedStatement.setBoolean(paramNumber++, user.isBlocked());
+            preparedStatement.setInt(paramNumber++, user.getId());
+
+            return preparedStatement.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<User> getAll() {
+
+        List<User> list = new ArrayList<>();
+
+        try {
+            Connection connection = Database.dataSource.getConnection();
+            Statement statement = connection.createStatement();
+            if (statement.execute(MysqlConstants.USERS_GET_ALL)) {
+                ResultSet resultSet = statement.getResultSet();
+                while (resultSet.next()) {
+                    list.add(getUserByResultSet(resultSet));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    /* PRIVATE */
+    private User getUserByResultSet(ResultSet resultSet) {
+        try {
+            int roleId = resultSet.getInt("role");
+            return new User(
+                    resultSet.getInt("id"),
+                    resultSet.getString("login"),
+                    resultSet.getString("password"),
+                    Role.getById(roleId),
+                    resultSet.getBoolean("blocked")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

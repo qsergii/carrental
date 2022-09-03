@@ -1,9 +1,8 @@
 package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Brand;
-import com.epam.carrental.entity.CarQuality;
+import com.epam.carrental.entity.*;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,91 +14,83 @@ import java.util.Optional;
 
 @WebServlet("/admin/users")
 public class AdminUsersController extends HttpServlet {
+    private final Logger log = Logger.getLogger(this.getClass());
+
+    /* EXTERNAL */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String paramId = request.getParameter("id");
+            if (paramId == null || paramId.isEmpty()) {
+                printUsers(request, response);
+            } else {
+                printUser(paramId, request, response);
+            }
+        } catch (Exception e) {
+            log.error("doGet: " + e.getMessage());
+            response.sendError(500);
+        }
+
         request.getRequestDispatcher("/WEB-INF/admin/users.jsp").forward(request, response);
     }
 
-    private void getCars(HttpServletRequest request, HttpServletResponse response) {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        try {
-            request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        // properties
+        int id = Integer.valueOf(Optional.ofNullable(request.getParameter("id")).orElse("-1"));
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
+        int roleId = Integer.parseInt(request.getParameter("role"));
+        Role role = Role.getById(roleId);
+        boolean blocked = Optional.ofNullable(request.getParameter("blocked")).orElse("").equals("on") ? true : false;
+
+        User user;
+        if (id == 0 ) {
+            user = new User();
+        } else {
+            user = DAOFactory.getInstance().getUserDAO().getUserById(id);
+            if(user == null){
+                response.sendError(400);
+                return;
+            }
+        }
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setRole(role);
+        user.setBlocked(blocked);
+
+        if(user.getId() == 0){
+            DAOFactory.getInstance().getUserDAO().insert(user);
+        }else{
+            DAOFactory.getInstance().getUserDAO().update(user);
         }
 
-        try {
-            request.getRequestDispatcher("WEB-INF/cars.jsp").forward(request, response);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        response.sendRedirect("users");
     }
 
-    private void getCarsBrands(HttpServletRequest request, HttpServletResponse response) {
+    /* PRIVATE */
+
+    private void printUsers(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setAttribute("carsBrands", DAOFactory.getInstance().getBrandDAO().getAll());
-            request.getRequestDispatcher("WEB-INF/list.jsp").forward(request, response);
+            request.setAttribute("users", DAOFactory.getInstance().getUserDAO().getAll());
+            request.getRequestDispatcher("/WEB-INF/admin/users.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = Optional.ofNullable(request.getParameter("page")).orElse("");
-        if (page.equals("cars")) {
-            String action = Optional.ofNullable(request.getParameter("action")).orElse("");
-            if (action.equals("add")) {
-                postCarAdd(request, response);
-            } else if (action.equals("carsBrands-add")) {
-                postCarsBrandsAdd(request, response);
-            } else {
-                response.sendRedirect("admin");
-            }
+    private void printUser(String paramId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user;
+        int id = Integer.parseInt(paramId);
+        if (id > 0) {
+            user = DAOFactory.getInstance().getUserDAO().getUserById(id);
         } else {
-            response.sendRedirect("admin");
+            user = new User();
         }
+        request.setAttribute("user", new User());
+        request.getRequestDispatcher("/WEB-INF/admin/user.jsp").forward(request, response);
+
     }
 
-    private void postCarAdd(HttpServletRequest request, HttpServletResponse response) {
-        String name = request.getParameter("name");
-        String carBrandId = request.getParameter("carBrand");
-        float price = Float.valueOf(request.getParameter("price"));
-        String description = request.getParameter("description");
-        boolean blocked = Optional.ofNullable(request.getParameter("blocked")).orElse("").equals("on") ? true : false;
-
-        Car car = new Car(
-                0,
-                name,
-                description,
-                blocked,
-                price,
-                new CarQuality(),
-                new Brand(Integer.parseInt(carBrandId))
-        );
-
-        try {
-            DAOFactory.getInstance().getCarDAO().create(car);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            response.sendRedirect("admin?page=cars");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void postCarsBrandsAdd(HttpServletRequest request, HttpServletResponse response) {
-        String name = request.getParameter("name");
-        Brand carBrand = new Brand(name);
-        try {
-            DAOFactory.getInstance().getBrandDAO().create(carBrand);
-            response.sendRedirect("admin?page=carsBrands");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
