@@ -17,18 +17,12 @@ import java.util.ResourceBundle;
 
 @WebServlet(urlPatterns = {"/", "/main"})
 public class RootController extends HttpServlet {
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(request.getServletPath().equals("/WEB-INF/builder.jsp")){
+            return; // request finished
+        }
         HttpSession session = request.getSession();
         if(session.isNew()){
             request.setAttribute("authNeeded", true);
@@ -45,6 +39,7 @@ public class RootController extends HttpServlet {
         ResourceBundle bundle = ResourceBundle.getBundle("resources");
         ResourceBundle bundleUa = ResourceBundle.getBundle("resources_ua", new Locale("uk", "UA"));
         request.setAttribute("auth", bundle.getString("auth"));
-        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll());
+        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
 }
