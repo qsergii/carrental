@@ -5,11 +5,11 @@ public abstract class MysqlConstants {
 
     /* BRANDS */
 
-    public static final String GET_ALL_CAR_BRAND = "SELECT * FROM brands ORDER BY name";
-    public static final String GET_CAR_BRAND_BY_ID = "SELECT * FROM brands WHERE id=?";
-    public static final String ADD_CAR_BRAND = "INSERT INTO brands (name) VALUES (?)";
-
-    public static final String DELETE_CAR_BRAND_BY_ID = "DELETE FROM brands WHERE id=?";
+    public static final String BRAND_GET_ALL = "SELECT * FROM brands ORDER BY name";
+    public static final String BRAND_GET_BY_ID = "SELECT * FROM brands WHERE id=?";
+    public static final String BRAND_ADD = "INSERT INTO brands (name) VALUES (?)";
+    public static final String BRAND_UPDATE = "UPDATE brands SET name=? WHERE id=?";
+    public static final String BRAND_DELETE_BY_ID = "DELETE FROM brands WHERE id=?";
 
     /* CARS */
 
@@ -25,4 +25,10 @@ public abstract class MysqlConstants {
     public static final String GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login=?";
     public static final String INSERT_USER = "INSERT INTO users (login, password, role, blocked) VALUES (?, ?, ?, ?)";
     public static final String USER_UPDATE = "UPDATE users SET login=?, password=?, role=?, blocked=? WHERE id=?";
+
+    /* ORDERS */
+
+    public static final String ORDER_INSERT = "INSERT INTO orders " +
+            "(user_id, with_driver, lease_term, passport_number, passport_valid, car_id, price) VALUES " +
+            "(?, ?, ?, ?, ?, ?, ?)";
 }

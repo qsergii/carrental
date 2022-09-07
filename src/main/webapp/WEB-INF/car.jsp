@@ -6,21 +6,28 @@
     <title>${requestScope.car.name}</title>
 </head>
 <body>
-<%--<%@include file="jspf/main-menu.jspf"%>--%>
-<h1>${requestScope.car.name}</h1>
-<form method="post">
-    <input type="hidden" name="id" value="${requestScope.car.id}">
-    <label for="name">Name:</label>
-    <input id="name" name="name" value="${requestScope.car.name}"/><br/>
-    <label for="brand">Model:</label>
-    <input id="brand" name="brand" value="${requestScope.car.brand}"><br/>
-    <label for="price">Price:</label>
-    <input id="price" name="price" type="number" min="0.01" step="0.01" value="${requestScope.car.price}"/><br/>
-    <label for="description">Description</label>
-    <textarea id="description" name="description" placeholder="Car suites for family trip and small bussiness">${requestScope.car.description}</textarea><br/>
-    <label for="blocked">Blocked:</label>
-    <input id="blocked" name="blocked" type="checkbox" value="${requestScope.car.blocked}"><br/>
-    <button type="submit">Select</button>
-</form>
+
+<%@include file="jspf/menu.jspx" %>
+
+<section>
+    <div class="container card" style="padding-top: 54px;">
+        <div class="row">
+            <div class="col"><picture><img src="assets/img/clipboard-image-1.png"></picture></div>
+            <div class="col">
+                <p class="card-header" style="font-weight: bold;color: var(--bs-indigo);font-size: 30px;">${requestScope.car.brand.name} ${requestScope.car.name} A8</p>
+                <p class="card-text">${requestScope.car.description}</p>
+                <p class="price" style="color: var(--bs-red);font-weight: bold;">$${requestScope.car.price} per 24h</p>
+                <form method="get" action="order?carid=${requestScope.car.id}">
+                    <button class="btn btn-primary border rounded d-md-flex"
+                            type="submit">Rent</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<%@include file="jspf/footer.jspf" %>
+
 </body>
 </html>

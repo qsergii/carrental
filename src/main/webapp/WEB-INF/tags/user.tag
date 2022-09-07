@@ -7,10 +7,11 @@
 
 <c:choose>
     <c:when test="${requestScope.user == null}">
-        <a href="login">Login</a>
+        <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/login">Sign In</a>
     </c:when>
     <c:otherwise>
         User: ${requestScope.user.login}
-        <a href="logout">Logout</a>
+        <label class="text-warning">${requestScope.get("user") != null ? requestScope.user.login : 'No auth'}</label>
+        <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/logout">Logout</a>
     </c:otherwise>
 </c:choose>

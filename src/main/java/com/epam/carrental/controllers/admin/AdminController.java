@@ -43,10 +43,10 @@ public class AdminController extends HttpServlet {
 //                        } catch (Exception e) {
 //                            throw new RuntimeException(e);
 //                        }
-//                        jspName = "WEB-INF/admin-cars-card.jsp";
+//                        jspName = "WEB-INF/admin-cars-brand.jsp";
 //                        break;
 //                    case "carsBrands-add":
-//                        jspName = "WEB-INF/card.jsp";
+//                        jspName = "WEB-INF/brand.jsp";
 //                        break;
 //                    default:
 //                        getCars(request, response);

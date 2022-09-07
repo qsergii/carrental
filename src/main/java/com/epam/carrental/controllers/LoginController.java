@@ -37,11 +37,11 @@ public class LoginController extends HttpServlet {
         User user = DAOFactory.getInstance().getUserDAO().validate(login, password);
         if(user == null){
             // TODO show message login/password incorrect
-            response.sendRedirect("login");
+            response.sendRedirect("login?message=Credentials incorrect");
         }else {
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getId());
-            response.sendRedirect("main");
+            response.sendRedirect("home");
         }
     }
 }

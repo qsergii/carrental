@@ -1,4 +1,7 @@
 package com.epam.carrental.dao;
 
-public class OrderDao {
+import com.epam.carrental.entity.Order;
+
+public abstract class OrderDao {
+    public abstract boolean insert(Order order);
 }

@@ -13,12 +13,10 @@ import java.util.List;
 public class MysqlCarDAO extends CarDao {
     @Override
     public void insert(Car car) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = Database.dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(MysqlConstants.CAR_INSERT, Statement.RETURN_GENERATED_KEYS);
-
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.CAR_INSERT, Statement.RETURN_GENERATED_KEYS);
+        ) {
             int paramNumber = 1;
             preparedStatement.setString(paramNumber++, car.getName());
             preparedStatement.setString(paramNumber++, car.getDescription());
@@ -34,23 +32,14 @@ public class MysqlCarDAO extends CarDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                preparedStatement.close();
-                connection.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
     }
 
     public boolean update(Car car) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = Database.dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(MysqlConstants.CAR_UPDATE);
-
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.CAR_UPDATE);
+        ) {
             int paramNumber = 1;
             preparedStatement.setString(paramNumber++, car.getName());
             preparedStatement.setString(paramNumber++, car.getDescription());
@@ -64,13 +53,6 @@ public class MysqlCarDAO extends CarDao {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                preparedStatement.close();
-                connection.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
         return false;
     }
@@ -78,9 +60,7 @@ public class MysqlCarDAO extends CarDao {
     @Override
     public List<Car> getAll() {
         List<Car> list = new ArrayList<>();
-        try {
-            Connection connection = Database.dataSource.getConnection();
-            Statement statement = connection.createStatement();
+        try (Connection connection = Database.dataSource.getConnection(); Statement statement = connection.createStatement()) {
             if (statement.execute(MysqlConstants.GET_ALL_CAR)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
@@ -96,9 +76,7 @@ public class MysqlCarDAO extends CarDao {
     @Override
     public Car getById(int id) {
         Car car = null;
-        try {
-            Connection connection = Database.dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(MysqlConstants.GET_CAR_BY_ID);
+        try (Connection connection = Database.dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(MysqlConstants.GET_CAR_BY_ID);) {
             statement.setInt(1, id);
             if (statement.execute()) {
                 ResultSet resultSet = statement.getResultSet();

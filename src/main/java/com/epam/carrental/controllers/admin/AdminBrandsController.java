@@ -2,6 +2,7 @@ package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Brand;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @WebServlet("/admin/brands")
 public class AdminBrandsController extends HttpServlet {
+    private final Logger log = Logger.getLogger(getClass());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -20,34 +22,24 @@ public class AdminBrandsController extends HttpServlet {
         if (action.equals("add")) {
             try {
                 request.setAttribute("brand", new Brand());
-                request.getRequestDispatcher("/WEB-INF/admin/brands/card.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/admin/brand.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(action.equals("edit")){
+        } else if (action.equals("edit")) {
             try {
                 int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse(""));
                 Brand brand = DAOFactory.getInstance().getBrandDAO().getById(id);
                 request.setAttribute("brand", brand);
-                request.getRequestDispatcher("/WEB-INF/admin/brands/card.jsp").forward(request, response);
-            } catch (Exception e){
+                request.getRequestDispatcher("/WEB-INF/admin/brand.jsp").forward(request, response);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(action.equals("delete")){
+        } else {
             try {
-                int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse(""));
-                DAOFactory.getInstance().getBrandDAO().delete(new Brand(id));
-                response.sendRedirect("brands");
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
+                request.setAttribute("page", "brands");
                 request.setAttribute("brands", DAOFactory.getInstance().getBrandDAO().getAll());
-                request.getRequestDispatcher("/WEB-INF/admin/brands/list.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/admin/brands.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -55,14 +47,54 @@ public class AdminBrandsController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        Brand brand = new Brand(name);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+
         try {
-            DAOFactory.getInstance().getBrandDAO().create(brand);
-            response.sendRedirect("brands");
+            handlePost(request, response);
         } catch (Exception e) {
+            log.error(e.getMessage());
             e.printStackTrace();
         }
     }
+
+    private void handlePost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Brand brand;
+
+        int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("0"));
+        if (id > 0) {
+            brand = DAOFactory.getInstance().getBrandDAO().getById(id);
+            if (brand == null) {
+                log.error("can't find brand by id " + id);
+                response.sendError(500);
+                return;
+            }
+        } else {
+            brand = new Brand();
+        }
+
+        String action = Optional.ofNullable(request.getParameter("action")).orElse("");
+        if (action.equals("delete")) {
+            deleteBrand(request, response, brand);
+            return;
+        }
+
+        String name = request.getParameter("name");
+        if (name == null || name.isEmpty()) {
+            response.sendRedirect("brand?message=name can't be empty");
+            return;
+        }
+        brand.setName(name);
+        if (brand.getId() == 0) {
+            DAOFactory.getInstance().getBrandDAO().create(brand);
+        } else {
+            DAOFactory.getInstance().getBrandDAO().update(brand);
+        }
+        response.sendRedirect("brands");
+    }
+
+    private void deleteBrand(HttpServletRequest request, HttpServletResponse response, Brand brand) throws IOException {
+        DAOFactory.getInstance().getBrandDAO().delete(brand);
+        response.sendRedirect("brands");
+    }
+
 }

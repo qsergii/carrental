@@ -2,57 +2,39 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <html>
-  <head>
-    <%@include file="jspf/head.jspf"%>
+<head>
+    <%@include file="jspf/head.jspf" %>
     <title>Car rental</title>
-  </head>
-  <body>
-  <%@include file="jspf/main-menu.jspx"%>
+</head>
+<body>
 
-  <h1>Rent car in one minute</h1>
+<%@include file="jspf/menu.jspx" %>
 
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Brand</th>
-      <th>Description</th>
-      <th>Blocked</th>
-      <th>Price</th>
-      <th>Quality</th>
-      <th>edit</th>
-    </tr>
-    <c:forEach items="${cars}" var="user">
-      <tr>
-        <td>${user.name}</td>
-        <td>${user.getBrand().getName()}</td>
-        <td>${user.getDescription()}</td>
-        <td>${user.isBlocked()}</td>
-        <td>${user.price}</td>
-        <td>${user.getQuality().getName()}</td>
-        <td><a href="car?id=${user.getId()}">Select</a></td>
-      </tr>
-    </c:forEach>
-  </table>
+<section>
+    <div class="container py-4 py-xl-5">
+        <h1>Rent car in one minute</h1>
+        <c:forEach items="${cars}" var="user">
+            <div class="border-3 mx-auto card" style="background: #fff;max-width: 700px;">
+                <div class="row" style="opacity: 1;">
+                    <div class="col">
+                        <picture><img src="assets/img/clipboard-image-1.png"></picture>
+                    </div>
+                    <div class="col">
+                        <p class="card-header">${user.getBrand().getName()} - ${user.name}
+                            - ${user.getQuality().getName()}</p>
+                        <p>${user.getDescription()}</p>
+                    </div>
+                    <div class="col">
+                        <p>$${user.price} / 24h</p>
+                        <a class="btn btn-primary" href="car?id=${user.getId()}">Rent</a>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+</section>
 
-<%--  <my:user id="123" />--%>
+<%@include file="jspf/footer.jspf" %>
 
-
-<%--  <jsp:forward page="admin/cars.jsp" />--%>
-
-<%--  <c:if test="${not empty requestScope.mes}">--%>
-<%--    <hr>--%>
-<%--  </c:if>--%>
-
-<%--  <c:if test="${not empty mes}">--%>
-<%--    <hr>--%>
-<%--    ${mes}--%>
-<%--  </c:if>--%>
-
-<%--  <%@ taglib prefix="c" uri="/" %>--%>
-<%--  <c:if test="${sessionScope.userRole == 'admin'}">--%>
-<%--    <a href="...">settings</a>--%>
-<%--  </c:if>--%>
-
-  </body>
-  <%@include file="jspf/bottom.jspf"%>
+</body>
 </html>

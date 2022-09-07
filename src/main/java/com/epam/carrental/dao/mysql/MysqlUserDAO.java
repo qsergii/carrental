@@ -26,9 +26,10 @@ public class MysqlUserDAO extends UserDao {
 
     @Override
     public User getUserById(int id) {
-        try {
-            Connection connection = Database.dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_ID);
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_ID);
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -43,9 +44,10 @@ public class MysqlUserDAO extends UserDao {
 
     @Override
     public User getUserByLogin(String login) {
-        try {
-            Connection connection = Database.dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN);
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN);
+        ) {
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -60,9 +62,10 @@ public class MysqlUserDAO extends UserDao {
 
     @Override
     public boolean insert(User user) {
-        try {
-            Connection connection = Database.dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+        ) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setInt(3, user.getRole().getId());
@@ -80,14 +83,13 @@ public class MysqlUserDAO extends UserDao {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public boolean update(User user) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = Database.dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(MysqlConstants.USER_UPDATE);
-
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.USER_UPDATE);
+        ) {
             int paramNumber = 1;
             preparedStatement.setString(paramNumber++, user.getLogin());
             preparedStatement.setString(paramNumber++, user.getPassword());
@@ -99,25 +101,17 @@ public class MysqlUserDAO extends UserDao {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                preparedStatement.close();
-                connection.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
         return false;
     }
 
     @Override
     public List<User> getAll() {
-
         List<User> list = new ArrayList<>();
-
-        try {
-            Connection connection = Database.dataSource.getConnection();
-            Statement statement = connection.createStatement();
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                Statement statement = connection.createStatement();
+        ) {
             if (statement.execute(MysqlConstants.USERS_GET_ALL)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
@@ -127,7 +121,6 @@ public class MysqlUserDAO extends UserDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return list;
     }
 

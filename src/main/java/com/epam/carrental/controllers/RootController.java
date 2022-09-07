@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-@WebServlet(urlPatterns = {"/", "/main"})
+@WebServlet(urlPatterns = {"/", "/home"})
 public class RootController extends HttpServlet {
 
     @Override
@@ -23,18 +23,6 @@ public class RootController extends HttpServlet {
         if(request.getServletPath().equals("/WEB-INF/builder.jsp")){
             return; // request finished
         }
-        HttpSession session = request.getSession();
-        if(session.isNew()){
-            request.setAttribute("authNeeded", true);
-        }
-        Integer userId = (Integer) session.getAttribute("userId");
-        User user = null;
-        if(userId == null){
-            // non authenticated
-        }else{
-            user = DAOFactory.getInstance().getUserDAO().getUserById(userId);
-        }
-        request.setAttribute("user", user);
 
         ResourceBundle bundle = ResourceBundle.getBundle("resources");
         ResourceBundle bundleUa = ResourceBundle.getBundle("resources_ua", new Locale("uk", "UA"));

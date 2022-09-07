@@ -73,6 +73,7 @@ public class AdminUsersController extends HttpServlet {
 
     private void printUsers(HttpServletRequest request, HttpServletResponse response) {
         try {
+            request.setAttribute("page", "users");
             request.setAttribute("users", DAOFactory.getInstance().getUserDAO().getAll());
             request.getRequestDispatcher("/WEB-INF/admin/users.jsp").forward(request, response);
         } catch (Exception e) {

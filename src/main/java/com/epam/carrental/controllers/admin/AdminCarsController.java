@@ -23,21 +23,37 @@ public class AdminCarsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String paramId = request.getParameter("id");
-            if (paramId == null || paramId.isEmpty()) {
-                printCars(request, response);
-            } else {
-                printCar(paramId, request, response);
-            }
+            handleGet(request, response);
         } catch (Exception e) {
-            log.error("doGet: " + e.getMessage());
+            log.error(e.getMessage());
             response.sendError(500);
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String paramId = request.getParameter("id");
+        if (paramId == null || paramId.isEmpty()) {
+            printCars(request, response);
+        } else {
+            printCar(paramId, request, response);
+        }
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            handlePost(request, response);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            try {
+                response.sendError(500);
+            }catch (IOException ex) {
+                log.error(ex.getMessage());
+            }
+        }
+    }
+
+    private void handlePost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // properties
         int id = Integer.valueOf(Optional.ofNullable(request.getParameter("id")).orElse("-1"));
         String name = request.getParameter("name");
@@ -77,6 +93,7 @@ public class AdminCarsController extends HttpServlet {
 
     private void printCars(HttpServletRequest request, HttpServletResponse response) {
         try {
+            request.setAttribute("page", "cars");
             request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll());
             request.getRequestDispatcher("/WEB-INF/admin/cars.jsp").forward(request, response);
         } catch (Exception e) {
@@ -92,10 +109,9 @@ public class AdminCarsController extends HttpServlet {
         } else {
             car = new Car();
         }
-        request.setAttribute("car", new Car());
+        request.setAttribute("car", car);
         request.setAttribute("brands", DAOFactory.getInstance().getBrandDAO().getAll());
         request.getRequestDispatcher("/WEB-INF/admin/car.jsp").forward(request, response);
-
     }
 
 }

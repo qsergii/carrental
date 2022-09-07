@@ -1,7 +1,17 @@
+<!--https://tomcat.apache.org/tomcat-9.0-doc/jndi-resources-howto.html-->
 <Context>
     <Resource
-            name="jdbc/carrental" auth="Container" type="javax.sql.DataSource"
-            maxTotal="100" maxIdle="30" maxWaitMillis="10000"
-            username="carrental" password="carrental" driverClassName="com.mysql.cj.jdbc.Driver"
-            url="jdbc:mysql://localhost:3306/carrental"/>
+            name="jdbc/carrental"
+            driverClassName="com.mysql.cj.jdbc.Driver"
+            url="jdbc:mysql://10.1.5.21:3306/carrental"
+            username="carrental"
+            password="carrental"
+            auth="Container"
+            type="javax.sql.DataSource"
+
+            maxTotal="10"
+            maxIdle="5"
+            minIdle="3"
+            maxWaitMillis="10000"
+    />
 </Context>

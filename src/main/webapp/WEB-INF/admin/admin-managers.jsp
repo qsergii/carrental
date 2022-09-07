@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Administration</h1>
-<jsp:include page="menu.jspf"/>
+<jsp:include page="header.jspf"/>
 <h2>Managers</h2>
 </body>
 </html>

@@ -35,4 +35,20 @@ public class Brand {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !obj.getClass().equals(this.getClass()))
+            return false;
+
+        Brand that = (Brand) obj;
+
+        return this.getId() == that.getId()
+                && this.getName().equals(that.getName());
+    }
 }
