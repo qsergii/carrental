@@ -39,9 +39,14 @@ public class LoginController extends HttpServlet {
             // TODO show message login/password incorrect
             response.sendRedirect("login?message=Credentials incorrect");
         }else {
+            // success
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getId());
-            response.sendRedirect("home");
+            if(session.getAttribute("car") != null){
+                response.sendRedirect("order");
+            }else {
+                response.sendRedirect("home");
+            }
         }
     }
 }
