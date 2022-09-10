@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
     <title>${requestScope.car.name}</title>
 </head>
 <body>
@@ -40,7 +40,7 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-text">Number of days:</span>
+                        <span class="input-group-text">lease term, days:</span>
                         <input class="form-control" type="number" name="lease-term" min="1" max="30" required/>
                     </div>
                     <input type="number" name="ammount" value="${requestScope.car.price}"/>

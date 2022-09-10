@@ -2,13 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <html>
-<head>
-    <%@include file="jspf/head.jspf" %>
-    <title>Car rental</title>
-</head>
+<c:set var="title" value="Car rental" scope="page"/>
+<%@include file="/WEB-INF/jspf/head_tag.jspf" %>
 <body>
 
-<%@include file="jspf/menu.jspx" %>
+<%@include file="/WEB-INF/jspf/menu.jspx" %>
 
 <section>
     <div class="container py-4 py-xl-5">
@@ -34,7 +32,7 @@
     </div>
 </section>
 
-<%@include file="jspf/footer.jspf" %>
+<%@include file="/WEB-INF/jspf/footer.jspf" %>
 
 </body>
 </html>

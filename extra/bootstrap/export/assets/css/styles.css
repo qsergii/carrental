@@ -78,7 +78,7 @@ body {
   /*height: 39vh;*/
 }
 
-form span {
+.order form span {
   width: 116px;
 }
 
@@ -87,5 +87,11 @@ form span {
 }
 
 p {
+}
+
+.order .header {
+  font-weight: bold;
+  color: var(--bs-indigo);
+  font-size: 30px;
 }
 

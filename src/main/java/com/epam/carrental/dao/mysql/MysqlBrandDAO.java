@@ -56,8 +56,7 @@ public class MysqlBrandDAO extends BrandDao {
         List<Brand> list = new ArrayList<>();
         try (
                 Connection connection = Database.dataSource.getConnection();
-                Statement statement = connection.createStatement();
-
+                Statement statement = connection.createStatement()
         ) {
             if (statement.execute(MysqlConstants.BRAND_GET_ALL)) {
                 ResultSet resultSet = statement.getResultSet();
@@ -67,6 +66,7 @@ public class MysqlBrandDAO extends BrandDao {
                             resultSet.getString("name")
                     ));
                 }
+                resultSet.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();

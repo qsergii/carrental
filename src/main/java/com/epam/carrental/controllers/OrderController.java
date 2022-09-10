@@ -38,36 +38,65 @@ public class OrderController extends HttpServlet {
 
     private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String carIdString = request.getParameter("car-id");
-        if(carIdString != null){
-            int carId = Integer.parseInt(carIdString);
-            if (carId > 0) {
-                Car car = DAOFactory.getInstance().getCarDAO().getById(carId);
-                if (car == null) {
-                    response.sendError(400);
-                    return;
-                }
-
-                User user = (User) request.getAttribute("user");
-                if(user == null){
-                    HttpSession session = request.getSession();
-                    session.setAttribute("car", car);
-                    response.sendRedirect("login");
-                    return;
-                }
-
-                request.setAttribute("car", car);
-                request.getRequestDispatcher("/WEB-INF/order.jsp").forward(request, response);
-            } else {
-                response.sendError(400);
-            }
+        if (carIdString != null) {
+            get_PrintCar(carIdString, request, response);
+            return;
         }
-        else{
-            HttpSession session = request.getSession();
-            if(session.getAttribute("car") != null){
-                request.setAttribute("car", session.getAttribute("car"));
-                session.removeAttribute("car");
-                request.getRequestDispatcher("/WEB-INF/order.jsp").forward(request, response);
+
+        String orderIdString = request.getParameter("id");
+        if (orderIdString != null) {
+            get_PrintOrder(orderIdString, request, response);
+            return;
+        }
+
+        HttpSession session = request.getSession();
+        if (session.getAttribute("car") != null) {
+            request.setAttribute("car", session.getAttribute("car"));
+            session.removeAttribute("car");
+            request.getRequestDispatcher("/WEB-INF/order.jsp").forward(request, response);
+            return;
+        }
+
+        response.sendError(400);
+
+    }
+
+    private void get_PrintCar(String idString, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int carId = Integer.parseInt(idString);
+        if (carId > 0) {
+            Car car = DAOFactory.getInstance().getCarDAO().getById(carId);
+            if (car == null) {
+                response.sendError(400);
+                return;
             }
+
+            User user = (User) request.getAttribute("user");
+            if (user == null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("car", car);
+                response.sendRedirect("login");
+                return;
+            }
+
+            request.setAttribute("car", car);
+            request.getRequestDispatcher("/WEB-INF/order.jsp").forward(request, response);
+        } else {
+            response.sendError(400);
+        }
+    }
+
+    private void get_PrintOrder(String idString, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int id = Integer.parseInt(idString);
+        if (id > 0) {
+            Order order = DAOFactory.getInstance().getOrderDAO().getById(id);
+            if (order == null) {
+                response.sendError(400);
+                return;
+            }
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("/WEB-INF/order-new.jsp").forward(request, response);
+        } else {
+            response.sendError(400);
         }
     }
 
@@ -85,7 +114,7 @@ public class OrderController extends HttpServlet {
         }
     }
 
-    private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ParseException {
+    private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
         User user;
         boolean withDriver;
         int leaseTerm;
@@ -102,7 +131,7 @@ public class OrderController extends HttpServlet {
         }
         car = DAOFactory.getInstance().getCarDAO().getById(carId);
         user = (User) request.getAttribute("user");
-        if(user == null){
+        if (user == null) {
             HttpSession session = request.getSession();
             session.setAttribute("car", car);
             response.sendRedirect("login");
@@ -122,6 +151,7 @@ public class OrderController extends HttpServlet {
             return;
         }
 
+        // create order
         Order order = new Order();
         order.setUser(user);
         order.setWithDriver(withDriver);
@@ -134,7 +164,6 @@ public class OrderController extends HttpServlet {
             log.error("can't write order to database");
             response.sendError(500);
         }
-        request.setAttribute("order", order);
-        request.getRequestDispatcher("/WEB-INF/new-order.jsp").forward(request, response);
+        response.sendRedirect("order?id=" + order.getId());
     }
 }

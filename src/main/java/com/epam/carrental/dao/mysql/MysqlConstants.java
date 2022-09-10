@@ -28,6 +28,8 @@ public abstract class MysqlConstants {
 
     /* ORDERS */
 
+    public static final String ORDER_GET_BY_ID = "SELECT * FROM orders WHERE id=?";
+
     public static final String ORDER_INSERT = "INSERT INTO orders " +
             "(user_id, with_driver, lease_term, passport_number, passport_valid, car_id, price) VALUES " +
             "(?, ?, ?, ?, ?, ?, ?)";

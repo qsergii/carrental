@@ -1,14 +1,35 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.OrderDao;
 import com.epam.carrental.entity.Order;
+import com.epam.carrental.entity.Role;
+import com.epam.carrental.entity.User;
+import com.thoughtworks.qdox.model.expression.Or;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
 
 public class MysqlOrderDAO extends OrderDao {
     Logger log = Logger.getLogger(this.getClass());
+    @Override
+    public Order getById(int id) {
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.ORDER_GET_BY_ID);
+        ) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return getOrderByResultSet(resultSet);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public boolean insert(Order order) {
 
@@ -37,5 +58,24 @@ public class MysqlOrderDAO extends OrderDao {
         }
 
         return false;
+    }
+
+    private Order getOrderByResultSet(ResultSet resultSet) {
+        try {
+            Order order = new Order();
+            order.setId(resultSet.getInt("id"));
+            order.setUser(DAOFactory.getInstance().getUserDAO().getUserById(resultSet.getInt("user_id")));
+            order.setWithDriver(resultSet.getBoolean("with_driver"));
+            order.setLeaseTerm(resultSet.getInt("lease_term"));
+            order.setPassportNumber(resultSet.getString("passport_number"));
+            order.setPassportValid(resultSet.getDate("passport_valid"));
+            order.setCar(DAOFactory.getInstance().getCarDAO().getById(resultSet.getInt("car_id")));
+            order.setPrice(resultSet.getFloat("price"));
+            return order;
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO throw up to stack
+        }
+        return null;
     }
 }

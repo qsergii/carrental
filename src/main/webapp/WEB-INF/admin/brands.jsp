@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
     <title>Administration</title>
 </head>
 

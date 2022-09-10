@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <%@ include file="../jspf/head.jspf" %>
+    <%@ include file="../jspf/head_tag.jspf" %>
     <title>Administration</title>
 </head>
 <body>

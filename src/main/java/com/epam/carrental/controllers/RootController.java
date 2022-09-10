@@ -20,6 +20,7 @@ public class RootController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         if(request.getServletPath().equals("/WEB-INF/builder.jsp")){
             return; // request finished
         }

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
     <title>Registration</title>
 </head>
 <body>
