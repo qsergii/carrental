@@ -3,6 +3,12 @@
 
 <head>
     <meta charset="utf-8">
+<link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Book.woff2" as="font/woff2"
+          crossorigin="" />
+    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Bold.woff2" as="font/woff2"
+          crossorigin="" />
+    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Medium.woff2" as="font/woff2"
+          crossorigin="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>carrental</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
@@ -30,6 +36,35 @@
         </div>
     </section>
     <section id="cars">
+        <div id="filters" class="container">
+            <form>
+                <div class="row">
+                    <div class="col"><span>Brand:</span><select class="form-select">
+                            <optgroup label="Select brand">
+                                <option value="12" selected="">BMW</option>
+                                <option value="13">KIA</option>
+                                <option value="14">Mersedes</option>
+                            </optgroup>
+                        </select></div>
+                    <div class="col"><span>Quality:</span><select class="form-select">
+                            <optgroup label="Select a class">
+                                <option value="12" selected="">VIP</option>
+                                <option value="13">Buissness</option>
+                                <option value="14">Comfort</option>
+                                <option value="econom">Econom</option>
+                            </optgroup>
+                        </select></div>
+                    <div class="col"><span>Sort by:</span><select class="form-select">
+                            <optgroup label="Sort by">
+                                <option value="12" selected="">price</option>
+                                <option value="13">price desc</option>
+                                <option value="14">name</option>
+                                <option value="">name desc</option>
+                            </optgroup>
+                        </select></div>
+                </div>
+            </form>
+        </div>
         <div class="border-3 mx-auto card" style="background: #fff;max-width: 700px;">
             <div class="row" style="opacity: 1;">
                 <div class="col">
@@ -44,8 +79,20 @@
                 </div>
             </div>
         </div>
+        <div class="d-lg-flex justify-content-lg-center" id="pagination">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                </ul>
+            </nav>
+        </div>
     </section>
-    <section></section>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 

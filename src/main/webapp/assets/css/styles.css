@@ -71,21 +71,29 @@
 
 body {
   background: rgb(240,243,245);
-  font-family: Montserrat, sans-serif;
+  /*font-family: Montserrat, sans-serif;*/
+  font-family: "Centra No2", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-synthesis: none;
 }
 
 #cars {
   /*height: 39vh;*/
 }
 
-form span {
+.order form span {
   width: 116px;
 }
 
-.order form span {
+form span {
   width: 159px;
 }
 
-.order p {
+p {
+}
+
+.order .header {
+  font-weight: bold;
+  color: var(--bs-indigo);
+  font-size: 30px;
 }
 

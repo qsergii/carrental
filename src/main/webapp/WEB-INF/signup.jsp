@@ -29,7 +29,7 @@
                             <div class="mb-3"><input class="form-control" type="password" name="password2" placeholder="Re-type password"></div>
                             <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Sign Up</button></div>
                             <p class="text-muted">Forgot your password?</p>
-                            <p class="text-muted">Already registered? <a href="login">Sign In</a></p>
+                            <p class="text-muted">Already registered? <a href="login">Log In</a></p>
                         </form>
                     </div>
                 </div>
