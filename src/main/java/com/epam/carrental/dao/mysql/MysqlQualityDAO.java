@@ -1,28 +1,28 @@
 package com.epam.carrental.dao.mysql;
 
-import com.epam.carrental.dao.BrandDao;
 import com.epam.carrental.dao.Database;
-import com.epam.carrental.entity.Brand;
+import com.epam.carrental.dao.QualityDao;
+import com.epam.carrental.entity.Quality;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MysqlBrandDAO extends BrandDao {
+public class MysqlQualityDAO extends QualityDao {
     private Logger log = Logger.getLogger(getClass());
     @Override
-    public void create(Brand carBrand) {
+    public void create(Quality quality) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_ADD, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_ADD, Statement.RETURN_GENERATED_KEYS);
         ) {
-            preparedStatement.setString(1, carBrand.getName());
+            preparedStatement.setString(1, quality.getName());
             int rowCount = preparedStatement.executeUpdate();
             if (rowCount > 0) {
                 ResultSet resultSet = preparedStatement.getResultSet();
                 if (resultSet.next()) {
-                    carBrand.setId(resultSet.getInt("id"));
+                    quality.setId(resultSet.getInt("id"));
                 }
             }
         } catch (Exception e) {
@@ -30,18 +30,18 @@ public class MysqlBrandDAO extends BrandDao {
         }
     }
     @Override
-    public boolean update(Brand brand) {
+    public boolean update(Quality quality) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_UPDATE, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_UPDATE, Statement.RETURN_GENERATED_KEYS);
         ) {
-            preparedStatement.setString(1, brand.getName());
-            preparedStatement.setInt(2, brand.getId());
+            preparedStatement.setString(1, quality.getName());
+            preparedStatement.setInt(2, quality.getId());
             int rowCount = preparedStatement.executeUpdate();
             if (rowCount > 0) {
                 ResultSet resultSet = preparedStatement.getResultSet();
                 if (resultSet.next()) {
-                    brand.setId(resultSet.getInt("id"));
+                    quality.setId(resultSet.getInt("id"));
                     return true;
                 }
             }
@@ -52,16 +52,16 @@ public class MysqlBrandDAO extends BrandDao {
     }
 
     @Override
-    public List<Brand> getAll() {
-        List<Brand> list = new ArrayList<>();
+    public List<Quality> getAll() {
+        List<Quality> list = new ArrayList<>();
         try (
                 Connection connection = Database.dataSource.getConnection();
                 Statement statement = connection.createStatement()
         ) {
-            if (statement.execute(MysqlConstants.BRAND_GET_ALL)) {
+            if (statement.execute(MysqlConstants.QUALITY_GET_ALL)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(new Brand(
+                    list.add(new Quality(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     ));
@@ -73,16 +73,16 @@ public class MysqlBrandDAO extends BrandDao {
         }
         return list;
     }
-    public List<Brand> getAllAvailible() {
-        List<Brand> list = new ArrayList<>();
+    public List<Quality> getAllAvailible() {
+        List<Quality> list = new ArrayList<>();
         try (
                 Connection connection = Database.dataSource.getConnection();
                 Statement statement = connection.createStatement()
         ) {
-            if (statement.execute(MysqlConstants.BRAND_GET_ALL_AVAILIBLE)) {
+            if (statement.execute(MysqlConstants.QUALITIES_GET_ALL_AVAILIBLE)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(new Brand(
+                    list.add(new Quality(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     ));
@@ -96,16 +96,16 @@ public class MysqlBrandDAO extends BrandDao {
     }
 
     @Override
-    public Brand getById(int id) {
+    public Quality getById(int id) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_GET_BY_ID);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_GET_BY_ID);
         ) {
             preparedStatement.setInt(1, id);
             if (preparedStatement.execute()) {
                 ResultSet resultSet = preparedStatement.getResultSet();
                 if (resultSet.next()) {
-                    return new Brand(
+                    return new Quality(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     );
@@ -118,12 +118,12 @@ public class MysqlBrandDAO extends BrandDao {
     }
 
     @Override
-    public boolean delete(Brand brand) {
+    public boolean delete(Quality quality) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_DELETE_BY_ID);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_DELETE_BY_ID);
         ) {
-            preparedStatement.setInt(1, brand.getId());
+            preparedStatement.setInt(1, quality.getId());
             if (preparedStatement.execute()) {
                 return true;
             }

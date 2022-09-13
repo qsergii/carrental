@@ -3,7 +3,7 @@ package com.epam.carrental.controllers.admin;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.CarQuality;
+import com.epam.carrental.entity.Quality;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -58,7 +58,9 @@ public class AdminCarsController extends HttpServlet {
         int id = Integer.valueOf(Optional.ofNullable(request.getParameter("id")).orElse("-1"));
         String name = request.getParameter("name");
         String brandId = request.getParameter("brand");
+        String qualityId = request.getParameter("quality");
         Brand brand = DAOFactory.getInstance().getBrandDAO().getById(Integer.parseInt(brandId));
+        Quality quality = DAOFactory.getInstance().getQualityDAO().getById(Integer.parseInt(qualityId));
         String description = request.getParameter("description");
         boolean blocked = Optional.ofNullable(request.getParameter("blocked")).orElse("").equals("on") ? true : false;
         float price = Float.valueOf(request.getParameter("price"));
@@ -77,8 +79,9 @@ public class AdminCarsController extends HttpServlet {
         car.setDescription(description);
         car.setBlocked(blocked);
         car.setPrice(price);
-        car.setQuality(new CarQuality());
+        car.setQuality(new Quality());
         car.setBrand(brand);
+        car.setQuality(quality);
 
         if(car.getId() == 0){
             DAOFactory.getInstance().getCarDAO().insert(car);
@@ -111,6 +114,7 @@ public class AdminCarsController extends HttpServlet {
         }
         request.setAttribute("car", car);
         request.setAttribute("brands", DAOFactory.getInstance().getBrandDAO().getAll());
+        request.setAttribute("qualities", DAOFactory.getInstance().getQualityDAO().getAll());
         request.getRequestDispatcher("/WEB-INF/admin/car.jsp").forward(request, response);
     }
 

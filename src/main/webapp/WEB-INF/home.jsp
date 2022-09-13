@@ -12,32 +12,50 @@
     <div id="filters" class="container">
         <form>
             <div class="row">
-                <div class="col"><span>Brand:</span>
+                <div class="col">
+                    <span>Brand:</span>
                     <select id="filter_brand" class="form-select">
-                    <optgroup label="Select brand">
-                        <option value="12" selected="">BMW</option>
-                        <option value="13">KIA</option>
-                        <option value="14">Mersedes</option>
-                    </optgroup>
-                </select></div>
-                <div class="col"><span>Quality:</span>
+                        <optgroup label="Select brand">
+                            <option></option>
+                            <c:forEach items="${requestScope.brands}" var="brand">
+                                <option
+                                        value="${brand.id}"
+                                    ${param.brand == brand.id ? 'selected=""' : ''}
+                                >${brand.name}</option>
+                            </c:forEach>
+                        </optgroup>
+                    </select></div>
+                <div class="col">
+                    <span>Quality:</span>
                     <select id="filter_quality" class="form-select">
-                    <optgroup label="Select a class">
-                        <option value="12" selected="">VIP</option>
-                        <option value="13">Buissness</option>
-                        <option value="14">Comfort</option>
-                        <option value="econom">Econom</option>
-                    </optgroup>
-                </select></div>
-                <div class="col"><span>Sort by:</span>
+                        <optgroup label="Select a class">
+                            <option></option>
+                            <c:forEach items="${requestScope.qualities}" var="quality">
+                                <option
+                                        value="${quality.id}"
+                                    ${param.quality == quality.id ? 'selected=""' : ''}
+                                >${quality.name}</option>
+                            </c:forEach>
+                        </optgroup>
+                    </select></div>
+                <div class="col">
+                    <span>Sort by:</span>
                     <select id="sort_by" class="form-select">
-                    <optgroup label="Sort by">
-                        <option value="12" selected="">price</option>
-                        <option value="13">price desc</option>
-                        <option value="14">name</option>
-                        <option value="15">name desc</option>
-                    </optgroup>
-                </select></div>
+                        <optgroup label="Sort by">
+                            <option></option>
+                            <option value="price" ${param.sort == "price" ? 'selected=""' : ''}>price
+                            </option>
+                            <option value="price-desc" ${param.sort == "price-desc" ? 'selected=""' : ''}>
+                                price desc
+                            </option>
+                            <option value="name" ${param.sort == "name" ? 'selected=""' : ''}>name
+                            </option>
+                            <option value="name-desc" ${param.sort == "name-desc" ? 'selected=""' : ''}>
+                                name desc
+                            </option>
+                        </optgroup>
+                    </select>
+                </div>
             </div>
         </form>
     </div>
@@ -65,13 +83,15 @@
     <div id="pagination" class="d-lg-flex justify-content-lg-center">
         <nav>
             <ul class="pagination">
-                <li class="page-item"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                <li class="page-item"><a class="page-link" aria-label="Previous" href="#"><span
+                        aria-hidden="true">«</span></a></li>
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item"><a class="page-link" href="#">4</a></li>
                 <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a>
+                </li>
             </ul>
         </nav>
     </div>

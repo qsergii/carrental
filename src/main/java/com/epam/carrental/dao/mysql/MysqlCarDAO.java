@@ -4,7 +4,7 @@ import com.epam.carrental.dao.CarDao;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.CarQuality;
+import com.epam.carrental.entity.Quality;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class MysqlCarDAO extends CarDao {
             preparedStatement.setString(paramNumber++, car.getDescription());
             preparedStatement.setBoolean(paramNumber++, car.isBlocked());
             preparedStatement.setFloat(paramNumber++, car.getPrice());
-            preparedStatement.setInt(paramNumber++, 1);
+            preparedStatement.setInt(paramNumber++, car.getQuality().getId());
             preparedStatement.setInt(paramNumber++, car.getBrand().getId());
 
             int res = preparedStatement.executeUpdate();
@@ -40,14 +40,14 @@ public class MysqlCarDAO extends CarDao {
                 Connection connection = Database.dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.CAR_UPDATE);
         ) {
-            int paramNumber = 1;
-            preparedStatement.setString(paramNumber++, car.getName());
-            preparedStatement.setString(paramNumber++, car.getDescription());
-            preparedStatement.setBoolean(paramNumber++, car.isBlocked());
-            preparedStatement.setFloat(paramNumber++, car.getPrice());
-            preparedStatement.setInt(paramNumber++, 1);
-            preparedStatement.setInt(paramNumber++, car.getBrand().getId());
-            preparedStatement.setInt(paramNumber++, car.getId());
+            int paramNumber = 0;
+            preparedStatement.setString(++paramNumber, car.getName());
+            preparedStatement.setString(++paramNumber, car.getDescription());
+            preparedStatement.setBoolean(++paramNumber, car.isBlocked());
+            preparedStatement.setFloat(++paramNumber, car.getPrice());
+            preparedStatement.setInt(++paramNumber, car.getQuality().getId());
+            preparedStatement.setInt(++paramNumber, car.getBrand().getId());
+            preparedStatement.setInt(++paramNumber, car.getId());
 
             return preparedStatement.executeUpdate() > 0;
 
@@ -62,6 +62,71 @@ public class MysqlCarDAO extends CarDao {
         List<Car> list = new ArrayList<>();
         try (Connection connection = Database.dataSource.getConnection(); Statement statement = connection.createStatement()) {
             if (statement.execute(MysqlConstants.GET_ALL_CAR)) {
+                ResultSet resultSet = statement.getResultSet();
+                while (resultSet.next()) {
+                    list.add(getCarByResultSet(resultSet));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<Car> getAll(String brandId, String qualityId, String sortParam) {
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM cars WHERE true");
+
+        // brand
+        int brandIdInt = -1;
+        if(brandId != null && !brandId.isEmpty()){
+            brandIdInt = Integer.parseInt(brandId);
+            query.append(" AND brand_id=?");
+        }
+
+        // quality
+        int qualityIdInt = -1;
+        if(qualityId != null && !qualityId.isEmpty()){
+            qualityIdInt = Integer.parseInt(qualityId);
+            query.append(" AND quality_id=?");
+        }
+
+        // sort
+        if(sortParam != null && !sortParam.isEmpty()){
+            query.append(" ORDER BY ");
+            switch (sortParam){
+                case "price":
+                    query.append("price");
+                    break;
+                case "price-desc":
+                    query.append("price desc");
+                    break;
+                case "name":
+                    query.append("name");
+                    break;
+                case "name-desc":
+                    query.append("name desc");
+                    break;
+                default:
+                    query.append("price");
+            }
+        }
+
+        List<Car> list = new ArrayList<>();
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query.toString())
+        ) {
+            int parameterNumber = 0;
+            if(brandIdInt > 0){
+                statement.setInt(++parameterNumber, brandIdInt);
+            }
+            if(qualityIdInt > 0){
+                statement.setInt(++parameterNumber, qualityIdInt);
+            }
+            if (statement.execute()) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(getCarByResultSet(resultSet));
@@ -97,7 +162,7 @@ public class MysqlCarDAO extends CarDao {
                 resultSet.getString("description"),
                 resultSet.getBoolean("blocked"),
                 resultSet.getFloat("price"),
-                new CarQuality(resultSet.getInt("quality_class")),
+                DAOFactory.getInstance().getQualityDAO().getById(resultSet.getInt("quality_id")),
                 DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id"))
         );
     }

@@ -3,7 +3,7 @@ package com.epam.carrental.controllers.admin;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.CarQuality;
+import com.epam.carrental.entity.Quality;
 import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletException;
@@ -124,7 +124,7 @@ public class AdminController extends HttpServlet {
                 description,
                 blocked,
                 price,
-                new CarQuality(),
+                new Quality(),
                 new Brand(Integer.parseInt(carBrandId))
         );
 

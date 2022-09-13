@@ -17,11 +17,32 @@ function sort_by_change() {
 document.getElementById('sort_by').addEventListener('change', sort_by_change);
 
 function reloadWithParams(){
-    var url = window.location.href;
-    if (url.indexOf('?') > -1){
-        url += '&param=1'
-    }else{
-        url += '?param=1'
+
+    brand_id = document.getElementById("filter_brand").value;
+    quality_id = document.getElementById("filter_quality").value;
+    sort_id = document.getElementById("sort_by").value;
+
+    // var url = window.location.href;
+    var url = window.location.pathname;
+    if(brand_id){
+        url = addParameter(url, "brand="+brand_id);
     }
+    if(quality_id){
+        url = addParameter(url, "quality="+quality_id);
+    }
+    if(sort_id){
+        url = addParameter(url, "sort="+sort_id);
+    }
+
     window.location.href = url;
+}
+
+function addParameter(url, value){
+    if (url.indexOf('?') > -1){
+        url += '&';
+    }else{
+        url += '?';
+    }
+    url += value;
+    return url;
 }

@@ -2,6 +2,7 @@ drop table IF EXISTS invoices;
 drop table IF EXISTS orders;
 drop table IF EXISTS cars;
 drop table IF EXISTS brands;
+drop table IF EXISTS qualities;
 drop table IF EXISTS users;
 
 create table brands
@@ -14,19 +15,29 @@ create table brands
         unique (name)
 );
 
+create table qualities
+(
+    id   int auto_increment primary key,
+    name varchar(100) not null,
+    constraint id_unique
+        unique (id)
+);
+
 create table cars
 (
-    id            int auto_increment primary key,
-    name          varchar(100)         not null,
-    description   varchar(200)         null,
-    blocked       tinyint(1) default 0 not null,
-    price         float                not null,
-    quality_class int                  not null,
-    brand_id      int                  not null,
+    id          int auto_increment primary key,
+    name        varchar(100)         not null,
+    description varchar(200)         null,
+    blocked     tinyint(1) default 0 not null,
+    price       float                not null,
+    quality_id  int                  not null,
+    brand_id    int                  not null,
     constraint cars_id_uindex
         unique (id),
     constraint brand_id_fk
-        foreign key (brand_id) references brands (id)
+        foreign key (brand_id) references brands (id),
+    constraint quality_id_fk
+        foreign key (quality_id) references qualities (id)
 );
 
 create table users

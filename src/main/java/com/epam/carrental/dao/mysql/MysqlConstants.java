@@ -6,17 +6,44 @@ public abstract class MysqlConstants {
     /* BRANDS */
 
     public static final String BRAND_GET_ALL = "SELECT * FROM brands ORDER BY name";
+    public static final String BRAND_GET_ALL_AVAILIBLE =
+            "SELECT\n" +
+                    "    brands.*\n" +
+                    "FROM\n" +
+                    "    brands\n" +
+                    "        JOIN cars\n" +
+                    "            ON brands.id = cars.brand_id\n" +
+                    "ORDER BY name";
     public static final String BRAND_GET_BY_ID = "SELECT * FROM brands WHERE id=?";
     public static final String BRAND_ADD = "INSERT INTO brands (name) VALUES (?)";
     public static final String BRAND_UPDATE = "UPDATE brands SET name=? WHERE id=?";
     public static final String BRAND_DELETE_BY_ID = "DELETE FROM brands WHERE id=?";
 
+    /* QUALITIES */
+
+    public static final String QUALITY_GET_ALL = "SELECT * FROM qualities ORDER BY name";
+    public static final String QUALITIES_GET_ALL_AVAILIBLE =
+            "SELECT\n" +
+                    "    qualities.*\n" +
+                    "FROM\n" +
+                    "    qualities\n" +
+                    "        JOIN cars\n" +
+                    "            ON qualities.id = cars.quality_id\n" +
+                    "ORDER BY name";
+    public static final String QUALITY_GET_BY_ID = "SELECT * FROM qualities WHERE id=?";
+    public static final String QUALITY_ADD = "INSERT INTO qualities (name) VALUES (?)";
+    public static final String QUALITY_UPDATE = "UPDATE qualities SET name=? WHERE id=?";
+    public static final String QUALITY_DELETE_BY_ID = "DELETE FROM qualities WHERE id=?";
+
     /* CARS */
 
     public static final String GET_ALL_CAR = "SELECT * FROM cars";
+
     public static final String GET_CAR_BY_ID = "SELECT * FROM cars WHERE id=?";
-    public static final String CAR_INSERT = "INSERT INTO cars (id, name, description, blocked, price, quality_class, brand_id) VALUES (default, ?, ?, ?, ?, ?, ?)";
-    public static final String CAR_UPDATE = "UPDATE cars SET name=?, description=?, blocked=?, price=?, quality_class=?, brand_id=? WHERE id=?";
+    public static final String CAR_INSERT = "INSERT INTO cars (id, name, description, blocked, price, quality_id, brand_id) VALUES (default, ?, ?, ?, ?, ?, ?)";
+    public static final String CAR_UPDATE = "UPDATE cars SET " +
+            "name=?, description=?, blocked=?, price=?, quality_id=?, brand_id=? " +
+            "WHERE id=?";
 
     /* USERS */
 

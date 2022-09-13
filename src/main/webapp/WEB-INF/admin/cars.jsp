@@ -29,6 +29,7 @@
                             <tr>
                                 <th>Picture</th>
                                 <th>Brand</th>
+                                <th>Quality</th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Blocked</th>
@@ -43,6 +44,7 @@
                                         <picture><img src="../assets/img/clipboard-image-1.png"></picture>
                                     </td>
                                     <td>${user.getBrand().getName()}</td>
+                                    <td>${user.getQuality().getName()}</td>
                                     <td>${user.name}</td>
                                     <td>${user.getDescription()}</td>
                                     <td>${user.isBlocked()}</td>

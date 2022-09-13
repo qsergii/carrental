@@ -7,7 +7,7 @@ public class Car {
     boolean blocked;
     float price;
     Brand brand;
-    CarQuality quality;
+    Quality quality;
 
     public Car() {
     }
@@ -18,7 +18,7 @@ public class Car {
             String description,
             boolean blocked,
             float price,
-            CarQuality quality,
+            Quality quality,
             Brand brand) {
         this.id = id;
         this.name = name;
@@ -61,11 +61,11 @@ public class Car {
         this.brand = brand;
     }
 
-    public CarQuality getQuality() {
+    public Quality getQuality() {
         return quality;
     }
 
-    public void setQuality(CarQuality quality) {
+    public void setQuality(Quality quality) {
         this.quality = quality;
     }
 

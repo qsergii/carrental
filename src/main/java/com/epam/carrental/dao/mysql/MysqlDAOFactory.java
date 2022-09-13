@@ -8,6 +8,7 @@ public class MysqlDAOFactory extends DAOFactory {
     private OrderDao orderDao;
     private CarDao carDao;
     private BrandDao brandDao;
+    private QualityDao qualityDao;
 
     @Override
     public synchronized UserDao getUserDAO() {
@@ -39,5 +40,13 @@ public class MysqlDAOFactory extends DAOFactory {
             brandDao = new MysqlBrandDAO();
         }
         return brandDao;
+    }
+
+    @Override
+    public synchronized QualityDao getQualityDAO() {
+        if(qualityDao == null){
+            qualityDao = new MysqlQualityDAO();
+        }
+        return qualityDao;
     }
 }

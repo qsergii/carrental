@@ -21,6 +21,7 @@
                 <div class="col">
                     <form method="post">
                         <input type="hidden" name="id" value="${requestScope.car.id}">
+
                         <div id="brand_group" class="input-group">
                             <span class="input-group-text">Brand:</span>
                             <select id="brand" class="form-select" name="brand">
@@ -32,10 +33,24 @@
                                 </optgroup>
                             </select>
                         </div>
+
                         <div id="name_group" class="input-group">
                             <span class="input-group-text">Name:</span>
                             <input class="form-control" type="text" name="name" value="${requestScope.car.name}"/>
                         </div>
+
+                        <div id="quality_group" class="input-group">
+                            <span class="input-group-text">Quality:</span>
+                            <select id="quality" class="form-select" name="quality">
+                                <optgroup label="Select quality">
+                                    <c:forEach items="${requestScope.qualities}" var="quality">
+                                        <option value="${quality.id}"
+                                            ${requestScope.car.quality.equals(quality) ? 'selected' : ''}>${quality.getName()}</option>
+                                    </c:forEach>
+                                </optgroup>
+                            </select>
+                        </div>
+
                         <div class="input-group">
                             <span class="input-group-text">Price:</span>
                             <input class="form-control" name="price" type="number" min="0.01" step="0.01"

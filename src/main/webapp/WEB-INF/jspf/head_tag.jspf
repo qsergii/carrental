@@ -5,12 +5,12 @@
 <%--    <link rel="stylesheet"--%>
 <%--          href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600&amp;subset=cyrillic,cyrillic-ext&amp;display=swap">--%>
 
-    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Book.woff2" as="font/woff2"
-          crossorigin="" />
-    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Bold.woff2" as="font/woff2"
-          crossorigin="" />
-    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Medium.woff2" as="font/woff2"
-          crossorigin="" />
+    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Book.woff2"
+          as="font" type="font/woff2" crossorigin="" />
+    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Bold.woff2"
+          as="font" type="font/woff2" crossorigin="" />
+    <link rel="preload" href="${pageContext.request.contextPath}/assets/fonts/CentraNo2-Medium.woff2"
+          as="font" type="font/woff2" crossorigin="" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 

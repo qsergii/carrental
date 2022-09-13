@@ -8,5 +8,6 @@ public abstract class CarDao {
     public abstract void insert(Car car);
     public abstract boolean update(Car car);
     public abstract List<Car> getAll();
+    public abstract List<Car> getAll(String brandId, String qualityId, String sortName);
     public abstract Car getById(int id);
 }

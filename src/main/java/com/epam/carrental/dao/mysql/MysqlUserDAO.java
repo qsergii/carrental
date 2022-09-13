@@ -1,10 +1,7 @@
 package com.epam.carrental.dao.mysql;
 
-import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.UserDao;
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.CarQuality;
 import com.epam.carrental.entity.Role;
 import com.epam.carrental.entity.User;
 
