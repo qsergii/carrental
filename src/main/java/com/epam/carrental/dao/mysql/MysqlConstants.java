@@ -7,7 +7,7 @@ public abstract class MysqlConstants {
 
     public static final String BRAND_GET_ALL = "SELECT * FROM brands ORDER BY name";
     public static final String BRAND_GET_ALL_AVAILIBLE =
-            "SELECT\n" +
+            "SELECT DISTINCT\n" +
                     "    brands.*\n" +
                     "FROM\n" +
                     "    brands\n" +
@@ -23,7 +23,7 @@ public abstract class MysqlConstants {
 
     public static final String QUALITY_GET_ALL = "SELECT * FROM qualities ORDER BY name";
     public static final String QUALITIES_GET_ALL_AVAILIBLE =
-            "SELECT\n" +
+            "SELECT DISTINCT\n" +
                     "    qualities.*\n" +
                     "FROM\n" +
                     "    qualities\n" +
@@ -55,9 +55,27 @@ public abstract class MysqlConstants {
 
     /* ORDERS */
 
+    public static final String ORDER_GET_ALL = "SELECT * FROM orders";
     public static final String ORDER_GET_BY_ID = "SELECT * FROM orders WHERE id=?";
-
     public static final String ORDER_INSERT = "INSERT INTO orders " +
-            "(user_id, with_driver, lease_term, passport_number, passport_valid, car_id, price) VALUES " +
+            "(user_id, with_driver, lease_term, passport_number, passport_valid, car_id, price, " +
+            "rejected, reject_reason) VALUES " +
+            "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String ORDER_UPDATE = "UPDATE orders SET " +
+            "user_id=?, with_driver=?, lease_term=?, passport_number=?, passport_valid=?, car_id=?, price=?, " +
+            "rejected=?, reject_reason=? " +
+            "WHERE id=?";
+
+    /* INVOICES */
+    public static final String INVOICE_GET_ALL = "SELECT * FROM invoices";
+    public static final String INVOICE_GET_BY_ID = "SELECT * FROM invoices WHERE id=?";
+    public static final String INVOICE_INSERT = "INSERT INTO invoices " +
+            "(order_id, type, amount, payed, date, payed_date, user_id) VALUES " +
             "(?, ?, ?, ?, ?, ?, ?)";
+    public static final String INVOICE_UPDATE =
+            "UPDATE invoices " +
+            "SET" +
+                    " order_id=?, type=?, amount=?, payed=?, date=?, payed_date=?" +
+            "WHERE id=?";
+
 }

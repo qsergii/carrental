@@ -56,13 +56,17 @@ create table users
 create table orders
 (
     id              int auto_increment primary key,
-    user_id         int         not null,
-    with_driver     tinyint(1)  null,
-    lease_term      int         not null,
-    passport_number varchar(50) not null,
-    passport_valid  date        not null,
-    car_id          int         not null,
-    price           float       not null,
+    user_id         int          not null,
+    with_driver     tinyint(1)   not null,
+    lease_term      int          not null,
+    passport_number varchar(50)  not null,
+    passport_valid  date         not null,
+    car_id          int          not null,
+    price           float        not null,
+    rejected        tinyint(1)   not null,
+    reject_reason   varchar(100) null,
+    return_date     datetime     null,
+    return_damage   varchar(100) null,
     constraint orders_id_uindex
         unique (id),
     constraint car_id_fk
@@ -73,14 +77,18 @@ create table orders
 
 create table invoices
 (
-    id       int auto_increment primary key,
-    order_id int        null,
-    type     int        not null,
-    price    float      null,
-    payed    tinyint(1) null,
-    date     date       not null,
+    id         int auto_increment primary key,
+    date       date       not null,
+    order_id   int        null,
+    user_id    int        not null,
+    type       int        not null,
+    amount     float      null,
+    payed      tinyint(1) null,
+    payed_date date       null,
+
     constraint invoices_id_uindex
         unique (id),
     constraint order_id
-        foreign key (order_id) references orders (id)
+        foreign key (order_id) references orders (id),
+    foreign key (user_id) references users (id)
 );

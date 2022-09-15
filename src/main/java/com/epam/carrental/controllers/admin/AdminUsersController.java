@@ -2,7 +2,8 @@ package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @WebServlet("/admin/users")
 public class AdminUsersController extends HttpServlet {
-    private final Logger log = Logger.getLogger(this.getClass());
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     /* EXTERNAL */
     @Override

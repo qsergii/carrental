@@ -31,6 +31,7 @@ public abstract class DAOFactory {
     }
     public abstract UserDao getUserDAO();
     public abstract OrderDao getOrderDAO();
+    public abstract InvoiceDao getInvoiceDAO();
     public abstract CarDao getCarDAO();
     public abstract BrandDao getBrandDAO();
     public abstract QualityDao getQualityDAO();

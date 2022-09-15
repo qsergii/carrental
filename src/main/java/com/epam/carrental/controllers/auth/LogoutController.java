@@ -1,4 +1,4 @@
-package com.epam.carrental.controllers;
+package com.epam.carrental.controllers.auth;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

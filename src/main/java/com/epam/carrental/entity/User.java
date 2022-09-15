@@ -9,8 +9,7 @@ public class User {
     private Role role;
     private boolean blocked;
 
-    public User() {
-    }
+    public User() {}
 
     public User(int id, String login, String password, Role role, boolean blocked) {
         this.id = id;

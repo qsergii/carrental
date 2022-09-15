@@ -38,19 +38,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${cars}" var="user">
-                                <tr class='clickable-row' data-href='cars?id=${user.getId()}'>
+                            <c:forEach items="${cars}" var="invoice">
+                                <tr class='clickable-row' data-href='cars?id=${invoice.getId()}'>
                                     <td>
                                         <picture><img src="../assets/img/clipboard-image-1.png"></picture>
                                     </td>
-                                    <td>${user.getBrand().getName()}</td>
-                                    <td>${user.getQuality().getName()}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.getDescription()}</td>
-                                    <td>${user.isBlocked()}</td>
+                                    <td>${invoice.getBrand().getName()}</td>
+                                    <td>${invoice.getQuality().getName()}</td>
+                                    <td>${invoice.name}</td>
+                                    <td>${invoice.getDescription()}</td>
+                                    <td>${invoice.isBlocked()}</td>
                                     <td><input type="checkbox"></td>
-                                    <td>${user.price}</td>
-                                    <td>${user.getQuality().getName()}</td>
+                                    <td>${invoice.price}</td>
+                                    <td>${invoice.getQuality().getName()}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

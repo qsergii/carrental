@@ -3,14 +3,14 @@ package com.epam.carrental.dao.mysql;
 import com.epam.carrental.dao.BrandDao;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.entity.Brand;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlBrandDAO extends BrandDao {
-    private Logger log = Logger.getLogger(getClass());
+    private Logger log = LogManager.getLogger(getClass());
     @Override
     public void create(Brand carBrand) {
         try (

@@ -9,7 +9,9 @@
 <section>
     <div class="container card order-new" style="padding-top: 54px;">
         <div class="row">
-            <div class="col"><img class="card-img" src="assets/img/clipboard-image-1.png"></div>
+            <div class="col">
+                <img class="card-img" src="assets/img/clipboard-image-1.png">
+            </div>
             <div class="col">
                 <p class="card-header header">Order #${requestScope.order.id}</p>
                 <form>
@@ -24,6 +26,7 @@
                     <div class="input-group"><span class="input-group-text">Days:</span>
                         <span class="input-group-text">${requestScope.order.leaseTerm}</span></div>
                 </form>
+                New <a href="invoices?id=${requestScope.invoice.id}">invoice</a> for rent, please pay ASAP!
                 <p>Please, wait for your car</p>
             </div>
         </div>

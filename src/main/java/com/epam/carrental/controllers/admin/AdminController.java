@@ -4,7 +4,8 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Quality;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +14,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Logger;
+
 
 @WebServlet("/admin")
 public class AdminController extends HttpServlet {
 
-    static Logger log = Logger.getLogger(AdminController.class.getName());
+    static Logger log = LogManager.getLogger(AdminController.class.getName());
 
-    static{
-        PropertyConfigurator.configure("log4j.properties");
-//        PropertyConfigurator.configure(getClass().getResource("/controlador/log4j.properties"));
-    }
+//    static{
+//        PropertyConfigurator.configure("-log4j.properties");
+////        PropertyConfigurator.configure(getClass().getResource("/controlador/-log4j.properties"));
+//    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect("admin/cars");

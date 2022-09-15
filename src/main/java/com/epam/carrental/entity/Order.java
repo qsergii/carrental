@@ -12,7 +12,10 @@ public class Order {
     private Date passportValid;
     private float price;
     private boolean payed;
-
+    private boolean rejected;
+    private String rejectReason;
+    private Date dateReturn;
+    private String returnDamage;
     public int getId() {
         return id;
     }
@@ -83,5 +86,37 @@ public class Order {
 
     public void setPayed(boolean payed) {
         this.payed = payed;
+    }
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
+
+    public String getRejectReason() {
+        return rejectReason;
+    }
+
+    public void setRejectReason(String rejectReason) {
+        this.rejectReason = rejectReason;
+    }
+
+    public Date getDateReturn() {
+        return dateReturn;
+    }
+
+    public void setDateReturn(Date dateReturn) {
+        this.dateReturn = dateReturn;
+    }
+
+    public String getReturnDamage() {
+        return returnDamage;
+    }
+
+    public void setReturnDamage(String returnDamage) {
+        this.returnDamage = returnDamage;
     }
 }

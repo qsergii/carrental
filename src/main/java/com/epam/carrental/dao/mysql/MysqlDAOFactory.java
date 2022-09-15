@@ -6,6 +6,7 @@ public class MysqlDAOFactory extends DAOFactory {
 
     private UserDao userDao;
     private OrderDao orderDao;
+    private InvoiceDao invoiceDao;
     private CarDao carDao;
     private BrandDao brandDao;
     private QualityDao qualityDao;
@@ -24,6 +25,13 @@ public class MysqlDAOFactory extends DAOFactory {
             orderDao = new MysqlOrderDAO();
         }
         return orderDao;
+    }
+    @Override
+    public synchronized InvoiceDao getInvoiceDAO() {
+        if(invoiceDao == null){
+            invoiceDao = new MysqlInvoiceDAO();
+        }
+        return invoiceDao;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.controllers.user.HomeController;
 import com.epam.carrental.dao.CarDao;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Quality;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -74,29 +74,29 @@ public class MysqlCarDAO extends CarDao {
     }
 
     @Override
-    public List<Car> getAll(String brandId, String qualityId, String sortParam) {
+    public HomeController.CarsInfo getAll(String brandId, String qualityId, String sortParam, int page) {
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM cars WHERE true");
 
         // brand
         int brandIdInt = -1;
-        if(brandId != null && !brandId.isEmpty()){
+        if (brandId != null && !brandId.isEmpty()) {
             brandIdInt = Integer.parseInt(brandId);
             query.append(" AND brand_id=?");
         }
 
         // quality
         int qualityIdInt = -1;
-        if(qualityId != null && !qualityId.isEmpty()){
+        if (qualityId != null && !qualityId.isEmpty()) {
             qualityIdInt = Integer.parseInt(qualityId);
             query.append(" AND quality_id=?");
         }
 
         // sort
-        if(sortParam != null && !sortParam.isEmpty()){
+        if (sortParam != null && !sortParam.isEmpty()) {
             query.append(" ORDER BY ");
-            switch (sortParam){
+            switch (sortParam) {
                 case "price":
                     query.append("price");
                     break;
@@ -114,16 +114,39 @@ public class MysqlCarDAO extends CarDao {
             }
         }
 
+        int pageCount = 0;
         List<Car> list = new ArrayList<>();
         try (
                 Connection connection = Database.dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query.toString())
         ) {
             int parameterNumber = 0;
-            if(brandIdInt > 0){
+            if (brandIdInt > 0) {
                 statement.setInt(++parameterNumber, brandIdInt);
             }
-            if(qualityIdInt > 0){
+            if (qualityIdInt > 0) {
+                statement.setInt(++parameterNumber, qualityIdInt);
+            }
+            if (statement.execute()) {
+                ResultSet resultSet = statement.getResultSet();
+                while(resultSet.next()){
+                    pageCount++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        query.append(" LIMIT 10 OFFSET " + ((page-1) * 10));
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query.toString())
+        ) {
+            int parameterNumber = 0;
+            if (brandIdInt > 0) {
+                statement.setInt(++parameterNumber, brandIdInt);
+            }
+            if (qualityIdInt > 0) {
                 statement.setInt(++parameterNumber, qualityIdInt);
             }
             if (statement.execute()) {
@@ -135,7 +158,12 @@ public class MysqlCarDAO extends CarDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+
+        HomeController.CarsInfo carsInfo = new HomeController().new CarsInfo();
+        carsInfo.setPageCount((int) Math.ceil((double) pageCount/10));
+        carsInfo.setPage(page);
+        carsInfo.setCars(list);
+        return carsInfo;
     }
 
     @Override

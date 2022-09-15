@@ -21,12 +21,12 @@
             <th>Blocked</th>
             <th>edit</th>
         </tr>
-        <c:forEach items="${users}" var="user">
+        <c:forEach items="${users}" var="invoice">
             <tr>
-                <td>${user.login}</td>
-                <td>${user.role}</td>
-                <td>${user.blocked}</td>
-                <td><a href="?id=${user.id}">edit</a></td>
+                <td>${invoice.login}</td>
+                <td>${invoice.role}</td>
+                <td>${invoice.blocked}</td>
+                <td><a href="?id=${invoice.id}">edit</a></td>
             </tr>
         </c:forEach>
     </table>

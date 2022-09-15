@@ -1,10 +1,12 @@
-package com.epam.carrental.controllers;
+package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Car;
+import com.epam.carrental.entity.Invoice;
 import com.epam.carrental.entity.Order;
 import com.epam.carrental.entity.User;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +22,7 @@ import java.util.Optional;
 
 @WebServlet("/order")
 public class OrderController extends HttpServlet {
-    private final Logger log = Logger.getLogger(this.getClass());
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -89,11 +91,13 @@ public class OrderController extends HttpServlet {
         int id = Integer.parseInt(idString);
         if (id > 0) {
             Order order = DAOFactory.getInstance().getOrderDAO().getById(id);
+            Invoice invoice = DAOFactory.getInstance().getInvoiceDAO().getById(Integer.parseInt(request.getParameter("invoice_id")));
             if (order == null) {
                 response.sendError(400);
                 return;
             }
             request.setAttribute("order", order);
+            request.setAttribute("invoice", invoice);
             request.getRequestDispatcher("/WEB-INF/order-new.jsp").forward(request, response);
         } else {
             response.sendError(400);
@@ -113,7 +117,6 @@ public class OrderController extends HttpServlet {
             }
         }
     }
-
     private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
         User user;
         boolean withDriver;
@@ -160,10 +163,15 @@ public class OrderController extends HttpServlet {
         order.setPassportValid(passportValid);
         order.setCar(car);
         order.setPrice(price);
-        if (!DAOFactory.getInstance().getOrderDAO().insert(order)) {
-            log.error("can't write order to database");
-            response.sendError(500);
-        }
-        response.sendRedirect("order?id=" + order.getId());
+        DAOFactory.getInstance().getOrderDAO().insert(order);
+
+        Invoice invoice = new Invoice();
+        invoice.setType(Invoice.Type.RENT);
+        invoice.setUser(order.getUser());
+        invoice.setOrder(order);
+        invoice.setAmount(order.getPrice());
+        DAOFactory.getInstance().getInvoiceDAO().insert(invoice);
+
+        response.sendRedirect("order?id=" + order.getId()+"&invoice_id="+invoice.getId());
     }
 }

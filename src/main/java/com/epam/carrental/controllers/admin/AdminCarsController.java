@@ -4,7 +4,6 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Quality;
-import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @WebServlet("/admin/cars")
 public class AdminCarsController extends HttpServlet {
 
-    private final Logger log = Logger.getLogger(this.getClass());
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     /* EXTERNAL */
     @Override

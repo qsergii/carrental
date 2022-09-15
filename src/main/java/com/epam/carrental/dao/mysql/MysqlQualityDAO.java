@@ -3,14 +3,15 @@ package com.epam.carrental.dao.mysql;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.QualityDao;
 import com.epam.carrental.entity.Quality;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlQualityDAO extends QualityDao {
-    private Logger log = Logger.getLogger(getClass());
+    private Logger log = LogManager.getLogger(getClass());
     @Override
     public void create(Quality quality) {
         try (

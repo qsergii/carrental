@@ -1,4 +1,4 @@
-package com.epam.carrental.controllers;
+package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Car;

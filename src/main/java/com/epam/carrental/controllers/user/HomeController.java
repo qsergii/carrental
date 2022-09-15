@@ -1,0 +1,80 @@
+package com.epam.carrental.controllers.user;
+
+import com.epam.carrental.dao.DAOFactory;
+import com.epam.carrental.entity.Car;
+
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+@WebServlet(urlPatterns = {"/home"})
+public class HomeController extends HttpServlet {
+
+    private final Logger log = LogManager.getLogger(this.getClass());
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        log.debug("test");
+
+        System.out.println(getServletContext().getAttribute("baseDir"));
+
+        String sort = request.getParameter("sort");
+        String brand = request.getParameter("brand");
+        String quality = request.getParameter("quality");
+
+        int page = Integer.valueOf(Optional.ofNullable(request.getParameter("page")).orElse("1"));
+
+        CarsInfo carsInfo = DAOFactory.getInstance().getCarDAO().getAll(brand, quality, sort, page);
+
+        request.setAttribute("page", carsInfo.getPage());
+        request.setAttribute("pageCount", carsInfo.getPageCount());
+        request.setAttribute("cars", carsInfo.getCars());
+
+        request.setAttribute("brands", DAOFactory.getInstance().getBrandDAO().getAllAvailible());
+        request.setAttribute("qualities", DAOFactory.getInstance().getQualityDAO().getAllAvailible());
+        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+    }
+    public class CarsInfo{
+        int pageCount;
+        int page;
+        List<Car> cars;
+
+        public int getPageCount() {
+            return pageCount;
+        }
+
+        public void setPageCount(int pageCount) {
+            this.pageCount = pageCount;
+        }
+
+        public int getPage() {
+            return Math.min(page, pageCount);
+        }
+
+        public void setPage(int page) {
+            this.page = page;
+        }
+
+        public List<Car> getCars() {
+            return cars;
+        }
+
+        public void setCars(List<Car> cars) {
+            this.cars = cars;
+        }
+    }
+
+}
+
+//        ResourceBundle bundle = ResourceBundle.getBundle("resources");
+//        ResourceBundle bundleUa = ResourceBundle.getBundle("resources_ua", new Locale("uk", "UA"));
+//        request.setAttribute("auth", bundle.getString("auth"));

@@ -9,8 +9,7 @@ public class Car {
     Brand brand;
     Quality quality;
 
-    public Car() {
-    }
+    public Car() {}
 
     public Car(
             int id,
