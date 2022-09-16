@@ -5,17 +5,18 @@ import com.epam.carrental.dao.UserDao;
 import com.epam.carrental.entity.Role;
 import com.epam.carrental.entity.User;
 
+import javax.servlet.ServletContextEvent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlUserDAO extends UserDao {
-    public User validate(String login, String password) {
-        User user = getUserByLogin(login);
+    public User validate(User userToCheck) {
+        User user = getUserByLogin(userToCheck.getLogin());
         if (user == null) {
             return null;
         }
-        if (user.getPassword().equals(user.getPasswordHash(password))) {
+        if (user.getPassword().equals(userToCheck.getPassword())) {
             return user;
         }
         return null;
@@ -25,7 +26,7 @@ public class MysqlUserDAO extends UserDao {
     public User getUserById(int id) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_ID);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_ID)
         ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,7 +44,7 @@ public class MysqlUserDAO extends UserDao {
     public User getUserByLogin(String login) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN)
         ) {
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -57,11 +58,18 @@ public class MysqlUserDAO extends UserDao {
         }
     }
 
+    /**
+     * @param user - user to insert
+     * @throws RuntimeException in case user exists
+     * @return <strong>true</strong> if users inserted {@link com.epam.carrental.ContextListener()}
+     * @see com.epam.carrental.ContextListener#contextDestroyed(ServletContextEvent)
+     * */
     @Override
-    public boolean insert(User user) {
+    public boolean insert(User user) throws RuntimeException{
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INSERT_USER, Statement.RETURN_GENERATED_KEYS)
+                // TODO read and close result set
         ) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
@@ -85,7 +93,7 @@ public class MysqlUserDAO extends UserDao {
     public boolean update(User user) {
         try (
                 Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.USER_UPDATE);
+                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.USER_UPDATE)
         ) {
             int paramNumber = 1;
             preparedStatement.setString(paramNumber++, user.getLogin());

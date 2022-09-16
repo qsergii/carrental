@@ -1,7 +1,14 @@
 package com.epam.carrental.entity;
 
+import com.epam.carrental.AppSettings;
+import com.google.common.hash.Hashing;
+import org.apache.commons.codec.digest.DigestUtils;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ * User entity
+ * */
 public class User {
     private int id;
     private String login;
@@ -9,7 +16,8 @@ public class User {
     private Role role;
     private boolean blocked;
 
-    public User() {}
+    public User() {
+    }
 
     public User(int id, String login, String password, Role role, boolean blocked) {
         this.id = id;
@@ -42,6 +50,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setPasswordAndSecure(String password) {
+        this.password = getPasswordHash(password);
+    }
 
     public Role getRole() {
         return role;
@@ -59,9 +70,24 @@ public class User {
         this.blocked = blocked;
     }
 
-    public String getPasswordHash(String password){
-        // TODO https://www.baeldung.com/java-password-hashing
-        return password;
+    /**
+     * Get hash from password + solt
+     * Method for calculation hash string set in main settings with param "hashMethod".
+     *  Possible values: "google" or other = "sha256" method
+     * @param password password from user
+     * @return hash string
+     * */
+    public String getPasswordHash(String password) {
+        String solt = AppSettings.PROPERTIES.getProperty("passwordSolt");
+        String sha256hex;
+        if (AppSettings.PROPERTIES.getProperty("hashMethod").equals("google")) {
+            sha256hex = Hashing.sha256()
+                    .hashString(password, StandardCharsets.UTF_8)
+                    .toString();
+        } else {
+            sha256hex = DigestUtils.sha256Hex(password + solt);
+        }
+        return sha256hex;
     }
 
     @Override

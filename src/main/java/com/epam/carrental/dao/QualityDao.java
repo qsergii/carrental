@@ -1,6 +1,5 @@
 package com.epam.carrental.dao;
 
-import com.epam.carrental.entity.Brand;
 import com.epam.carrental.entity.Quality;
 
 import java.util.List;

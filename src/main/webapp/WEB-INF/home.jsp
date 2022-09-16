@@ -3,10 +3,10 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <html>
 <c:set var="title" value="Car rental" scope="page"/>
-<%@include file="/WEB-INF/jspf/head_tag.jspf" %>
+<%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
 <body>
 
-<%@include file="/WEB-INF/jspf/menu.jspx" %>
+<%@include file="/WEB-INF/jspf/menu.jspf" %>
 
 <section>
     <div id="filters" class="container">
@@ -99,6 +99,7 @@
 </section>
 
 <%@include file="/WEB-INF/jspf/footer.jspf" %>
+
 
 </body>
 </html>

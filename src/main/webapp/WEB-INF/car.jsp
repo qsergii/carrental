@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<%@include file="jspf/menu.jspx" %>
+<%@include file="jspf/menu.jspf" %>
 
 <section>
     <div class="container card" style="padding-top: 54px;">

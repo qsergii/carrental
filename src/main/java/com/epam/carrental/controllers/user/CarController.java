@@ -26,7 +26,7 @@ public class CarController extends HttpServlet {
     private void printCar(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Car car = DAOFactory.getInstance().getCarDAO().getById(id);
         request.setAttribute("car", car);
-//        request.setAttribute("title", car.getName());
+        request.setAttribute("title", car.getName());
         request.getRequestDispatcher("/WEB-INF/car.jsp").forward(request, response);
     }
 }

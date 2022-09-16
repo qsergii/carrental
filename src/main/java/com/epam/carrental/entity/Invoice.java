@@ -1,7 +1,5 @@
 package com.epam.carrental.entity;
 
-import com.epam.carrental.entity.Order;
-
 import java.util.Date;
 
 public class Invoice {

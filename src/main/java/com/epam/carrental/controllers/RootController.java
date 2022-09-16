@@ -21,8 +21,9 @@ public class RootController extends HttpServlet {
         if(request.getServletPath().equals("/WEB-INF/builder.jsp")){
             return; // request finished
         }
-        if (request.getServletPath().equals("/index.html")) {
-            response.sendRedirect("home");
-        }
+        response.sendRedirect("home");
+//        if (request.getServletPath().equals("/index.html")) {
+//            response.sendRedirect("home");
+//        }
     }
 }

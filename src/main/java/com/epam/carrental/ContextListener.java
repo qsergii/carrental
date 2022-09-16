@@ -1,6 +1,5 @@
 package com.epam.carrental;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -10,9 +9,9 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        ServletContext context = event.getServletContext();
-        String baseDir = context.getRealPath("/");
-        context.setAttribute("baseDir", baseDir);
+//        ServletContext context = event.getServletContext();
+//        String baseDir = context.getRealPath("/");
+//        context.setAttribute("baseDir", baseDir);
 
 
 //        String path = context.getContextPath();

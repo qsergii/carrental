@@ -1,0 +1,11 @@
+com.epam.carrental
+com.epam.carrental.controllers
+com.epam.carrental.controllers.admin
+com.epam.carrental.controllers.auth
+com.epam.carrental.controllers.manager
+com.epam.carrental.controllers.user
+com.epam.carrental.dao
+com.epam.carrental.dao.mysql
+com.epam.carrental.entity
+com.epam.carrental.filters
+com.epam.carrental.tags

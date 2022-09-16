@@ -15,23 +15,32 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@WebServlet(urlPatterns = {"/home"})
+@WebServlet("/home")
 public class HomeController extends HttpServlet {
 
     private final Logger log = LogManager.getLogger(this.getClass());
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        log.debug("test");
+        try {
+            handleGet(request, response);
+        } catch (ServletException | IOException e) {
+            log.error(e.getMessage());
+            try{
+                response.sendError(500);
+            }catch (IOException ioException){
+                log.error(ioException.getMessage());
+            }
+        }
+    }
 
-        System.out.println(getServletContext().getAttribute("baseDir"));
-
+    private static void handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String sort = request.getParameter("sort");
         String brand = request.getParameter("brand");
         String quality = request.getParameter("quality");
 
-        int page = Integer.valueOf(Optional.ofNullable(request.getParameter("page")).orElse("1"));
+        int page = Integer.parseInt(Optional.ofNullable(request.getParameter("page")).orElse("1"));
 
         CarsInfo carsInfo = DAOFactory.getInstance().getCarDAO().getAll(brand, quality, sort, page);
 
@@ -43,6 +52,7 @@ public class HomeController extends HttpServlet {
         request.setAttribute("qualities", DAOFactory.getInstance().getQualityDAO().getAllAvailible());
         request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
+
     public class CarsInfo{
         int pageCount;
         int page;
@@ -72,7 +82,6 @@ public class HomeController extends HttpServlet {
             this.cars = cars;
         }
     }
-
 }
 
 //        ResourceBundle bundle = ResourceBundle.getBundle("resources");

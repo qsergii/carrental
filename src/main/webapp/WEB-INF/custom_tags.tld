@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib>
+
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>taglib</short-name>
+
+    <tag>
+        <name>Language</name>
+        <tag-class>com.epam.carrental.tags.LanguageSelect</tag-class>
+<!--        <body-content>JSP</body-content>-->
+<!--        <attribute>-->
+<!--            <name>a</name>-->
+<!--            <required>true</required>-->
+<!--        </attribute>-->
+<!--        <attribute>-->
+<!--            <name>b</name>-->
+<!--        </attribute>-->
+    </tag>
+
+</taglib>

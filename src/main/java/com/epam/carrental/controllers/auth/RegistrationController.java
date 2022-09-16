@@ -17,7 +17,7 @@ import java.util.Optional;
 public class RegistrationController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/signupsignup.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/auth/signup.jsp").forward(request, response);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class RegistrationController extends HttpServlet {
         }
         User user = new User();
         user.setLogin(login);
-        user.setPassword(password);
+        user.setPasswordAndSecure(password);
         user.setRole(Role.CLIENT);
         user.setBlocked(false);
 
@@ -58,7 +58,7 @@ public class RegistrationController extends HttpServlet {
         }else {
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getId());
-            response.sendRedirect("main");
+            response.sendRedirect("home");
         }
     }
 }

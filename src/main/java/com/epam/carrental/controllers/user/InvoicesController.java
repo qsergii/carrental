@@ -1,10 +1,7 @@
 package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Invoice;
-import com.epam.carrental.entity.Order;
-import com.epam.carrental.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,12 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 @WebServlet("/invoices")
 public class InvoicesController extends HttpServlet {

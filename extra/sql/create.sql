@@ -44,7 +44,7 @@ create table users
 (
     id       int         not null primary key auto_increment,
     login    varchar(50) not null,
-    password varchar(50) not null DEFAULT '',
+    password varchar(64) not null DEFAULT '',
     role     int         not null DEFAULT 2,
     blocked  tinyint(1)  not null DEFAULT 0,
     constraint id_UNIQUE

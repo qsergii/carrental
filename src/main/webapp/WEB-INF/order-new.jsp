@@ -4,7 +4,7 @@
 <c:set var="title" value="Order" scope="page"/><%@include file="/WEB-INF/jspf/head_tag.jspf" %>
 <body>
 
-<%@include file="jspf/menu.jspx" %>
+<%@include file="jspf/menu.jspf" %>
 
 <section>
     <div class="container card order-new" style="padding-top: 54px;">

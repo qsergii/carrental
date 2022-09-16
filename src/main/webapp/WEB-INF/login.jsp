@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<%@include file="jspf/menu.jspx" %>
+<%@include file="jspf/menu.jspf" %>
 
 <section class="position-relative py-4 py-xl-5">
     <div class="container">

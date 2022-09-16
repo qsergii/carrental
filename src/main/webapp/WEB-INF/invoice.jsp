@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<%@ include file="/WEB-INF/jspf/menu.jspx" %>
+<%@ include file="/WEB-INF/jspf/menu.jspf" %>
 
 <div class="container">
 

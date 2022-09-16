@@ -4,12 +4,11 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.User;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class CommonFilter extends HttpFilter {
     private String encoding;
@@ -21,14 +20,18 @@ public class CommonFilter extends HttpFilter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if(request.getCharacterEncoding() == null){
-            request.setCharacterEncoding(encoding);
-        }
-        identificateUser(request, response);
+        setEncoding(request);
+        authorizeUser(request, response);
         chain.doFilter(request, response);
     }
 
-    private void identificateUser(ServletRequest request, ServletResponse response){
+    private void setEncoding(ServletRequest request) throws UnsupportedEncodingException {
+        if(request.getCharacterEncoding() == null){
+            request.setCharacterEncoding(encoding);
+        }
+    }
+
+    private void authorizeUser(ServletRequest request, ServletResponse response){
 
         User user = null;
 
@@ -40,5 +43,10 @@ public class CommonFilter extends HttpFilter {
         }
 
         request.setAttribute("user", user);
+    }
+
+    @Override
+    public void destroy() {
+        // not needed
     }
 }
