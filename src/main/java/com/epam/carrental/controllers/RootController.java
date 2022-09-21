@@ -18,12 +18,8 @@ public class RootController extends HttpServlet {
     }
 
     private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(request.getServletPath().equals("/WEB-INF/builder.jsp")){
-            return; // request finished
+        if(!request.getServletPath().equals("/WEB-INF/builder.jsp")){
+            response.sendRedirect("home");
         }
-        response.sendRedirect("home");
-//        if (request.getServletPath().equals("/index.html")) {
-//            response.sendRedirect("home");
-//        }
     }
 }

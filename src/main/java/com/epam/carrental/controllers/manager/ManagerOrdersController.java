@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.Date;
 
 @WebServlet("/manager/orders")
-public class OrdersController extends HttpServlet {
-    private final Logger log = LogManager.getLogger(this.getClass());
+public class ManagerOrdersController extends HttpServlet {
+    private final Logger log = LogManager.getLogger(getClass());
 
     /* GET */
 
@@ -58,7 +58,7 @@ public class OrdersController extends HttpServlet {
             order = new Order();
         }
         request.setAttribute("order", order);
-        request.getRequestDispatcher("/WEB-INF/manager/order.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/manager/order-confirm.jsp").forward(request, response);
     }
 
     /* POST */

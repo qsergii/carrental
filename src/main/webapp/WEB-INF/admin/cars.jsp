@@ -4,13 +4,13 @@
 <html lang="en">
 
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
     <title>Administration</title>
 </head>
 
 <body>
 
-<%@ include file="/WEB-INF/jspf/menu.jspf" %>
+<%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
 
@@ -38,19 +38,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${cars}" var="invoice">
-                                <tr class='clickable-row' data-href='cars?id=${invoice.getId()}'>
+                            <c:forEach items="${cars}" var="car">
+                                <tr class='clickable-row' data-href='cars?id=${car.getId()}'>
                                     <td>
                                         <picture><img src="../assets/img/clipboard-image-1.png"></picture>
                                     </td>
-                                    <td>${invoice.getBrand().getName()}</td>
-                                    <td>${invoice.getQuality().getName()}</td>
-                                    <td>${invoice.name}</td>
-                                    <td>${invoice.getDescription()}</td>
-                                    <td>${invoice.isBlocked()}</td>
+                                    <td>${car.getBrand().getName()}</td>
+                                    <td>${car.getQuality().getName()}</td>
+                                    <td>${car.name}</td>
+                                    <td>${car.getDescription()}</td>
+                                    <td>${car.isBlocked()}</td>
                                     <td><input type="checkbox"></td>
-                                    <td>${invoice.price}</td>
-                                    <td>${invoice.getQuality().getName()}</td>
+                                    <td>${car.price}</td>
+                                    <td>${car.getQuality().getName()}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

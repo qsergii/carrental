@@ -79,7 +79,7 @@ public class MysqlCarDAO extends CarDao {
     }
 
     @Override // TODO delete
-    public HomeController.CarsInfo getAll(String brandId, String qualityId, String sortParam, int page) throws DbException {
+    public HomeController.CarsInfo getAll(String brandId, String qualityId, String sortParam, int page)  {
 
         QueryBuilder queryBuilder = new QueryBuilder("SELECT * FROM cars WHERE true")
                 .setBrand(brandId)
@@ -111,7 +111,7 @@ public class MysqlCarDAO extends CarDao {
 
         try {
             connection = Database.dataSource.getConnection();
-            statement = connection.prepareStatement(queryBuilder.toString())
+            statement = connection.prepareStatement(queryBuilder.toString());
             queryBuilder.setParameters(statement);
             if (statement.execute()) {
                 resultSet = statement.getResultSet();
@@ -127,13 +127,13 @@ public class MysqlCarDAO extends CarDao {
             System.out.println("printTrace /n");
             sqe.printStackTrace();
             log.error(sqe.getMessage());
-            throw new DbException("SQL error:" + sqe.getErrorCode());
+//            throw new DbException("SQL error:" + sqe.getErrorCode());
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
 
         HomeController.CarsInfo carsInfo = new HomeController().new CarsInfo();
-        carsInfo.setPageCount((int) Math.ceil((double) pageCount / 10));
+        carsInfo.setPageCount((int) Math.ceil((double) pageCount / 9));
         carsInfo.setPage(page);
         carsInfo.setCars(list);
         return carsInfo;
@@ -229,7 +229,7 @@ public class MysqlCarDAO extends CarDao {
         }
 
         public QueryBuilder setLimit(int page) {
-            queryString.append(" LIMIT 10 OFFSET " + ((page - 1) * 10));
+            queryString.append(" LIMIT 9 OFFSET " + ((page - 1) * 9));
             return this;
         }
 

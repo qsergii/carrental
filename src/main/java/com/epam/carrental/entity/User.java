@@ -4,6 +4,7 @@ import com.epam.carrental.AppSettings;
 import com.google.common.hash.Hashing;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -15,6 +16,9 @@ public class User {
     private String password;
     private Role role;
     private boolean blocked;
+
+    private String passportNumber;
+    private Date passportValid;
 
     public User() {
     }
@@ -68,6 +72,22 @@ public class User {
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
+    }
+
+    public Date getPassportValid() {
+        return passportValid;
+    }
+
+    public void setPassportValid(Date passportValid) {
+        this.passportValid = passportValid;
     }
 
     /**

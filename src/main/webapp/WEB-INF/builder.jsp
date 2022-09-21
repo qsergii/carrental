@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-  <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+  <%@ include file="/WEB-INF/jspf/head.jspf" %>
   <title>${requestScope.title}</title>
 </head>
 <body>

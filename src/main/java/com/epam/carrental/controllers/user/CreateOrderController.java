@@ -20,8 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
-@WebServlet("/order")
-public class OrderController extends HttpServlet {
+@WebServlet("/create-order")
+public class CreateOrderController extends HttpServlet {
     private final Logger log = LogManager.getLogger(this.getClass());
 
     @Override
@@ -55,7 +55,7 @@ public class OrderController extends HttpServlet {
         if (session.getAttribute("car") != null) {
             request.setAttribute("car", session.getAttribute("car"));
             session.removeAttribute("car");
-            request.getRequestDispatcher("/WEB-INF/order.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/order-confirm.jsp").forward(request, response);
             return;
         }
 
@@ -81,7 +81,8 @@ public class OrderController extends HttpServlet {
             }
 
             request.setAttribute("car", car);
-            request.getRequestDispatcher("/WEB-INF/order.jsp").forward(request, response);
+            request.setAttribute("user", user);
+            request.getRequestDispatcher("/WEB-INF/user/order-confirm.jsp").forward(request, response);
         } else {
             response.sendError(400);
         }
@@ -98,7 +99,7 @@ public class OrderController extends HttpServlet {
             }
             request.setAttribute("order", order);
             request.setAttribute("invoice", invoice);
-            request.getRequestDispatcher("/WEB-INF/order-new.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/user/order-created.jsp").forward(request, response);
         } else {
             response.sendError(400);
         }
@@ -154,6 +155,7 @@ public class OrderController extends HttpServlet {
             return;
         }
 
+        // TODO make in transaction
         // create order
         Order order = new Order();
         order.setUser(user);
@@ -172,6 +174,14 @@ public class OrderController extends HttpServlet {
         invoice.setAmount(order.getPrice());
         DAOFactory.getInstance().getInvoiceDAO().insert(invoice);
 
-        response.sendRedirect("order?id=" + order.getId()+"&invoice_id="+invoice.getId());
+        savePassportInformationToUser(user, passportNumber, passportValid);
+
+        response.sendRedirect("create-order?id=" + order.getId()+"&invoice_id="+invoice.getId());
+    }
+
+    private void savePassportInformationToUser(User user, String passportNumber, Date passportValid){
+        user.setPassportNumber(passportNumber);
+        user.setPassportValid(passportValid);
+        DAOFactory.getInstance().getUserDAO().update(user);
     }
 }

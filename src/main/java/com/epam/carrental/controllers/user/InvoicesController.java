@@ -2,6 +2,7 @@ package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Invoice;
+import com.epam.carrental.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +45,7 @@ public class InvoicesController extends HttpServlet {
     private void printList(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("invoices", DAOFactory.getInstance().getInvoiceDAO().getAll());
-            request.getRequestDispatcher("/WEB-INF/invoices.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/user/invoices.jsp").forward(request, response);
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
@@ -55,12 +56,12 @@ public class InvoicesController extends HttpServlet {
         Invoice invoice;
         int id = Integer.parseInt(orderIdString);
         if (id > 0) {
-            invoice = DAOFactory.getInstance().getInvoiceDAO().getById(id);
+            invoice = DAOFactory.getInstance().getInvoiceDAO().getByIdAndUser(id, (User) request.getAttribute("user"));
         } else {
             invoice = new Invoice();
         }
         request.setAttribute("invoice", invoice);
-        request.getRequestDispatcher("/WEB-INF/invoice.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/user/invoice.jsp").forward(request, response);
     }
 
     /* POST */

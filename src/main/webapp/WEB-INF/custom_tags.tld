@@ -6,16 +6,8 @@
     <short-name>taglib</short-name>
 
     <tag>
-        <name>Language</name>
-        <tag-class>com.epam.carrental.tags.LanguageSelect</tag-class>
-<!--        <body-content>JSP</body-content>-->
-<!--        <attribute>-->
-<!--            <name>a</name>-->
-<!--            <required>true</required>-->
-<!--        </attribute>-->
-<!--        <attribute>-->
-<!--            <name>b</name>-->
-<!--        </attribute>-->
+        <name>Quote</name>
+        <tag-class>com.epam.carrental.tags.Quote</tag-class>
     </tag>
 
 </taglib>

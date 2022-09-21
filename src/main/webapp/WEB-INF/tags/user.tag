@@ -10,8 +10,11 @@
         <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/login">Sign In</a>
     </c:when>
     <c:otherwise>
-        User: ${requestScope.user.login}
-        <label class="text-warning">${requestScope.get("user") != null ? requestScope.user.login : 'No auth'}</label>
-        <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/logout">Logout</a>
+        <div class="d-md-flex d-xl-flex align-items-md-center align-items-xl-center" id="client">
+            <div>
+                <a id="client_link" class="nav-link" href="${path}/user">${requestScope.user.login}</a>
+            </div>
+            <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/logout">Logout</a>
+        </div>
     </c:otherwise>
 </c:choose>

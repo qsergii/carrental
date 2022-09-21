@@ -1,6 +1,7 @@
 package com.epam.carrental.dao;
 
 import com.epam.carrental.entity.Order;
+import com.epam.carrental.entity.User;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public abstract class OrderDao {
 
     public abstract boolean insert(Order order);
     public abstract boolean update(Order order);
+
+    public abstract List<Order> getByUser(User user);
 }

@@ -3,12 +3,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/header.jspf" %>
     <title>Administration</title>
 </head>
 <body>
 
-<%@ include file="/WEB-INF/jspf/menu.jspf" %>
+<%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
     <%@include file="/WEB-INF/admin/header.jspf" %>

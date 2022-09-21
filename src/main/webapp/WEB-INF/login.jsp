@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
     <title>Login</title>
 </head>
 <body>
 
-<%@include file="jspf/menu.jspf" %>
+<%@include file="jspf/header.jspf" %>
 
 <section class="position-relative py-4 py-xl-5">
     <div class="container">

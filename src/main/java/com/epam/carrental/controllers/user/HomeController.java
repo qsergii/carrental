@@ -1,5 +1,6 @@
 package com.epam.carrental.controllers.user;
 
+import com.epam.carrental.DbException;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Car;
 
@@ -50,7 +51,7 @@ public class HomeController extends HttpServlet {
 
         request.setAttribute("brands", DAOFactory.getInstance().getBrandDAO().getAllAvailible());
         request.setAttribute("qualities", DAOFactory.getInstance().getQualityDAO().getAllAvailible());
-        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/user/home.jsp").forward(request, response);
     }
 
     public class CarsInfo{

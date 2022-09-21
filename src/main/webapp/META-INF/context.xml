@@ -8,6 +8,7 @@
             password="carrental"
             auth="Container"
             type="javax.sql.DataSource"
+            connectionProperties="zeroDateTimeBehavior=CONVERT_TO_NULL;"
 
             maxTotal="10"
             maxIdle="5"

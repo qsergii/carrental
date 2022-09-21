@@ -42,11 +42,13 @@ create table cars
 
 create table users
 (
-    id       int         not null primary key auto_increment,
-    login    varchar(50) not null,
-    password varchar(64) not null DEFAULT '',
-    role     int         not null DEFAULT 2,
-    blocked  tinyint(1)  not null DEFAULT 0,
+    id              int         not null primary key auto_increment,
+    login           varchar(50) not null,
+    password        varchar(64) not null DEFAULT '',
+    role            int         not null DEFAULT 2,
+    blocked         tinyint(1)  not null DEFAULT 0,
+    passport_number varchar(50) null,
+    passport_valid  date        not null,
     constraint id_UNIQUE
         unique (id),
     constraint login_UNIQUE
@@ -56,17 +58,18 @@ create table users
 create table orders
 (
     id              int auto_increment primary key,
-    user_id         int          not null,
-    with_driver     tinyint(1)   not null,
-    lease_term      int          not null,
-    passport_number varchar(50)  not null,
-    passport_valid  date         not null,
-    car_id          int          not null,
-    price           float        not null,
-    rejected        tinyint(1)   not null,
-    reject_reason   varchar(100) null,
-    return_date     datetime     null,
-    return_damage   varchar(100) null,
+    date            date default (CURRENT_DATE) not null,
+    user_id         int                         not null,
+    with_driver     tinyint(1)                  not null,
+    lease_term      int                         not null,
+    passport_number varchar(50)                 not null,
+    passport_valid  date                        not null,
+    car_id          int                         not null,
+    price           float                       not null,
+    rejected        tinyint(1)                  not null,
+    reject_reason   varchar(100)                null,
+    return_date     datetime                    null,
+    return_damage   varchar(100)                null,
     constraint orders_id_uindex
         unique (id),
     constraint car_id_fk

@@ -1,16 +1,25 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.DbException;
+import com.epam.carrental.Logging;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.UserDao;
 import com.epam.carrental.entity.Role;
 import com.epam.carrental.entity.User;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MysqlUserDAO extends UserDao {
+
+    private final Logger log = LogManager.getLogger(getClass());
+
     public User validate(User userToCheck) {
         User user = getUserByLogin(userToCheck.getLogin());
         if (user == null) {
@@ -24,19 +33,24 @@ public class MysqlUserDAO extends UserDao {
 
     @Override
     public User getUserById(int id) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_ID)
-        ) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE id=?");
+
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return getUserByResultSet(resultSet);
+                return mapUser(resultSet);
             } else {
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DbException e) {
             throw new RuntimeException(e);
+        } finally {
+            DbUtils.closeQuietly(connection, preparedStatement, resultSet);
         }
     }
 
@@ -49,23 +63,23 @@ public class MysqlUserDAO extends UserDao {
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return getUserByResultSet(resultSet);
+                return mapUser(resultSet);
             } else {
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DbException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
      * @param user - user to insert
-     * @throws RuntimeException in case user exists
      * @return <strong>true</strong> if users inserted {@link com.epam.carrental.ContextListener()}
+     * @throws RuntimeException in case user exists
      * @see com.epam.carrental.ContextListener#contextDestroyed(ServletContextEvent)
-     * */
+     */
     @Override
-    public boolean insert(User user) throws RuntimeException{
+    public boolean insert(User user) throws RuntimeException {
         try (
                 Connection connection = Database.dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INSERT_USER, Statement.RETURN_GENERATED_KEYS)
@@ -76,7 +90,6 @@ public class MysqlUserDAO extends UserDao {
             preparedStatement.setInt(3, user.getRole().getId());
             preparedStatement.setBoolean(4, user.isBlocked());
             preparedStatement.execute();
-            int rowCount = preparedStatement.getUpdateCount();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 user.setId(resultSet.getInt(1));
@@ -91,23 +104,32 @@ public class MysqlUserDAO extends UserDao {
 
     @Override
     public boolean update(User user) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.USER_UPDATE)
-        ) {
-            int paramNumber = 1;
-            preparedStatement.setString(paramNumber++, user.getLogin());
-            preparedStatement.setString(paramNumber++, user.getPassword());
-            preparedStatement.setInt(paramNumber++, user.getRole().getId());
-            preparedStatement.setBoolean(paramNumber++, user.isBlocked());
-            preparedStatement.setInt(paramNumber++, user.getId());
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "UPDATE users " +
+                            "SET login=?, password=?, role=?, blocked=?,  passport_number=?, passport_valid=?" +
+                            "WHERE id=?"
+            );
 
-            return preparedStatement.executeUpdate() > 0;
+            int i = 0;
+            statement.setString(++i, user.getLogin());
+            statement.setString(++i, user.getPassword());
+            statement.setInt(++i, user.getRole().getId());
+            statement.setBoolean(++i, user.isBlocked());
+            statement.setString(++i, user.getPassportNumber());
+            statement.setDate(++i, new Date(user.getPassportValid().getTime()));
+            statement.setInt(++i, user.getId());
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, null);
         }
-        return false;
     }
 
     @Override
@@ -115,12 +137,12 @@ public class MysqlUserDAO extends UserDao {
         List<User> list = new ArrayList<>();
         try (
                 Connection connection = Database.dataSource.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ) {
             if (statement.execute(MysqlConstants.USERS_GET_ALL)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(getUserByResultSet(resultSet));
+                    list.add(mapUser(resultSet));
                 }
             }
         } catch (Exception e) {
@@ -130,20 +152,24 @@ public class MysqlUserDAO extends UserDao {
     }
 
     /* PRIVATE */
-    private User getUserByResultSet(ResultSet resultSet) {
+    private User mapUser(ResultSet resultSet) throws DbException {
         try {
-            int roleId = resultSet.getInt("role");
-            return new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("login"),
-                    resultSet.getString("password"),
-                    Role.getById(roleId),
-                    resultSet.getBoolean("blocked")
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            User user = new User();
+            user.setId(resultSet.getInt("id"));
+            user.setLogin(resultSet.getString("login"));
+            user.setPassword(resultSet.getString("password"));
+            user.setRole(Role.getById(resultSet.getInt("role")));
+            user.setBlocked(resultSet.getBoolean("blocked"));
+            user.setPassportNumber(resultSet.getString("passport_number"));
+//            user.setPassportValid(Optional.ofNullable(resultSet.getDate("passport_valid")).orElse(null));
+            user.setPassportValid(resultSet.getDate("passport_valid"));
+            return user;
+
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+            throw new DbException("Can't map user from DB to instance");
         }
-        return null;
     }
 
 }

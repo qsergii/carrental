@@ -1,13 +1,15 @@
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
     <title>${requestScope.car.name}</title>
 </head>
 <body>
 
-<%@include file="jspf/menu.jspf" %>
+<%@include file="/WEB-INF/jspf/header.jspf" %>
 
 <section>
     <div class="container card order" style="padding-top: 54px;">
@@ -19,26 +21,32 @@
                 <p class="card-text">${requestScope.car.description}</p>
                 <p class="price" style="color: var(--bs-red);font-weight: bold;">$${requestScope.car.price} per 24h</p>
 
-                <form action="order" method="post">
+                <form action="create-order" method="post">
                     <input type="hidden" name="car-id" value="${requestScope.car.id}">
                     <input type="hidden" name="price" value="${requestScope.car.price}">
+
                     <div class="input-group">
                         <span class="input-group-text">Passport number:</span>
-                        <input class="form-control" type="text" name="passport-number" required>
+                        <input class="form-control" type="text" name="passport-number" required
+                               value="${requestScope.user.passportNumber}">
                     </div>
+
                     <div class="input-group">
                         <span class="input-group-text">Passport valid:</span>
-                        <input class="form-control" type="date" name="passport-valid" required>
+                        <input id="passportValid" class="form-control" type="date"
+                               name="passport-valid" required
+                               value="${requestScope.user.passportValid}"
+                        min="<%= (new SimpleDateFormat("yyyy:MM:dd HH:mm:ss")).format(new Date()) %>">
                     </div>
+
                     <div class="input-group">
                         <span class="input-group-text">With driver:</span>
                         <select name="with-driver" class="form-select" required>
-                            <optgroup label="Select driver options">
-                                <option value="with-driver">With driver</option>
-                                <option value="without-driver">Without driver</option>
-                            </optgroup>
+                            <option value="with-driver">With driver</option>
+                            <option value="without-driver">Without driver</option>
                         </select>
                     </div>
+
                     <div class="input-group">
                         <span class="input-group-text">lease term, days:</span>
                         <input class="form-control" type="number" name="lease-term" min="1" max="30" required/>
@@ -48,12 +56,14 @@
                     <button class="btn btn-primary border rounded d-md-flex" type="submit">Place the order</button>
                 </form>
 
+                <script src="${path}/assets/js/order-confirm.js"></script>
+
             </div>
         </div>
     </div>
 </section>
 
-<%@include file="jspf/footer.jspf" %>
+<%@include file="/WEB-INF/jspf/footer.jspf" %>
 
 </body>
 </html>

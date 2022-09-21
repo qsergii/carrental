@@ -10,6 +10,6 @@ public abstract class CarDao {
     public abstract void insert(Car car);
     public abstract boolean update(Car car);
     public abstract List<Car> getAll();
-    public abstract HomeController.CarsInfo getAll(String brandId, String qualityId, String sortName, int page) throws DbException;
+    public abstract HomeController.CarsInfo getAll(String brandId, String qualityId, String sortName, int page);
     public abstract Car getById(int id);
 }

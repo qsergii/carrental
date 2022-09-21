@@ -3,12 +3,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
     <title>Administration</title>
 </head>
 <body>
 
-<%@ include file="/WEB-INF/jspf/menu.jspf" %>
+<%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
     <%@ include file="header.jspf" %>
@@ -21,12 +21,12 @@
             <th>Blocked</th>
             <th>edit</th>
         </tr>
-        <c:forEach items="${users}" var="invoice">
+        <c:forEach items="${users}" var="car">
             <tr>
-                <td>${invoice.login}</td>
-                <td>${invoice.role}</td>
-                <td>${invoice.blocked}</td>
-                <td><a href="?id=${invoice.id}">edit</a></td>
+                <td>${car.login}</td>
+                <td>${car.role}</td>
+                <td>${car.blocked}</td>
+                <td><a href="?id=${car.id}">edit</a></td>
             </tr>
         </c:forEach>
     </table>

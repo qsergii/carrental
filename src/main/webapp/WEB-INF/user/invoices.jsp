@@ -4,13 +4,13 @@
 <html lang="en">
 
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
     <title>Administration</title>
 </head>
 
 <body>
 
-<%@ include file="/WEB-INF/jspf/menu.jspf" %>
+<%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
 
@@ -35,15 +35,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.invoices}" var="invoice">
-                                <tr class='clickable-row' data-href='invoices?id=${invoice.getId()}'>
-                                    <td>${invoice.id}</td>
-                                    <td>${invoice.getDate()}</td>
-                                    <td>${invoice.getOrder().getId()}</td>
-                                    <td>${invoice.type}</td>
-                                    <td>${invoice.amount}</td>
-                                    <td>${invoice.payed}</td>
-                                    <td>${invoice.user.login}</td>
+                            <c:forEach items="${requestScope.invoices}" var="car">
+                                <tr class='clickable-row' data-href='invoices?id=${car.getId()}'>
+                                    <td>${car.id}</td>
+                                    <td>${car.getDate()}</td>
+                                    <td>${car.getOrder().getId()}</td>
+                                    <td>${car.type}</td>
+                                    <td>${car.amount}</td>
+                                    <td>${car.payed}</td>
+                                    <td>${car.user.login}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

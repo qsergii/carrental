@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Order {
     private int id;
+    private Date date;
     private User user;
     private Car car;
     private boolean withDriver;
@@ -16,12 +17,25 @@ public class Order {
     private String rejectReason;
     private Date dateReturn;
     private String returnDamage;
+
+    public Order() {
+        date = new Date();
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public User getUser() {

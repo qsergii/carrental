@@ -1,6 +1,6 @@
 package com.epam.carrental.dao.mysql;
 
-public abstract class MysqlConstants {
+public final class MysqlConstants {
     private MysqlConstants(){}
 
     /* BRANDS */
@@ -48,21 +48,21 @@ public abstract class MysqlConstants {
     /* USERS */
 
     public static final String USERS_GET_ALL = "SELECT * FROM users";
-    public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id=?";
+//    public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id=?";
     public static final String GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login=?";
     public static final String INSERT_USER = "INSERT INTO users (login, password, role, blocked) VALUES (?, ?, ?, ?)";
-    public static final String USER_UPDATE = "UPDATE users SET login=?, password=?, role=?, blocked=? WHERE id=?";
+    //public static final String USER_UPDATE = "UPDATE users SET login=?, password=?, role=?, blocked=? WHERE id=?";
 
     /* ORDERS */
 
     public static final String ORDER_GET_ALL = "SELECT * FROM orders";
     public static final String ORDER_GET_BY_ID = "SELECT * FROM orders WHERE id=?";
     public static final String ORDER_INSERT = "INSERT INTO orders " +
-            "(user_id, with_driver, lease_term, passport_number, passport_valid, car_id, price, " +
+            "(date, user_id, with_driver, lease_term, passport_number, passport_valid, car_id, price, " +
             "rejected, reject_reason) VALUES " +
-            "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String ORDER_UPDATE = "UPDATE orders SET " +
-            "user_id=?, with_driver=?, lease_term=?, passport_number=?, passport_valid=?, car_id=?, price=?, " +
+            "date=?, user_id=?, with_driver=?, lease_term=?, passport_number=?, passport_valid=?, car_id=?, price=?, " +
             "rejected=?, reject_reason=? " +
             "WHERE id=?";
 

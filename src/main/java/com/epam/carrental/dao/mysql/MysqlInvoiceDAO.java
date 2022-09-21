@@ -4,6 +4,7 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.InvoiceDao;
 import com.epam.carrental.entity.Invoice;
+import com.epam.carrental.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,6 +89,26 @@ public class MysqlInvoiceDAO extends InvoiceDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INVOICE_GET_BY_ID)
         ) {
             preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapResultSet(resultSet);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public Invoice getByIdAndUser(int id, User user) {
+        try (
+                Connection connection = Database.dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM invoices WHERE id=? AND user_id=?")
+        ) {
+            int i = 0;
+            preparedStatement.setInt(++i, id);
+            preparedStatement.setInt(++i, user.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return mapResultSet(resultSet);

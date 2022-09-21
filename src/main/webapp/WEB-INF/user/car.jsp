@@ -2,12 +2,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <%@ include file="/WEB-INF/jspf/head_tag.jspf" %>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
     <title>${requestScope.car.name}</title>
 </head>
 <body>
 
-<%@include file="jspf/menu.jspf" %>
+<%@include file="/WEB-INF/jspf/header.jspf" %>
 
 <section>
     <div class="container card" style="padding-top: 54px;">
@@ -22,7 +22,7 @@
                 <p class="card-text">${requestScope.car.description}</p>
                 <p class="price" style="color: var(--bs-red);font-weight: bold;">$${requestScope.car.price} per 24h</p>
 
-                <form method="get" action="order">
+                <form method="get" action="create-order">
                     <input type="hidden" name="car-id" value="${requestScope.car.id}">
                     <button class="btn btn-primary border rounded d-md-flex" type="submit">Rent</button>
                 </form>
@@ -32,7 +32,7 @@
     </div>
 </section>
 
-<%@include file="jspf/footer.jspf" %>
+<%@include file="/WEB-INF/jspf/footer.jspf" %>
 
 </body>
 </html>

@@ -4,6 +4,8 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.OrderDao;
 import com.epam.carrental.entity.Order;
+import com.epam.carrental.entity.User;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,6 +55,33 @@ public class MysqlOrderDAO extends OrderDao {
     }
 
     @Override
+    public List<Order> getByUser(User user) {
+        if(user == null){
+            throw new NullPointerException("user can't be null");
+        }
+        List<Order> orders = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM orders WHERE user_id = ? ORDER BY id desc");
+            statement.setInt(1, user.getId());
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                orders.add(mapResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+        return orders;
+    }
+
+    @Override
     public boolean insert(Order order) {
 
         try (
@@ -60,6 +89,7 @@ public class MysqlOrderDAO extends OrderDao {
                 PreparedStatement statement = connection.prepareStatement(MysqlConstants.ORDER_INSERT, Statement.RETURN_GENERATED_KEYS)
         ) {
             int i = 0;
+            statement.setDate(++i, new Date(order.getDate().getTime()));
             statement.setInt(++i, order.getUser().getId());
             statement.setBoolean(++i, order.isWithDriver());
             statement.setInt(++i, order.getLeaseTerm());
@@ -83,12 +113,14 @@ public class MysqlOrderDAO extends OrderDao {
 
         return false;
     }
+
     public boolean update(Order order) {
         try (
                 Connection connection = Database.dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(MysqlConstants.ORDER_UPDATE);
         ) {
             int i = 0;
+            statement.setDate(++i, new Date(order.getDate().getTime()));
             statement.setInt(++i, order.getUser().getId());
             statement.setBoolean(++i, order.isWithDriver());
             statement.setInt(++i, order.getLeaseTerm());
@@ -107,10 +139,12 @@ public class MysqlOrderDAO extends OrderDao {
         }
         return false;
     }
+
     private Order mapResultSet(ResultSet resultSet) {
         try {
             Order order = new Order();
             order.setId(resultSet.getInt("id"));
+            order.setDate(new Date(resultSet.getDate("date").getTime()));
             order.setUser(DAOFactory.getInstance().getUserDAO().getUserById(resultSet.getInt("user_id")));
             order.setWithDriver(resultSet.getBoolean("with_driver"));
             order.setLeaseTerm(resultSet.getInt("lease_term"));

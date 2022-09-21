@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<c:set var="title" value="Order" scope="page"/><%@include file="/WEB-INF/jspf/head_tag.jspf" %>
+<c:set var="title" value="Order" scope="page"/>
+<%@include file="/WEB-INF/jspf/head.jspf" %>
 <body>
 
-<%@include file="jspf/menu.jspf" %>
+<%@include file="/WEB-INF/jspf/header.jspf" %>
 
 <section>
     <div class="container card order-new" style="padding-top: 54px;">
@@ -33,7 +34,7 @@
     </div>
 </section>
 
-<%@include file="jspf/footer.jspf" %>
+<%@include file="/WEB-INF/jspf/footer.jspf" %>
 
 </body>
 </html>
