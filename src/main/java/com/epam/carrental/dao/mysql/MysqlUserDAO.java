@@ -1,5 +1,6 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.ContextListener;
 import com.epam.carrental.DbException;
 import com.epam.carrental.Logging;
 import com.epam.carrental.dao.Database;
@@ -14,7 +15,6 @@ import javax.servlet.ServletContextEvent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class MysqlUserDAO extends UserDao {
 
@@ -74,23 +74,37 @@ public class MysqlUserDAO extends UserDao {
 
     /**
      * @param user - user to insert
-     * @return <strong>true</strong> if users inserted {@link com.epam.carrental.ContextListener()}
+     * @return <strong>true</strong> if users inserted {@link ContextListener()}
      * @throws RuntimeException in case user exists
-     * @see com.epam.carrental.ContextListener#contextDestroyed(ServletContextEvent)
+     * @see ContextListener#contextDestroyed(ServletContextEvent)
      */
     @Override
     public boolean insert(User user) throws RuntimeException {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.INSERT_USER, Statement.RETURN_GENERATED_KEYS)
-                // TODO read and close result set
-        ) {
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setInt(3, user.getRole().getId());
-            preparedStatement.setBoolean(4, user.isBlocked());
-            preparedStatement.execute();
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "INSERT INTO users " +
+                            "(login, phone, email, first_name, last_name, password, passport_number, passport_valid, role, blocked) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    , Statement.RETURN_GENERATED_KEYS);
+
+            int i = 0;
+            statement.setString(++i, user.getLogin());
+            statement.setString(++i, user.getPhone());
+            statement.setString(++i, user.getEmail());
+            statement.setString(++i, user.getFirstName());
+            statement.setString(++i, user.getLastName());
+            statement.setString(++i, user.getPassword());
+            statement.setString(++i, user.getPassportNumber());
+            statement.setDate(++i, user.getPassportValid() != null ? new Date(user.getPassportValid().getTime()) : null);
+            statement.setInt(++i, user.getRole().getId());
+            statement.setBoolean(++i, user.isBlocked());
+            statement.execute();
+
+            resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 user.setId(resultSet.getInt(1));
                 return true;
@@ -99,6 +113,8 @@ public class MysqlUserDAO extends UserDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
     }
 
@@ -110,12 +126,16 @@ public class MysqlUserDAO extends UserDao {
             connection = Database.dataSource.getConnection();
             statement = connection.prepareStatement(
                     "UPDATE users " +
-                            "SET login=?, password=?, role=?, blocked=?,  passport_number=?, passport_valid=?" +
+                            "SET login=?, phone=?, email=?, first_name=?, last_name=?, password=?, role=?, blocked=?,  passport_number=?, passport_valid=?" +
                             "WHERE id=?"
             );
 
             int i = 0;
             statement.setString(++i, user.getLogin());
+            statement.setString(++i, user.getPhone());
+            statement.setString(++i, user.getEmail());
+            statement.setString(++i, user.getFirstName());
+            statement.setString(++i, user.getLastName());
             statement.setString(++i, user.getPassword());
             statement.setInt(++i, user.getRole().getId());
             statement.setBoolean(++i, user.isBlocked());
@@ -135,18 +155,22 @@ public class MysqlUserDAO extends UserDao {
     @Override
     public List<User> getAll() {
         List<User> list = new ArrayList<>();
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                Statement statement = connection.createStatement()
-        ) {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.createStatement();
             if (statement.execute(MysqlConstants.USERS_GET_ALL)) {
-                ResultSet resultSet = statement.getResultSet();
+                resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(mapUser(resultSet));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection, statement, null);
         }
         return list;
     }
@@ -154,18 +178,17 @@ public class MysqlUserDAO extends UserDao {
     /* PRIVATE */
     private User mapUser(ResultSet resultSet) throws DbException {
         try {
-
             User user = new User();
             user.setId(resultSet.getInt("id"));
             user.setLogin(resultSet.getString("login"));
+            user.setPhone(resultSet.getString("phone"));
+            user.setEmail(resultSet.getString("email"));
             user.setPassword(resultSet.getString("password"));
             user.setRole(Role.getById(resultSet.getInt("role")));
             user.setBlocked(resultSet.getBoolean("blocked"));
             user.setPassportNumber(resultSet.getString("passport_number"));
-//            user.setPassportValid(Optional.ofNullable(resultSet.getDate("passport_valid")).orElse(null));
             user.setPassportValid(resultSet.getDate("passport_valid"));
             return user;
-
         } catch (SQLException e) {
             log.error(Logging.makeDescription(e));
             throw new DbException("Can't map user from DB to instance");

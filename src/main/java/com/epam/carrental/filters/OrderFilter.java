@@ -17,30 +17,31 @@ public class OrderFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         String orderIdString = request.getParameter("id");
-        if(orderIdString != null) {
+        if (orderIdString != null) {
 
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
             int orderId = Integer.parseInt(orderIdString);
-            Order order = DAOFactory.getInstance().getOrderDAO().getById(orderId);
-            if(order == null){
+            Order order = null;
+            order = DAOFactory.getInstance().getOrderDAO().getById(orderId);
+            if (order == null) {
                 httpServletResponse.sendError(400);
                 return;
             }
 
-            User user = (User)((HttpServletRequest)request).getAttribute("user");
-            if(user == null){
+            User user = (User) ((HttpServletRequest) request).getAttribute("user");
+            if (user == null) {
                 httpServletResponse.sendError(403);
                 return;
             }
 
             Role role = user.getRole();
-            if(role == Role.ADMIN || role == Role.MANAGER){
+            if (role == Role.ADMIN || role == Role.MANAGER) {
                 chain.doFilter(request, response);
                 return;
             }
 
-            if(!order.getUser().equals(user)){
+            if (!order.getUser().equals(user)) {
                 httpServletResponse.sendError(403);
                 return;
             }

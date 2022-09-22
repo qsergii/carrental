@@ -17,15 +17,26 @@
                 <p class="card-header header">Order #${requestScope.order.id}</p>
                 <form>
                     <div class="input-group"><span class="input-group-text">Passport number:</span>
-                        <span class="input-group-text">${requestScope.order.passportNumber}</span></div>
+                        <span class="input-group-text">${requestScope.order.passportNumber}</span>
+                    </div>
                     <div class="input-group"><span class="input-group-text">Passport valid:</span>
-                        <span class="input-group-text">${requestScope.order.passportValid}</span></div>
+                        <span class="input-group-text">${requestScope.order.passportValid}</span>
+                    </div>
                     <div class="input-group"><span class="input-group-text">With driver:</span>
-                        <span class="input-group-text">${requestScope.order.withDriver}</span></div>
+                        <span class="input-group-text">${requestScope.order.withDriver}</span>
+                    </div>
                     <div class="input-group"><span class="input-group-text">Price for 24h:</span>
-                        <span class="input-group-text">$ ${requestScope.order.price}</span></div>
+                        <span class="input-group-text">$ ${requestScope.order.price}</span>
+                    </div>
+                    <div class="input-group"><span class="input-group-text">Begin:</span>
+                        <span class="input-group-text">${requestScope.order.leaseBegin}</span>
+                    </div>
+                    <div class="input-group"><span class="input-group-text">Finish:</span>
+                        <span class="input-group-text">${requestScope.order.leaseFinish}</span>
+                    </div>
                     <div class="input-group"><span class="input-group-text">Days:</span>
-                        <span class="input-group-text">${requestScope.order.leaseTerm}</span></div>
+                        <span class="input-group-text">${requestScope.order.leaseTerm}</span>
+                    </div>
                 </form>
                 New <a href="invoices?id=${requestScope.invoice.id}">invoice</a> for rent, please pay ASAP!
                 <p>Please, wait for your car</p>

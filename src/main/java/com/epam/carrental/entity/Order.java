@@ -7,8 +7,10 @@ public class Order {
     private Date date;
     private User user;
     private Car car;
-    private boolean withDriver;
+    private Date leaseBegin;
+    private Date leaseFinish;
     private int leaseTerm;
+    private boolean withDriver;
     private String passportNumber;
     private Date passportValid;
     private float price;
@@ -52,6 +54,22 @@ public class Order {
 
     public void setWithDriver(boolean withDriver) {
         this.withDriver = withDriver;
+    }
+
+    public Date getLeaseBegin() {
+        return leaseBegin;
+    }
+
+    public void setLeaseBegin(Date leaseBegin) {
+        this.leaseBegin = leaseBegin;
+    }
+
+    public Date getLeaseFinish() {
+        return leaseFinish;
+    }
+
+    public void setLeaseFinish(Date leaseFinish) {
+        this.leaseFinish = leaseFinish;
     }
 
     public int getLeaseTerm() {

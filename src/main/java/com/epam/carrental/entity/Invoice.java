@@ -30,6 +30,14 @@ public class Invoice {
         this.date = new Date();
     }
 
+    public Invoice(Order order, Invoice.Type type) {
+        this.date = new Date();
+        this.setType(type);
+        this.setUser(order.getUser());
+        this.setOrder(order);
+        this.setAmount(order.getPrice());
+    }
+
     private int id;
     private Date date;
     private User user;

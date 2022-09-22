@@ -1,5 +1,6 @@
 package com.epam.carrental.controllers.user;
 
+import com.epam.carrental.DbException;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Invoice;
@@ -38,7 +39,7 @@ public class CreateOrderController extends HttpServlet {
         }
     }
 
-    private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, DbException {
         String carIdString = request.getParameter("car-id");
         if (carIdString != null) {
             get_PrintCar(carIdString, request, response);
@@ -88,7 +89,7 @@ public class CreateOrderController extends HttpServlet {
         }
     }
 
-    private void get_PrintOrder(String idString, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void get_PrintOrder(String idString, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, DbException {
         int id = Integer.parseInt(idString);
         if (id > 0) {
             Order order = DAOFactory.getInstance().getOrderDAO().getById(id);
@@ -120,8 +121,10 @@ public class CreateOrderController extends HttpServlet {
     }
     private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
         User user;
-        boolean withDriver;
+        Date leaseBegin;
+        Date leaseFinish;
         int leaseTerm;
+        boolean withDriver;
         String passportNumber;
         Date passportValid;
         Car car;
@@ -142,12 +145,11 @@ public class CreateOrderController extends HttpServlet {
             return;
         }
         withDriver = request.getParameter("with-driver").equals("with-driver");
+        leaseBegin = parseDate(request.getParameter("lease_begin"));
+        leaseFinish = parseDate(request.getParameter("lease_finish"));
         leaseTerm = Integer.parseInt(request.getParameter("lease-term"));
         passportNumber = request.getParameter("passport-number");
-
-        String input = request.getParameter("passport-valid");
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
-        passportValid = parser.parse(input);
+        passportValid = parseDate(request.getParameter("passport-valid"));
 
         price = Float.parseFloat(request.getParameter("price"));
         if (price != car.getPrice()) {
@@ -159,19 +161,18 @@ public class CreateOrderController extends HttpServlet {
         // create order
         Order order = new Order();
         order.setUser(user);
-        order.setWithDriver(withDriver);
+        order.setLeaseBegin(leaseBegin);
+        order.setLeaseFinish(leaseFinish);
         order.setLeaseTerm(leaseTerm);
+        order.setWithDriver(withDriver);
         order.setPassportNumber(passportNumber);
         order.setPassportValid(passportValid);
         order.setCar(car);
         order.setPrice(price);
         DAOFactory.getInstance().getOrderDAO().insert(order);
 
-        Invoice invoice = new Invoice();
-        invoice.setType(Invoice.Type.RENT);
-        invoice.setUser(order.getUser());
-        invoice.setOrder(order);
-        invoice.setAmount(order.getPrice());
+        // create and save invoice
+        Invoice invoice = new Invoice(order, Invoice.Type.RENT);
         DAOFactory.getInstance().getInvoiceDAO().insert(invoice);
 
         savePassportInformationToUser(user, passportNumber, passportValid);
@@ -183,5 +184,10 @@ public class CreateOrderController extends HttpServlet {
         user.setPassportNumber(passportNumber);
         user.setPassportValid(passportValid);
         DAOFactory.getInstance().getUserDAO().update(user);
+    }
+
+    private Date parseDate(String input) throws ParseException {
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+        return parser.parse(input);
     }
 }

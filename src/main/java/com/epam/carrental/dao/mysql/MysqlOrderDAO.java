@@ -1,5 +1,7 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.DbException;
+import com.epam.carrental.Logging;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.OrderDao;
@@ -37,12 +39,14 @@ public class MysqlOrderDAO extends OrderDao {
 
     @Override
     public Order getById(int id) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.ORDER_GET_BY_ID);
-        ) {
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.ORDER_GET_BY_ID);
+            statement.setInt(1, id);
+            resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return mapResultSet(resultSet);
             } else {
@@ -50,13 +54,15 @@ public class MysqlOrderDAO extends OrderDao {
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
-            throw new RuntimeException(e);
+            return null;
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
     }
 
     @Override
     public List<Order> getByUser(User user) {
-        if(user == null){
+        if (user == null) {
             throw new NullPointerException("user can't be null");
         }
         List<Order> orders = new ArrayList<>();
@@ -64,7 +70,7 @@ public class MysqlOrderDAO extends OrderDao {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        try{
+        try {
             connection = Database.dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * FROM orders WHERE user_id = ? ORDER BY id desc");
             statement.setInt(1, user.getId());
@@ -74,8 +80,7 @@ public class MysqlOrderDAO extends OrderDao {
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
-            throw new RuntimeException(e);
-        }finally {
+        } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return orders;
@@ -83,16 +88,24 @@ public class MysqlOrderDAO extends OrderDao {
 
     @Override
     public boolean insert(Order order) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "INSERT INTO orders " +
+                            "(date, user_id, lease_begin, lease_finish, lease_term, with_driver, passport_number, passport_valid," +
+                            " car_id, price, rejected, reject_reason) " +
+                            "VALUES (?, ?, ?,?,?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(MysqlConstants.ORDER_INSERT, Statement.RETURN_GENERATED_KEYS)
-        ) {
             int i = 0;
             statement.setDate(++i, new Date(order.getDate().getTime()));
             statement.setInt(++i, order.getUser().getId());
-            statement.setBoolean(++i, order.isWithDriver());
+            statement.setDate(++i, new Date(order.getLeaseBegin().getTime()));
+            statement.setDate(++i, new Date(order.getLeaseFinish().getTime()));
             statement.setInt(++i, order.getLeaseTerm());
+            statement.setBoolean(++i, order.isWithDriver());
             statement.setString(++i, order.getPassportNumber());
             statement.setDate(++i, new java.sql.Date(order.getPassportValid().getTime()));
             statement.setInt(++i, order.getCar().getId());
@@ -100,7 +113,7 @@ public class MysqlOrderDAO extends OrderDao {
             statement.setBoolean(++i, order.isRejected());
             statement.setString(++i, order.getRejectReason());
             if (statement.executeUpdate() > 0) {
-                ResultSet resultSet = statement.getGeneratedKeys();
+                resultSet = statement.getGeneratedKeys();
                 if (resultSet.next()) {
                     order.setId(resultSet.getInt(1));
                 }
@@ -109,6 +122,8 @@ public class MysqlOrderDAO extends OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
 
         return false;
@@ -146,8 +161,10 @@ public class MysqlOrderDAO extends OrderDao {
             order.setId(resultSet.getInt("id"));
             order.setDate(new Date(resultSet.getDate("date").getTime()));
             order.setUser(DAOFactory.getInstance().getUserDAO().getUserById(resultSet.getInt("user_id")));
-            order.setWithDriver(resultSet.getBoolean("with_driver"));
+            order.setLeaseBegin(resultSet.getDate("lease_begin"));
+            order.setLeaseFinish(resultSet.getDate("lease_finish"));
             order.setLeaseTerm(resultSet.getInt("lease_term"));
+            order.setWithDriver(resultSet.getBoolean("with_driver"));
             order.setPassportNumber(resultSet.getString("passport_number"));
             order.setPassportValid(resultSet.getDate("passport_valid"));
             order.setCar(DAOFactory.getInstance().getCarDAO().getById(resultSet.getInt("car_id")));
@@ -156,9 +173,8 @@ public class MysqlOrderDAO extends OrderDao {
             order.setRejectReason(resultSet.getString("reject_reason"));
             return order;
         } catch (Exception e) {
-            e.printStackTrace();
-            // TODO throw up to stack
+            log.error(Logging.makeDescription(e));
+            return null;
         }
-        return null;
     }
 }

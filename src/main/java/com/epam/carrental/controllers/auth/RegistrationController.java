@@ -1,8 +1,11 @@
 package com.epam.carrental.controllers.auth;
 
+import com.epam.carrental.Exceptions;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Role;
 import com.epam.carrental.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,23 +18,36 @@ import java.util.Optional;
 
 @WebServlet("/registration")
 public class RegistrationController extends HttpServlet {
+    private final Logger log = LogManager.getLogger(getClass());
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/auth/signup.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            handlePost(request, response);
+        }catch (IOException exception){
+            Exceptions.ProcessInternalError(response, exception);
+        }
+    }
+
+    private void handlePost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String login = Optional.ofNullable(request.getParameter("login")).orElse("");
         if(login.isEmpty()){
             // TODO show error login empty
             response.sendRedirect("registration");
             return;
         }
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String firstName = request.getParameter("first_name");
+        String lastName = request.getParameter("last_name");
         String password = Optional.ofNullable(request.getParameter("password")).orElse("");
         if(password.isEmpty()){
             // TODO show error password empty
-            response.sendRedirect("registration");
+            response.sendRedirect("registration?message=Password empty");
             return;
         }
         String password2 = Optional.ofNullable(request.getParameter("password2")).orElse("");
@@ -48,6 +64,10 @@ public class RegistrationController extends HttpServlet {
         }
         User user = new User();
         user.setLogin(login);
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setPasswordAndSecure(password);
         user.setRole(Role.CLIENT);
         user.setBlocked(false);

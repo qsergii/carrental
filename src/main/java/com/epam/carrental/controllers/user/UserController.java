@@ -34,7 +34,6 @@ public class UserController extends HttpServlet {
             return;
         }
         request.setAttribute("user", user);
-        request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getByUser(user));
         request.getRequestDispatcher("/WEB-INF/user/user.jsp").forward(request, response);
     }
 }

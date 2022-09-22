@@ -1,5 +1,6 @@
 package com.epam.carrental.dao;
 
+import com.epam.carrental.DbException;
 import com.epam.carrental.entity.Order;
 import com.epam.carrental.entity.User;
 

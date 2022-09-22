@@ -23,7 +23,8 @@
 
                 <form action="create-order" method="post">
                     <input type="hidden" name="car-id" value="${requestScope.car.id}">
-                    <input type="hidden" name="price" value="${requestScope.car.price}">
+                    <input id="price" type="hidden"
+                           name="price" value="${requestScope.car.price}">
 
                     <div class="input-group">
                         <span class="input-group-text">Passport number:</span>
@@ -36,7 +37,7 @@
                         <input id="passportValid" class="form-control" type="date"
                                name="passport-valid" required
                                value="${requestScope.user.passportValid}"
-                        min="<%= (new SimpleDateFormat("yyyy:MM:dd HH:mm:ss")).format(new Date()) %>">
+                               min="<%= (new SimpleDateFormat("yyyy:MM:dd HH:mm:ss")).format(new Date()) %>">
                     </div>
 
                     <div class="input-group">
@@ -48,10 +49,25 @@
                     </div>
 
                     <div class="input-group">
-                        <span class="input-group-text">lease term, days:</span>
-                        <input class="form-control" type="number" name="lease-term" min="1" max="30" required/>
+                        <span class="input-group-text">Begin rent:</span>
+                        <input id="lease_begin" class="form-control" type="date"
+                               name="lease_begin" required >
                     </div>
-                    <input type="number" name="ammount" value="${requestScope.car.price}"/>
+                    <div class="input-group">
+                        <span class="input-group-text">Finish rent:</span>
+                        <input id="lease_finish" class="form-control" type="date"
+                               name="lease_finish" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Days rent:</span>
+                        <input id="lease_term" class="form-control" type="number" name="lease-term" min="1" max="30" required/>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-text">Amount:</span>
+                        <input id="ammount" class="form-control" type="number" readonly
+                               name="ammount" value="${requestScope.car.price}"/>
+                    </div>
                     <p class="text-secondary">You passport data will be stored and use in next order</p>
                     <button class="btn btn-primary border rounded d-md-flex" type="submit">Place the order</button>
                 </form>

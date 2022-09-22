@@ -1,6 +1,7 @@
 package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.DbException;
+import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.entity.Car;
 
@@ -16,13 +17,13 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@WebServlet("/home")
-public class HomeController extends HttpServlet {
+
+public class HomeController implements Controller {
 
     private final Logger log = LogManager.getLogger(this.getClass());
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         try {
             handleGet(request, response);

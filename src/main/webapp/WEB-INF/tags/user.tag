@@ -14,7 +14,7 @@
             <div>
                 <a id="client_link" class="nav-link" href="${path}/user">${requestScope.user.login}</a>
             </div>
-            <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/logout">Logout</a>
+            <a class="btn btn-primary" role="button" href="${path}/logout">Logout</a>
         </div>
     </c:otherwise>
 </c:choose>

@@ -42,13 +42,17 @@ create table cars
 
 create table users
 (
-    id              int         not null primary key auto_increment,
-    login           varchar(50) not null,
-    password        varchar(64) not null DEFAULT '',
-    role            int         not null DEFAULT 2,
-    blocked         tinyint(1)  not null DEFAULT 0,
-    passport_number varchar(50) null,
-    passport_valid  date        not null,
+    id              int          not null primary key auto_increment,
+    login           varchar(50)  not null,
+    phone           varchar(20)  null,
+    email           varchar(100) null,
+    first_name      varchar(100) null,
+    last_name       varchar(100) null,
+    password        varchar(64)  not null DEFAULT '',
+    role            int          not null DEFAULT 2,
+    blocked         tinyint(1)   not null DEFAULT 0,
+    passport_number varchar(50)  null,
+    passport_valid  date         null,
     constraint id_UNIQUE
         unique (id),
     constraint login_UNIQUE
@@ -59,6 +63,8 @@ create table orders
 (
     id              int auto_increment primary key,
     date            date default (CURRENT_DATE) not null,
+    lease_begin     date                        not null,
+    lease_finish    date                        not null,
     user_id         int                         not null,
     with_driver     tinyint(1)                  not null,
     lease_term      int                         not null,
