@@ -11,7 +11,7 @@
     <div class="container card order-new" style="padding-top: 54px;">
         <div class="row">
             <div class="col">
-                <img class="card-img" src="assets/img/clipboard-image-1.png">
+                <customtag:carImage car="${requestScope.order.car}" classElement="car-big"/>
             </div>
             <div class="col">
                 <p class="card-header header">Order #${requestScope.order.id}</p>

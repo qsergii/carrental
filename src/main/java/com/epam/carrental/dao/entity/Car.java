@@ -1,4 +1,4 @@
-package com.epam.carrental.entity;
+package com.epam.carrental.dao.entity;
 
 public class Car {
     int id;
@@ -9,6 +9,7 @@ public class Car {
     Brand brand;
     Quality quality;
 
+    String imageFileName;
     public Car() {}
 
     public Car(
@@ -82,5 +83,13 @@ public class Car {
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
     }
 }

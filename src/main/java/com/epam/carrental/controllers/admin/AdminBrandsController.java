@@ -1,7 +1,7 @@
 package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Brand;
+import com.epam.carrental.dao.entity.Brand;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

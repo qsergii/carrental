@@ -1,4 +1,4 @@
-package com.epam.carrental.entity;
+package com.epam.carrental.dao.entity;
 
 public enum Role {
     ADMIN(0),

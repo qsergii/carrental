@@ -1,4 +1,4 @@
-package com.epam.carrental.entity;
+package com.epam.carrental.dao.entity;
 
 public class Brand {
     int id;

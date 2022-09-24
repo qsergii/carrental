@@ -1,7 +1,7 @@
 package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Quality;
+import com.epam.carrental.dao.entity.Quality;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

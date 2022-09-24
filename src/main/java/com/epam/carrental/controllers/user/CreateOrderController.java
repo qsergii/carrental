@@ -2,10 +2,10 @@ package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.DbException;
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Invoice;
-import com.epam.carrental.entity.Order;
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.Car;
+import com.epam.carrental.dao.entity.Invoice;
+import com.epam.carrental.dao.entity.Order;
+import com.epam.carrental.dao.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +56,7 @@ public class CreateOrderController extends HttpServlet {
         if (session.getAttribute("car") != null) {
             request.setAttribute("car", session.getAttribute("car"));
             session.removeAttribute("car");
-            request.getRequestDispatcher("/WEB-INF/order-confirm.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/user/order-confirm.jsp").forward(request, response);
             return;
         }
 

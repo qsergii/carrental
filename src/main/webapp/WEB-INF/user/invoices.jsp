@@ -17,7 +17,6 @@
     <section>
         <div class="container">
             <div class="card">
-                <%--                <%@ include file="/WEB-INF/header.jspf" %>--%>
 
                 <div class="card-body">
                     <h4 class="card-title">Invoices</h4>

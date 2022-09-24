@@ -10,5 +10,5 @@ public interface Controller {
     default void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, SQLException, ServletException {}
     default void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, SQLException, ServletException{}
+            throws Exception {}
 }

@@ -40,9 +40,7 @@
                             <tbody>
                             <c:forEach items="${cars}" var="car">
                                 <tr class='clickable-row' data-href='cars?id=${car.getId()}'>
-                                    <td>
-                                        <picture><img src="../assets/img/clipboard-image-1.png"></picture>
-                                    </td>
+                                    <td><customtag:carImage car="${car}"/></td>
                                     <td>${car.getBrand().getName()}</td>
                                     <td>${car.getQuality().getName()}</td>
                                     <td>${car.name}</td>

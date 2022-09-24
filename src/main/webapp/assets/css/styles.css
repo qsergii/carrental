@@ -110,4 +110,25 @@ form span {
 .card {
   margin: 5px 0;
 }
+.car{
+  /*max-width: 175px;*/
+  height: 115px;
+  width:auto;
+}
+.car-big{
+  max-width: 600px;
+  max-height: 300px;
+
+}
+input::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
+}
+
+.fill-height {
+  padding-top: 150px;
+  padding-bottom: 150px;
+  /*background: #E41b13;*/
+  min-height: 100%;
+  height: 100vh;
+}
 

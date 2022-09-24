@@ -22,7 +22,11 @@ import java.util.Map;
  * receive all request, map dispatcher, take processing to it
  * */
 @WebServlet("/")
-@MultipartConfig
+//@MultipartConfig(
+//        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+//        maxFileSize = 1024 * 1024 * 10,      // 10 MB
+//        maxRequestSize = 1024 * 1024 * 100   // 100 MB
+//)
 public class FrontController extends HttpServlet {
 
     private static final Map<String, Class<?>> dispatchers = new HashMap<>();
@@ -31,23 +35,23 @@ public class FrontController extends HttpServlet {
     static {
         dispatchers.put("/", com.epam.carrental.controllers.user.HomeController.class);
         dispatchers.put("/home", com.epam.carrental.controllers.user.HomeController.class);
+
+        dispatchers.put("/logout", com.epam.carrental.controllers.auth.LogoutController.class);
+
         dispatchers.put("/admin/cars", com.epam.carrental.controllers.admin.AdminCarsController.class);
     }
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-//        super.service(req, res);
         doMethod((HttpServletRequest) req, (HttpServletResponse)res);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        super.doGet(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        super.doPost(req, resp);
     }
 
     private void doMethod(HttpServletRequest request, HttpServletResponse response){

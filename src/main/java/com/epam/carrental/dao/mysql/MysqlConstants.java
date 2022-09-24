@@ -40,10 +40,10 @@ public final class MysqlConstants {
     public static final String GET_ALL_CAR = "SELECT * FROM cars";
 
     public static final String GET_CAR_BY_ID = "SELECT * FROM cars WHERE id=?";
-    public static final String CAR_INSERT = "INSERT INTO cars (id, name, description, blocked, price, quality_id, brand_id) VALUES (default, ?, ?, ?, ?, ?, ?)";
-    public static final String CAR_UPDATE = "UPDATE cars SET " +
-            "name=?, description=?, blocked=?, price=?, quality_id=?, brand_id=? " +
-            "WHERE id=?";
+//    public static final String CAR_INSERT = "INSERT INTO cars (id, name, description, blocked, price, quality_id, brand_id) VALUES (default, ?, ?, ?, ?, ?, ?)";
+//    public static final String CAR_UPDATE = "UPDATE cars SET " +
+//            "name=?, description=?, blocked=?, price=?, quality_id=?, brand_id=? " +
+//            "WHERE id=?";
 
     /* USERS */
 

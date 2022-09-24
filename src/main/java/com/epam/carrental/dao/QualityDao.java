@@ -1,6 +1,6 @@
 package com.epam.carrental.dao;
 
-import com.epam.carrental.entity.Quality;
+import com.epam.carrental.dao.entity.Quality;
 
 import java.util.List;
 

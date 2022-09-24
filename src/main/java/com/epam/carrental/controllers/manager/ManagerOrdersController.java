@@ -1,8 +1,8 @@
 package com.epam.carrental.controllers.manager;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Invoice;
-import com.epam.carrental.entity.Order;
+import com.epam.carrental.dao.entity.Invoice;
+import com.epam.carrental.dao.entity.Order;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import javax.servlet.ServletException;

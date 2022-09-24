@@ -2,7 +2,7 @@ package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.Logging;
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Car;
+import com.epam.carrental.dao.entity.Car;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

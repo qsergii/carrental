@@ -1,9 +1,8 @@
 package com.epam.carrental.entity;
 
+import com.epam.carrental.dao.entity.User;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class UserTest {
 

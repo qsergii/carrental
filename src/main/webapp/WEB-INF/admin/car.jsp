@@ -18,31 +18,29 @@
             <p>Car</p>
             <div class="row row-cols-1">
 
-                <div class="col"><img src="../assets/img/clipboard-image-1.png"></div>
-
-                <form action="cars" enctype="multipart/form-data" method="post">
-                    <input type="hidden" name="action" value="file">
-                    <input type="hidden" name="id" value="${requestScope.car.id}">
-                    <input type="file" name="file2"/>
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="inputGroupFile02" name="file" size="50">
-                        <label class="input-group-text" for="inputGroupFile02">Upload</label>
-                    </div>
-                    <button class="btn btn-primary" type="submit">upload</button>
-                </form>
+                <div class="col">
+                    <customtag:carImage car="${requestScope.car}"/>
+                </div>
 
                 <div class="col">
 
-                    <form action="cars" method="post">
-                        <input type="hidden" name="action" value="order">
+                    <form action="cars" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="${requestScope.car.id}">
+
+                        <%--image--%>
+                        <div class="input-group mb-3">
+                            <input type="file" id="inputGroupFile02" class="form-control" name="file" size="50">
+                            <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                        </div>
 
                         <div id="brand_group" class="input-group">
                             <span class="input-group-text">Brand:</span>
                             <select id="brand" class="form-select" name="brand">
                                 <c:forEach items="${requestScope.brands}" var="brand">
                                     <option value="${brand.id}"
-                                        ${requestScope.car.brand.equals(brand) ? 'selected' : ''}>${brand.getName()}</option>
+                                        ${requestScope.car.brand.equals(brand) ? 'selected' : ''}>
+                                            ${brand.name}
+                                    </option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -54,13 +52,12 @@
 
                         <div id="quality_group" class="input-group">
                             <span class="input-group-text">Quality:</span>
-                            <select id="quality" class="form-select" name="quality">
-                                <optgroup label="Select quality">
-                                    <c:forEach items="${requestScope.qualities}" var="quality">
-                                        <option value="${quality.id}"
-                                            ${requestScope.car.quality.equals(quality) ? 'selected' : ''}>${quality.getName()}</option>
-                                    </c:forEach>
-                                </optgroup>
+                            <select id="quality" class="form-select" name="quality" required>
+                                <c:forEach items="${requestScope.qualities}" var="quality">
+                                    <option value="${quality.id}" ${requestScope.car.quality.equals(quality) ? 'selected' : ''}>
+                                            ${quality.getName()}
+                                    </option>
+                                </c:forEach>
                             </select>
                         </div>
 

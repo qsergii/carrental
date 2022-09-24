@@ -1,8 +1,7 @@
 package com.epam.carrental.filters;
 
 import com.epam.carrental.Logging;
-import com.epam.carrental.entity.Role;
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

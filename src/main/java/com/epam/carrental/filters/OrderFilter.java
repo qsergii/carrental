@@ -1,9 +1,9 @@
 package com.epam.carrental.filters;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Order;
-import com.epam.carrental.entity.Role;
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.Order;
+import com.epam.carrental.dao.entity.Role;
+import com.epam.carrental.dao.entity.User;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

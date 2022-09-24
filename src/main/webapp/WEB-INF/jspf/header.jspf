@@ -2,6 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="filetags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="customtag" uri="/WEB-INF/custom_tags.tld" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
+<%--<fmt:setLocale value = "${requestScope.language}" scope="session"/>--%>
 
 <header>
     <div class="container">
@@ -30,22 +33,22 @@
                 </button>
                 <div class="collapse navbar-collapse flex-grow-0 order-md-first" id="navcol-6">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="${pageContext.request.contextPath}">Home</a>
-                        </li>
-                        <c:if test="${requestScope.user.role == 'MANAGER' || requestScope.user.role == 'ADMIN'}">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="${pageContext.request.contextPath}/orders">Orders</a>
-                            </li>
-                        </c:if>
+                        <li class="nav-item"><a class="nav-link active" href="${path}"><fmt:message
+                                key="menu.home"/></a></li>
+
+                        <c:set var="user" value="${requestScope.user}"/>
                         <c:if test="${requestScope.user != null}">
-                            <li><a class="nav-link active" href="${path}/orders">Orders</a></li>
-                            <li><a class="nav-link active" href="${path}/invoices">Invoices</a></li>
-                        </c:if>
-                        <c:if test="${requestScope.user.role == 'ADMIN' }">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="${pageContext.request.contextPath}/admin">Admin</a>
-                            </li>
+                            <c:choose>
+                                <c:when test="${user.role == 'ADMIN' }">
+                                    <%@ include file="/WEB-INF/admin/menu.jspf" %>
+                                </c:when>
+                                <c:when test="${user.role == 'MANAGER' }">
+                                    <%@ include file="/WEB-INF/manager/menu.jspf" %>
+                                </c:when>
+                                <c:otherwise>
+                                    <%@ include file="/WEB-INF/user/menu.jspf" %>
+                                </c:otherwise>
+                            </c:choose>
                         </c:if>
                     </ul>
                     <div class="d-md-none my-2">
@@ -53,12 +56,13 @@
                         <button class="btn btn-primary" type="button">Button</button>
                     </div>
                 </div>
-                <select>
-                    <option value="13">EN</option>
-                    <option value="14">UA</option>
+                <select id="language">
+                    <option value="en" ${sessionScope.language == "en" ? "selected" : ""}>EN</option>
+                    <option value="ua" ${sessionScope.language == "ua" ? "selected" : ""}>UA</option>
                 </select>
                 <filetags:user user="${requestScope.user}"/>
             </div>
         </nav>
     </div>
 </header>
+<script src="${path}/assets/js/header.js"></script>

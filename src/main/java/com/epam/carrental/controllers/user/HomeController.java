@@ -1,14 +1,11 @@
 package com.epam.carrental.controllers.user;
 
-import com.epam.carrental.DbException;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Car;
+import com.epam.carrental.dao.entity.Car;
 
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

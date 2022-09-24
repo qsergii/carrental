@@ -2,12 +2,13 @@ package com.epam.carrental.controllers.admin;
 
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Brand;
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Quality;
+import com.epam.carrental.dao.entity.Brand;
+import com.epam.carrental.dao.entity.Car;
+import com.epam.carrental.dao.entity.Quality;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,15 +16,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class AdminCarsController implements Controller {
 
@@ -65,81 +62,81 @@ public class AdminCarsController implements Controller {
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (request.getContentType().contains("multipart/form-data")) {
-            doPostFile(request, response);
-            return;
-        }
-        String action = request.getParameter("action");
-        if (action == null) {
-            log.error("Wrong parameters");
+            createCar(request, response);
+        } else {
             response.sendError(400);
-            return;
         }
-        switch (action) {
-            case "file":
-                doPostFile(request, response);
-                break;
-            case "order":
-                doPostOrder(request, response);
-                break;
-            default:
-                log.error("param action wrong: " + action);
-                response.sendError(400);
-        }
-
     }
 
-    private void doPostFile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void createCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int maxMemSize = 5_000_000;
-        int maxFileSize = 5 * 1000 * 1000;
-        String file_name = null;
-        String file_name2="";
-        File file;
-        ServletContext context = request.getServletContext();
-        String filePath = context.getInitParameter("file-upload");
-        response.setContentType("text/html");
+        int maxFileSize = 5_000_000;
+
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setSizeThreshold(maxMemSize);
-        factory.setRepository(new File("c:\\temp"));
+        factory.setRepository(new File("c:\\temp")); // TODO set relative path
+
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setSizeMax(maxFileSize);
 
-        try {
-            // Parse the request to get file items.
-            List requestItems = upload.parseRequest(request);
-
-            // Process the uploaded file items
-            Iterator i = requestItems.iterator();
-
-            PrintWriter out = response.getWriter();
-
-            while (i.hasNext()) {
-                FileItem fileItem = (FileItem) i.next();
-                if (!fileItem.isFormField()) {
-                    // Get the uploaded file parameters
-                    String fieldName = fileItem.getFieldName();
-                    String fileName = fileItem.getName();
-                    boolean isInMemory = fileItem.isInMemory();
-                    long sizeInBytes = fileItem.getSize();
-
-                    // Write the file
-                    if (fileName.lastIndexOf("\\") >= 0) {
-                        file = new File(filePath + fileName.substring(fileName.lastIndexOf("\\")));
-                    } else {
-                        file = new File(filePath + fileName.substring(fileName.lastIndexOf("\\") + 1));
-                    }
-                    fileItem.write(file);
-                    out.println("Uploaded Filename: " + filePath + fileName + "<br>");
+        List<FileItem> requestItems = upload.parseRequest(request);
+        Car car = new Car();
+        for (FileItem element : requestItems) {
+            String fieldName = element.getFieldName();
+            if (element.isFormField()) {
+                switch (fieldName) {
+                    case "id":
+                        car.setId(Integer.parseInt(element.getString()));
+                        break;
+                    case "name":
+                        car.setName(element.getString());
+                        break;
+                    case "description":
+                        car.setDescription(element.getString());
+                        break;
+                    case "blocked":
+                        car.setBlocked(Optional.ofNullable(element.getString()).orElse("").equals("on"));
+                        break;
+                    case "price":
+                        car.setPrice(Float.parseFloat(element.getString()));
+                        break;
+                    case "quality":
+                        car.setQuality(DAOFactory.getInstance().getQualityDAO().getById(Integer.parseInt(element.getString())));
+                        break;
+                    case "brand":
+                        car.setBrand(DAOFactory.getInstance().getBrandDAO().getById(Integer.parseInt(element.getString())));
                 }
+            } else {
+                ServletContext context = request.getServletContext();
+                String filePath = context.getInitParameter("file-upload");
+
+                File file;
+
+                String fieldNameIn = element.getFieldName();
+                String fileName = element.getName();
+                boolean isInMemory = element.isInMemory();
+                long sizeInBytes = element.getSize();
+
+                // Write the file
+                int index;
+                if (fileName.lastIndexOf("\\") >= 0) {
+                    index = fileName.lastIndexOf("\\");
+                } else {
+                    index = fileName.lastIndexOf("\\") + 1;
+                }
+                file = new File(filePath + fileName.substring(index));
+                String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+                fileName = UUID.randomUUID().toString() + "." + extension;
+                file = new File(context.getRealPath("/") + "/assets/cars/" + fileName);
+                element.write(file);
+                car.setImageFileName(fileName);
             }
-        } catch (Exception ex) {
-            System.out.println(ex);
         }
-
-//        response.sendRedirect("cars?id=0&img=" + fileId);
-    }
-
+        write(car);
+        response.sendRedirect("cars");
+     }
     private void doPostOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // properties
         int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("-1"));
@@ -167,17 +164,19 @@ public class AdminCarsController implements Controller {
         car.setDescription(description);
         car.setBlocked(blocked);
         car.setPrice(price);
-        car.setQuality(new Quality());
         car.setBrand(brand);
         car.setQuality(quality);
 
+        write(car);
+
+        response.sendRedirect("cars");
+    }
+
+    private void write(Car car) {
         if (car.getId() == 0) {
             DAOFactory.getInstance().getCarDAO().insert(car);
         } else {
             DAOFactory.getInstance().getCarDAO().update(car);
         }
-
-        response.sendRedirect("cars");
     }
-
 }

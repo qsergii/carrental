@@ -14,7 +14,9 @@
 <section>
     <div class="container card order" style="padding-top: 54px;">
         <div class="row">
-            <div class="col"><img class="card-img" src="assets/img/clipboard-image-1.png"></div>
+            <div class="col">
+                <customtag:carImage car="${requestScope.car}" classElement="car-big"/>
+            </div>
             <div class="col">
                 <p class="card-header"
                    style="font-weight: bold;color: var(--bs-indigo);font-size: 30px;">${requestScope.car.brand.name} ${requestScope.car.name}</p>

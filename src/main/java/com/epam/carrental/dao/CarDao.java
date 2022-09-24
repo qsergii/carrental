@@ -1,8 +1,7 @@
 package com.epam.carrental.dao;
 
-import com.epam.carrental.DbException;
 import com.epam.carrental.controllers.user.HomeController;
-import com.epam.carrental.entity.Car;
+import com.epam.carrental.dao.entity.Car;
 
 import java.util.List;
 

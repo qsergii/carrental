@@ -21,6 +21,7 @@ public class Quote extends TagSupport {
     };
     private static final int quoteSize = quotes.length;
 
+    @Override
     public int doStartTag() {
 
         int quoteIndex = new Random().nextInt(quoteSize);

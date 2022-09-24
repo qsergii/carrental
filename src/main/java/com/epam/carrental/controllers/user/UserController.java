@@ -1,8 +1,7 @@
 package com.epam.carrental.controllers.user;
 
 import com.epam.carrental.Logging;
-import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

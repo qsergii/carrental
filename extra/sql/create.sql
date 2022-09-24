@@ -25,13 +25,14 @@ create table qualities
 
 create table cars
 (
-    id          int auto_increment primary key,
-    name        varchar(100)         not null,
-    description varchar(200)         null,
-    blocked     tinyint(1) default 0 not null,
-    price       float                not null,
-    quality_id  int                  not null,
-    brand_id    int                  not null,
+    id              int auto_increment primary key,
+    name            varchar(100)         not null,
+    description     varchar(200)         null,
+    blocked         tinyint(1) default 0 not null,
+    price           float                not null,
+    quality_id      int                  not null,
+    brand_id        int                  not null,
+    image_file_name varchar(100)         null,
     constraint cars_id_uindex
         unique (id),
     constraint brand_id_fk

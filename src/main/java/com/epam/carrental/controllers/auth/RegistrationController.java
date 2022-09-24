@@ -2,8 +2,8 @@ package com.epam.carrental.controllers.auth;
 
 import com.epam.carrental.Exceptions;
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.Role;
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.Role;
+import com.epam.carrental.dao.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

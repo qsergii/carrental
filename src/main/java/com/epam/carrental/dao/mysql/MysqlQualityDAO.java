@@ -2,7 +2,7 @@ package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.QualityDao;
-import com.epam.carrental.entity.Quality;
+import com.epam.carrental.dao.entity.Quality;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

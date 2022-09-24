@@ -1,6 +1,6 @@
 package com.epam.carrental.dao;
 
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.User;
 
 import java.util.List;
 

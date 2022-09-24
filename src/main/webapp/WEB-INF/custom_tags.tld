@@ -10,4 +10,19 @@
         <tag-class>com.epam.carrental.tags.Quote</tag-class>
     </tag>
 
+    <tag>
+        <name>carImage</name>
+        <tag-class>com.epam.carrental.tags.CarImage</tag-class>
+        <attribute>
+            <name>car</name>
+            <type>com.epam.carrental.dao.entity.Car</type>
+            <rtexprvalue>true</rtexprvalue>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>classElement</name>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
 </taglib>

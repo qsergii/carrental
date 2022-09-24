@@ -1,4 +1,4 @@
-package com.epam.carrental.entity;
+package com.epam.carrental.dao.entity;
 
 import com.epam.carrental.AppSettings;
 import com.google.common.hash.Hashing;

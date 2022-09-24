@@ -1,7 +1,7 @@
 package com.epam.carrental.controllers.auth;
 
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.entity.User;
+import com.epam.carrental.dao.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(request, response);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getId());
             if(session.getAttribute("car") != null){
-                response.sendRedirect("order");
+                response.sendRedirect("create-order");
             }else {
                 response.sendRedirect("home");
             }

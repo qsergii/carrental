@@ -1,11 +1,11 @@
 package com.epam.carrental.dao.mysql;
 
-import com.epam.carrental.DbException;
+import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.user.HomeController;
 import com.epam.carrental.dao.CarDao;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.Database;
-import com.epam.carrental.entity.Car;
+import com.epam.carrental.dao.entity.Car;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,48 +16,69 @@ import java.util.List;
 
 public class MysqlCarDAO extends CarDao {
     private final Logger log = LogManager.getLogger(getClass());
+
     @Override
     public void insert(Car car) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.CAR_INSERT, Statement.RETURN_GENERATED_KEYS);
-        ) {
-            int paramNumber = 1;
-            preparedStatement.setString(paramNumber++, car.getName());
-            preparedStatement.setString(paramNumber++, car.getDescription());
-            preparedStatement.setBoolean(paramNumber++, car.isBlocked());
-            preparedStatement.setFloat(paramNumber++, car.getPrice());
-            preparedStatement.setInt(paramNumber++, car.getQuality().getId());
-            preparedStatement.setInt(paramNumber++, car.getBrand().getId());
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "INSERT INTO cars " +
+                            "(id, name, description, blocked, price, quality_id, brand_id, image_file_name) " +
+                            "VALUES (default, ?, ?, ?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
 
-            int res = preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement.getResultSet();
+            int i = 0;
+            statement.setString(++i, car.getName());
+            statement.setString(++i, car.getDescription());
+            statement.setBoolean(++i, car.isBlocked());
+            statement.setFloat(++i, car.getPrice());
+            statement.setInt(++i, car.getQuality().getId());
+            statement.setInt(++i, car.getBrand().getId());
+            statement.setString(++i, car.getImageFileName());
+            statement.execute();
+
+            resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 car.setId(resultSet.getInt("id"));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
     }
 
     public boolean update(Car car) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.CAR_UPDATE);
-        ) {
-            int paramNumber = 0;
-            preparedStatement.setString(++paramNumber, car.getName());
-            preparedStatement.setString(++paramNumber, car.getDescription());
-            preparedStatement.setBoolean(++paramNumber, car.isBlocked());
-            preparedStatement.setFloat(++paramNumber, car.getPrice());
-            preparedStatement.setInt(++paramNumber, car.getQuality().getId());
-            preparedStatement.setInt(++paramNumber, car.getBrand().getId());
-            preparedStatement.setInt(++paramNumber, car.getId());
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(
+                    "UPDATE cars " +
+                            "SET name=?, description=?, blocked=?, price=?, quality_id=?, brand_id=?, image_file_name=? " +
+                            "WHERE id=?"
+            );
+
+            int i = 0;
+            preparedStatement.setString(++i, car.getName());
+            preparedStatement.setString(++i, car.getDescription());
+            preparedStatement.setBoolean(++i, car.isBlocked());
+            preparedStatement.setFloat(++i, car.getPrice());
+            preparedStatement.setInt(++i, car.getQuality().getId());
+            preparedStatement.setInt(++i, car.getBrand().getId());
+            preparedStatement.setString(++i, car.getImageFileName());
+            preparedStatement.setInt(++i, car.getId());
 
             return preparedStatement.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, preparedStatement, resultSet);
         }
         return false;
     }
@@ -69,7 +90,7 @@ public class MysqlCarDAO extends CarDao {
             if (statement.execute(MysqlConstants.GET_ALL_CAR)) {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(getCarByResultSet(resultSet));
+                    list.add(mapCar(resultSet));
                 }
             }
         } catch (Exception e) {
@@ -79,7 +100,7 @@ public class MysqlCarDAO extends CarDao {
     }
 
     @Override // TODO delete
-    public HomeController.CarsInfo getAll(String brandId, String qualityId, String sortParam, int page)  {
+    public HomeController.CarsInfo getAll(String brandId, String qualityId, String sortParam, int page) {
 
         QueryBuilder queryBuilder = new QueryBuilder("SELECT * FROM cars WHERE true")
                 .setBrand(brandId)
@@ -116,7 +137,7 @@ public class MysqlCarDAO extends CarDao {
             if (statement.execute()) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(getCarByResultSet(resultSet));
+                    list.add(mapCar(resultSet));
                 }
             }
         } catch (SQLException sqe) {
@@ -147,7 +168,7 @@ public class MysqlCarDAO extends CarDao {
             if (statement.execute()) {
                 ResultSet resultSet = statement.getResultSet();
                 if (resultSet.next()) {
-                    car = getCarByResultSet(resultSet);
+                    car = mapCar(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -156,8 +177,8 @@ public class MysqlCarDAO extends CarDao {
         return car;
     }
 
-    private Car getCarByResultSet(ResultSet resultSet) throws SQLException {
-        return new Car(
+    private Car mapCar(ResultSet resultSet) throws SQLException {
+        Car car = new Car(
                 resultSet.getInt("id"),
                 resultSet.getString("name"),
                 resultSet.getString("description"),
@@ -166,6 +187,8 @@ public class MysqlCarDAO extends CarDao {
                 DAOFactory.getInstance().getQualityDAO().getById(resultSet.getInt("quality_id")),
                 DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id"))
         );
+        car.setImageFileName(resultSet.getString("image_file_name"));
+        return car;
     }
 
     /*
