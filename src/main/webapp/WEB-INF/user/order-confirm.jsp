@@ -25,6 +25,7 @@
 
                 <form action="create-order" method="post">
                     <input type="hidden" name="car-id" value="${requestScope.car.id}">
+                    <input type="hidden" id="driverPrice" name="driverPrice" value="${requestScope.driverPrice}">
                     <input id="price" type="hidden"
                            name="price" value="${requestScope.car.price}">
 
@@ -44,7 +45,7 @@
 
                     <div class="input-group">
                         <span class="input-group-text">With driver:</span>
-                        <select name="with-driver" class="form-select" required>
+                        <select id="withDriver" class="form-select" name="with-driver" required>
                             <option value="with-driver">With driver</option>
                             <option value="without-driver">Without driver</option>
                         </select>
@@ -67,12 +68,13 @@
 
                     <div class="input-group">
                         <span class="input-group-text">Amount:</span>
-                        <input id="ammount" class="form-control" type="number" readonly
-                               name="ammount" value="${requestScope.car.price}"/>
+                        <input id="amount" class="form-control" type="number" readonly
+                               name="amount" value="${requestScope.car.price}"/>
                     </div>
                     <p class="text-secondary">You passport data will be stored and use in next order</p>
                     <button class="btn btn-primary border rounded d-md-flex" type="submit">Place the order</button>
                 </form>
+                <p>Driver cost ${requestScope.driverPrice} UAH/day</p>
 
                 <script src="${path}/assets/js/order-confirm.js"></script>
 

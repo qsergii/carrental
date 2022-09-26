@@ -7,6 +7,7 @@ public class Invoice {
         RENT(1),
         DAMAGE(2);
         private final int id;
+
         Type(int id){
             this.id = id;
         }
@@ -16,7 +17,7 @@ public class Invoice {
         }
 
         public static Type getById(int id) {
-            // TODO valueOf
+
             for (Type element : Type.values()) {
                 if (element.id == id) {
                     return element;

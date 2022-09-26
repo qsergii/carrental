@@ -4,8 +4,6 @@
 <%@ taglib prefix="customtag" uri="/WEB-INF/custom_tags.tld" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<%--<fmt:setLocale value = "${requestScope.language}" scope="session"/>--%>
-
 <header>
     <div class="container">
         <nav class="navbar navbar-light navbar-expand-md ">
@@ -14,18 +12,7 @@
                     <span class="visually-hidden">Toggle navigation</span>
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand d-flex align-items-center" href="${path}/home">
-                    <span>RENAR </span>
-                    <span class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                                 viewBox="0 0 16 16"
-                                 class="bi bi-cart-check-fill">
-                                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z"></path>
-                                        </svg>
-
-                    </span>
-                    <span>Rent car</span>
-                </a>
+                <%@ include file="logo.jspf"%>
 
                 <button class="navbar-toggler" data-bs-toggle="collapse">
                     <span class="visually-hidden">Toggle navigation</span>
@@ -36,13 +23,13 @@
                         <li class="nav-item"><a class="nav-link active" href="${path}"><fmt:message
                                 key="menu.home"/></a></li>
 
-                        <c:set var="user" value="${requestScope.user}"/>
-                        <c:if test="${requestScope.user != null}">
+                        <c:set var="car" value="${requestScope.authUser}"/>
+                        <c:if test="${requestScope.authUser != null}">
                             <c:choose>
-                                <c:when test="${user.role == 'ADMIN' }">
+                                <c:when test="${authUser.role == 'ADMIN' }">
                                     <%@ include file="/WEB-INF/admin/menu.jspf" %>
                                 </c:when>
-                                <c:when test="${user.role == 'MANAGER' }">
+                                <c:when test="${authUser.role == 'MANAGER' }">
                                     <%@ include file="/WEB-INF/manager/menu.jspf" %>
                                 </c:when>
                                 <c:otherwise>
@@ -60,9 +47,12 @@
                     <option value="en" ${sessionScope.language == "en" ? "selected" : ""}>EN</option>
                     <option value="ua" ${sessionScope.language == "ua" ? "selected" : ""}>UA</option>
                 </select>
-                <filetags:user user="${requestScope.user}"/>
+
+                <c:if test="${requestScope.uri != '/login' && requestScope.uri != '/registration'}">
+                    <filetags:user user="${requestScope.authUser}"/>
+                </c:if>
             </div>
         </nav>
     </div>
+    <script src="${path}/assets/js/header.js"></script>
 </header>
-<script src="${path}/assets/js/header.js"></script>

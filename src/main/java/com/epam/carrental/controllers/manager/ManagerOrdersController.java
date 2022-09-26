@@ -1,29 +1,29 @@
 package com.epam.carrental.controllers.manager;
 
+import com.epam.carrental.Logging;
+import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Invoice;
 import com.epam.carrental.dao.entity.Order;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-@WebServlet("/manager/orders")
-public class ManagerOrdersController extends HttpServlet {
+public class ManagerOrdersController implements Controller {
     private final Logger log = LogManager.getLogger(getClass());
 
     /* GET */
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             handleGetRequest(request, response);
-        } catch (Exception e) {
+        } catch (IOException | ServletException e) {
             log.error(e.getMessage());
             try {
                 response.sendError(500);
@@ -44,9 +44,10 @@ public class ManagerOrdersController extends HttpServlet {
         try {
             request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getAll());
             request.getRequestDispatcher("/WEB-INF/manager/orders.jsp").forward(request, response);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error(Logging.makeDescription(e));
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
         }
     }
     private void printOrder(String orderIdString, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,10 +65,10 @@ public class ManagerOrdersController extends HttpServlet {
     /* POST */
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response){
+    public void doPost(HttpServletRequest request, HttpServletResponse response){
         try {
             handlePostRequest(request, response);
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error(e.getStackTrace() +", "+ e.getMessage());
             try {
                 response.sendError(500);
@@ -133,7 +134,7 @@ public class ManagerOrdersController extends HttpServlet {
             invoice.setUser(order.getUser());
             invoice.setOrder(order);
             invoice.setAmount(Float.parseFloat(amount));
-            DAOFactory.getInstance().getInvoiceDAO().insert(invoice);
+            DAOFactory.getInstance().getInvoiceDAO().insert(invoice, null);
         }
 
         response.sendRedirect("orders");

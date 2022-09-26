@@ -14,8 +14,8 @@ public class UserTest {
         Assert.assertEquals(user.getId(), 1);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void createUserNull(){
-        new User(0, null, null, null, false);
-    }
+//    @Test(expected = NullPointerException.class)
+//    public void createUserNull(){
+//        new User();
+//    }
 }

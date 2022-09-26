@@ -9,8 +9,8 @@ public abstract class UserDao {
 
     public abstract User getUserByLogin(String login);
     public abstract User getUserById(int id);
-    public abstract boolean insert(User user);
-    public abstract boolean update(User user);
+    public abstract boolean insert(User user) throws DBException;
+    public abstract void update(User user);
 
     public abstract List<User> getAll();
 }

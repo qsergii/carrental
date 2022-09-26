@@ -1,5 +1,7 @@
 package com.epam.carrental.controllers.user;
 
+import com.epam.carrental.Logging;
+import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Invoice;
 import com.epam.carrental.dao.entity.User;
@@ -7,25 +9,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
-@WebServlet("/invoices")
-public class InvoicesController extends HttpServlet {
+public class InvoicesController implements Controller {
     private final Logger log = LogManager.getLogger(this.getClass());
 
     /* GET */
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             handleGetRequest(request, response);
-        } catch (Exception e) {
+        } catch (IOException | ServletException e) {
             log.error(e.getMessage());
             try {
                 response.sendError(500);
@@ -46,9 +45,8 @@ public class InvoicesController extends HttpServlet {
         try {
             request.setAttribute("invoices", DAOFactory.getInstance().getInvoiceDAO().getAll());
             request.getRequestDispatcher("/WEB-INF/user/invoices.jsp").forward(request, response);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (IOException | ServletException e) {
+            log.error(Logging.makeDescription(e));
         }
     }
     private void printOne(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,10 +65,10 @@ public class InvoicesController extends HttpServlet {
     /* POST */
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             handlePostRequest(request, response);
-        } catch (Exception e) {
+        } catch (IOException | ParseException e) {
             log.error(e.getMessage());
             try {
                 response.sendError(500);

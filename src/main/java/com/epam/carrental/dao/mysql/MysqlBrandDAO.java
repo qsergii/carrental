@@ -1,52 +1,64 @@
 package com.epam.carrental.dao.mysql;
 
+import com.epam.carrental.Logging;
 import com.epam.carrental.dao.BrandDao;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.entity.Brand;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlBrandDAO extends BrandDao {
     private Logger log = LogManager.getLogger(getClass());
+
     @Override
     public void create(Brand carBrand) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_ADD, Statement.RETURN_GENERATED_KEYS);
-        ) {
-            preparedStatement.setString(1, carBrand.getName());
-            int rowCount = preparedStatement.executeUpdate();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.BRAND_ADD, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, carBrand.getName());
+            int rowCount = statement.executeUpdate();
             if (rowCount > 0) {
-                ResultSet resultSet = preparedStatement.getResultSet();
+                ResultSet resultSet = statement.getResultSet();
                 if (resultSet.next()) {
                     carBrand.setId(resultSet.getInt("id"));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, null);
         }
     }
+
     @Override
     public boolean update(Brand brand) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_UPDATE, Statement.RETURN_GENERATED_KEYS);
-        ) {
-            preparedStatement.setString(1, brand.getName());
-            preparedStatement.setInt(2, brand.getId());
-            int rowCount = preparedStatement.executeUpdate();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.BRAND_UPDATE, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, brand.getName());
+            statement.setInt(2, brand.getId());
+            int rowCount = statement.executeUpdate();
             if (rowCount > 0) {
-                ResultSet resultSet = preparedStatement.getResultSet();
+                resultSet = statement.getResultSet();
                 if (resultSet.next()) {
                     brand.setId(resultSet.getInt("id"));
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(e.getMessage());
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return false;
     }
@@ -54,12 +66,15 @@ public class MysqlBrandDAO extends BrandDao {
     @Override
     public List<Brand> getAll() {
         List<Brand> list = new ArrayList<>();
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                Statement statement = connection.createStatement()
-        ) {
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.createStatement();
             if (statement.execute(MysqlConstants.BRAND_GET_ALL)) {
-                ResultSet resultSet = statement.getResultSet();
+                resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(new Brand(
                             resultSet.getInt("id"),
@@ -69,18 +84,25 @@ public class MysqlBrandDAO extends BrandDao {
                 resultSet.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return list;
     }
+
     public List<Brand> getAllAvailible() {
         List<Brand> list = new ArrayList<>();
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                Statement statement = connection.createStatement()
-        ) {
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.createStatement();
+
             if (statement.execute(MysqlConstants.BRAND_GET_ALL_AVAILIBLE)) {
-                ResultSet resultSet = statement.getResultSet();
+                resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(new Brand(
                             resultSet.getInt("id"),
@@ -90,20 +112,24 @@ public class MysqlBrandDAO extends BrandDao {
                 resultSet.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return list;
     }
 
     @Override
     public Brand getById(int id) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_GET_BY_ID);
-        ) {
-            preparedStatement.setInt(1, id);
-            if (preparedStatement.execute()) {
-                ResultSet resultSet = preparedStatement.getResultSet();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.BRAND_GET_BY_ID);
+            statement.setInt(1, id);
+            if (statement.execute()) {
+                resultSet = statement.getResultSet();
                 if (resultSet.next()) {
                     return new Brand(
                             resultSet.getInt("id"),
@@ -111,25 +137,30 @@ public class MysqlBrandDAO extends BrandDao {
                     );
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return null;
     }
 
     @Override
     public boolean delete(Brand brand) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.BRAND_DELETE_BY_ID);
-        ) {
-            preparedStatement.setInt(1, brand.getId());
-            if (preparedStatement.execute()) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.BRAND_DELETE_BY_ID);
+            statement.setInt(1, brand.getId());
+            if (statement.execute()) {
                 return true;
             }
             return false;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(e.getMessage());
+        } finally {
+            DbUtils.closeQuietly(connection, statement, null);
         }
         return false;
     }

@@ -1,4 +1,4 @@
-package com.epam.carrental.filters;
+package com.epam.carrental.controllers.filters;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Order;
@@ -29,7 +29,7 @@ public class OrderFilter implements Filter {
                 return;
             }
 
-            User user = (User) ((HttpServletRequest) request).getAttribute("user");
+            User user = (User) ((HttpServletRequest) request).getAttribute("authUser");
             if (user == null) {
                 httpServletResponse.sendError(403);
                 return;

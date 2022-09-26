@@ -1,5 +1,6 @@
 package com.epam.carrental.controllers.admin;
 
+import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Brand;
 import com.epam.carrental.dao.entity.Car;
@@ -8,95 +9,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
 
-@WebServlet("/admin")
-public class AdminController extends HttpServlet {
+public class AdminController implements Controller {
 
     static Logger log = LogManager.getLogger(AdminController.class.getName());
 
-//    static{
-//        PropertyConfigurator.configure("-log4j.properties");
-////        PropertyConfigurator.configure(getClass().getResource("/controlador/-log4j.properties"));
-//    }
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect("admin/cars");
         log.info("redirect");
-//        request.getRequestDispatcher("admin/cars").forward(request, response);
 
-
-//        String page = Optional.ofNullable(request.getParameter("page")).orElse("");
-//        String jspName = null;
-//        switch (page) {
-//            case "cars":
-//                String action = Optional.ofNullable(request.getParameter("action")).orElse("");
-//                switch (action) {
-//                    case "add":
-//                        try {
-//                            request.setAttribute("carsBrands", DAOFactory.getInstance().getCarBrandDAO().getAll());
-//                        } catch (Exception e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        jspName = "WEB-INF/admin-cars-brand.jsp";
-//                        break;
-//                    case "carsBrands-add":
-//                        jspName = "WEB-INF/brand.jsp";
-//                        break;
-//                    default:
-//                        getCars(request, response);
-//                        return;
-//                }
-//                break;
-//            case "carsBrands":
-//                getCarsBrands(request, response);
-//                return;
-//            case "users":
-//                jspName = "WEB-INF/admin/users.jsp";
-//                break;
-//            case "managers":
-//                jspName = "WEB-INF/admin/admin-managers.jsp";
-//                break;
-//            default:
-//                jspName = "WEB-INF/admin/cars.jsp";
-//        }
-//        request.getRequestDispatcher(jspName).forward(request, response);
-    }
-
-    private void getCars(HttpServletRequest request, HttpServletResponse response) {
-
-        try {
-            request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            request.getRequestDispatcher("WEB-INF/cars.jsp").forward(request, response);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void getCarsBrands(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setAttribute("carsBrands", DAOFactory.getInstance().getBrandDAO().getAll());
-            request.getRequestDispatcher("WEB-INF/mainlist.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = Optional.ofNullable(request.getParameter("page")).orElse("");
         if (page.equals("cars")) {
             String action = Optional.ofNullable(request.getParameter("action")).orElse("");
@@ -129,11 +60,7 @@ public class AdminController extends HttpServlet {
                 new Brand(Integer.parseInt(carBrandId))
         );
 
-        try {
-            DAOFactory.getInstance().getCarDAO().insert(car);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        DAOFactory.getInstance().getCarDAO().insert(car);
         try {
             response.sendRedirect("admin?page=cars");
         } catch (IOException e) {
@@ -147,7 +74,7 @@ public class AdminController extends HttpServlet {
         try {
             DAOFactory.getInstance().getBrandDAO().create(carBrand);
             response.sendRedirect("admin?page=carsBrands");
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

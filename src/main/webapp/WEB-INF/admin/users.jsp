@@ -13,23 +13,31 @@
 <div class="container">
     <%@ include file="header.jspf" %>
     <h2>Users</h2>
-    <a href="?id=0">Add</a>
-    <table>
-        <tr>
-            <th>Login</th>
-            <th>Role</th>
-            <th>Blocked</th>
-            <th>edit</th>
-        </tr>
-        <c:forEach items="${users}" var="car">
+    <a class="btn btn-primary" href="?id=0">Add</a>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
             <tr>
-                <td>${car.login}</td>
-                <td>${car.role}</td>
-                <td>${car.blocked}</td>
-                <td><a href="?id=${car.id}">edit</a></td>
+                <th>Login</th>
+                <th>Role</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Blocked</th>
             </tr>
-        </c:forEach>
-    </table>
+            </thead>
+            <tbody>
+            <c:forEach items="${requestScope.users}" var="car">
+                <tr class='clickable-row' data-href='users?id=${car.getId()}'>
+                    <td>${car.login}</td>
+                    <td>${car.role}</td>
+                    <td>${car.firstName}</td>
+                    <td>${car.lastName}</td>
+                    <td><input type="checkbox" ${car.blocked ? 'checked' : ''} disabled/></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <%@include file="/WEB-INF/jspf/footer.jspf" %>

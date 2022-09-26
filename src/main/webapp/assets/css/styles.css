@@ -132,3 +132,9 @@ input::-webkit-search-cancel-button {
   height: 100vh;
 }
 
+.clickable-row{
+  cursor: pointer;
+}
+.clickable-row:hover{
+  background-color: #d7d8e3;
+}

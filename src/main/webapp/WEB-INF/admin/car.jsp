@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
     <%@ include file="/WEB-INF/jspf/head.jspf" %>
@@ -79,6 +78,7 @@
                             <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>

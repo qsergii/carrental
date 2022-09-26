@@ -1,7 +1,10 @@
 package com.epam.carrental.dao;
 
 import com.epam.carrental.AppSettings;
+import com.epam.carrental.Logging;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -10,6 +13,8 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 public class Database {
+
+    private static final Logger log = LogManager.getLogger(Database.class);
 
     public static DataSource dataSource;// = getPooledConnectionDataSource();
 
@@ -45,7 +50,7 @@ public class Database {
                     resultSet.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(Logging.makeDescription(e));
             }
         }
         if (statement != null) {
@@ -54,7 +59,7 @@ public class Database {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(Logging.makeDescription(e));
             }
         }
 
@@ -64,7 +69,7 @@ public class Database {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(Logging.makeDescription(e));
             }
         }
     }
@@ -76,7 +81,7 @@ public class Database {
                     resultSet.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(Logging.makeDescription(e));
             }
         }
         if (statement != null) {
@@ -85,7 +90,7 @@ public class Database {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(Logging.makeDescription(e));
             }
         }
 
@@ -95,7 +100,7 @@ public class Database {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(Logging.makeDescription(e));
             }
         }
     }

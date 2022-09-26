@@ -1,4 +1,4 @@
-package com.epam.carrental.filters;
+package com.epam.carrental.controllers.filters;
 
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.User;
@@ -70,7 +70,7 @@ public class CommonFilter extends HttpFilter {
             user = DAOFactory.getInstance().getUserDAO().getUserById(userId);
         }
 
-        request.setAttribute("user", user);
+        request.setAttribute("authUser", user);
     }
 
     @Override

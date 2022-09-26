@@ -1,4 +1,4 @@
-package com.epam.carrental.filters;
+package com.epam.carrental.controllers.filters;
 
 import com.epam.carrental.Logging;
 import com.epam.carrental.dao.entity.User;
@@ -19,7 +19,7 @@ public class InvoicesFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
 
         try {
-            User user = (User)request.getAttribute("user");
+            User user = (User)request.getAttribute("authUser");
             if(user == null){
                 ((HttpServletResponse)response).sendRedirect("login");
             }else{

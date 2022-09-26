@@ -27,14 +27,6 @@ public class User {
     public User() {
     }
 
-    public User(int id, String login, String password, Role role, boolean blocked) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.role = role;
-        this.blocked = blocked;
-    }
-
     public int getId() {
         return id;
     }

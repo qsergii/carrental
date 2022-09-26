@@ -1,8 +1,15 @@
 package com.epam.carrental.dao;
 
 import com.epam.carrental.AppSettings;
+import com.epam.carrental.Logging;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.lang.reflect.InvocationTargetException;
 
 public abstract class DAOFactory {
+
+    private static final Logger log = LogManager.getLogger(DAOFactory.class);
 
     private static DAOFactory instance;
     private static String daoFactoryFCN = AppSettings.PROPERTIES.getProperty("daoFactoryFCN");
@@ -12,8 +19,10 @@ public abstract class DAOFactory {
             try {
                 Class<?> classExmp = Class.forName((DAOFactory.daoFactoryFCN));
                 instance = (DAOFactory) classExmp.getDeclaredConstructor().newInstance();
-            }catch (Exception e){
-                e.printStackTrace();
+            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException | NoSuchMethodException e) {
+                log.error(Logging.makeDescription(e));
+                throw new RuntimeException(e);
             }
         }
         return instance;
@@ -21,14 +30,6 @@ public abstract class DAOFactory {
 
     protected DAOFactory(){}
 
-    String daoFactoryFCN(){
-        return null; // TODO
-    }
-
-    void setDaoFactoryFCN(String daoFactoryFCN){
-        instance = null;
-        DAOFactory.daoFactoryFCN = daoFactoryFCN;
-    }
     public abstract UserDao getUserDAO();
     public abstract OrderDao getOrderDAO();
     public abstract InvoiceDao getInvoiceDAO();

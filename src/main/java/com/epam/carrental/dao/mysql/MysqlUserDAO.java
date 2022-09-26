@@ -1,7 +1,7 @@
 package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.ContextListener;
-import com.epam.carrental.DbException;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.Logging;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.UserDao;
@@ -43,11 +43,11 @@ public class MysqlUserDAO extends UserDao {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return mapUser(resultSet);
+                return extractUser(resultSet);
             } else {
                 return null;
             }
-        } catch (SQLException | DbException e) {
+        } catch (SQLException | DBException e) {
             throw new RuntimeException(e);
         } finally {
             DbUtils.closeQuietly(connection, preparedStatement, resultSet);
@@ -56,19 +56,24 @@ public class MysqlUserDAO extends UserDao {
 
     @Override
     public User getUserByLogin(String login) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN)
-        ) {
-            preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN);
+
+            statement.setString(1, login);
+            resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return mapUser(resultSet);
+                return extractUser(resultSet);
             } else {
                 return null;
             }
-        } catch (SQLException | DbException e) {
+        } catch (SQLException | DBException e) {
             throw new RuntimeException(e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
     }
 
@@ -79,7 +84,7 @@ public class MysqlUserDAO extends UserDao {
      * @see ContextListener#contextDestroyed(ServletContextEvent)
      */
     @Override
-    public boolean insert(User user) throws RuntimeException {
+    public boolean insert(User user) throws RuntimeException, DBException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -112,21 +117,27 @@ public class MysqlUserDAO extends UserDao {
                 return false;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            String message = e.getMessage();
+            if (message.matches("^Duplicate entry '(.*)' for key 'users\\.login_UNIQUE'$")) {
+                throw new DBException("User " + user.getLogin() + " already exist. Try different login", e);
+            } else {
+                throw new DBException("Can't create user", e);
+            }
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
     }
 
     @Override
-    public boolean update(User user) {
+    public void update(User user) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = Database.dataSource.getConnection();
             statement = connection.prepareStatement(
                     "UPDATE users " +
-                            "SET login=?, phone=?, email=?, first_name=?, last_name=?, password=?, role=?, blocked=?,  passport_number=?, passport_valid=?" +
+                            "SET login=?, phone=?, email=?, first_name=?, last_name=?, " +
+                                "password=?, role=?, blocked=?,  passport_number=?, passport_valid=? " +
                             "WHERE id=?"
             );
 
@@ -140,11 +151,9 @@ public class MysqlUserDAO extends UserDao {
             statement.setInt(++i, user.getRole().getId());
             statement.setBoolean(++i, user.isBlocked());
             statement.setString(++i, user.getPassportNumber());
-            statement.setDate(++i, new Date(user.getPassportValid().getTime()));
+            statement.setDate(++i, user.getPassportValid() != null ? new Date(user.getPassportValid().getTime()) : null);
             statement.setInt(++i, user.getId());
-
-            return statement.executeUpdate() > 0;
-
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -155,6 +164,7 @@ public class MysqlUserDAO extends UserDao {
     @Override
     public List<User> getAll() {
         List<User> list = new ArrayList<>();
+
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -164,19 +174,18 @@ public class MysqlUserDAO extends UserDao {
             if (statement.execute(MysqlConstants.USERS_GET_ALL)) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(mapUser(resultSet));
+                    list.add(extractUser(resultSet));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException | DBException e) {
+            log.error(Logging.makeDescription(e));
         } finally {
-            DbUtils.closeQuietly(connection, statement, null);
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return list;
     }
 
-    /* PRIVATE */
-    private User mapUser(ResultSet resultSet) throws DbException {
+    private User extractUser(ResultSet resultSet) throws DBException {
         try {
             User user = new User();
             user.setId(resultSet.getInt("id"));
@@ -193,7 +202,7 @@ public class MysqlUserDAO extends UserDao {
             return user;
         } catch (SQLException e) {
             log.error(Logging.makeDescription(e));
-            throw new DbException("Can't map user from DB to instance");
+            throw new DBException("Can't map user from DB to instance", e);
         }
     }
 

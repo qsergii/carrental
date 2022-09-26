@@ -1,5 +1,6 @@
 package com.epam.carrental;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -14,14 +15,11 @@ public class AppSettings {
      * */
     public final static Properties PROPERTIES = new Properties();
 
-    /**
-     * Load properties in property
-     * */
     static {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try (InputStream inputStream = loader.getResourceAsStream("settings.properties")) {
             PROPERTIES.load(inputStream);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("Properties file is missing", e);
         }
     }

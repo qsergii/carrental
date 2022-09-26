@@ -1,5 +1,6 @@
 package com.epam.carrental.controllers.admin;
 
+import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Brand;
@@ -25,7 +26,6 @@ import java.util.UUID;
 public class AdminCarsController implements Controller {
 
     private final Logger log = LogManager.getLogger(this.getClass());
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.trace("get");
@@ -56,8 +56,8 @@ public class AdminCarsController implements Controller {
             request.setAttribute("page", "cars");
             request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll());
             request.getRequestDispatcher("/WEB-INF/admin/cars.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | ServletException e) {
+            log.error(Logging.makeDescription(e));
         }
     }
 
@@ -76,7 +76,7 @@ public class AdminCarsController implements Controller {
 
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setSizeThreshold(maxMemSize);
-        factory.setRepository(new File("c:\\temp")); // TODO set relative path
+        factory.setRepository(new File(request.getRealPath("/WEB-INF/uploads")));
 
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setSizeMax(maxFileSize);
@@ -136,7 +136,7 @@ public class AdminCarsController implements Controller {
         }
         write(car);
         response.sendRedirect("cars");
-     }
+    }
     private void doPostOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // properties
         int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("-1"));

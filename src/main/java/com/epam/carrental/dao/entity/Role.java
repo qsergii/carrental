@@ -15,16 +15,12 @@ public enum Role {
     }
 
     public static Role getById(int id){
-        // TODO valueOf
+
         for (Role role : Role.values()) {
             if(role.id == id){
                 return role;
             }
         }
         return null;
-//        if(id == 0) return admin;
-//        else if(id == 1) return manager;
-//        else if(id == 2) return client;
-//        return null;
     }
 }

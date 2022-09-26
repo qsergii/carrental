@@ -1,24 +1,22 @@
 package com.epam.carrental.controllers.admin;
 
+import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Quality;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/admin/qualities")
-public class AdminQualityController extends HttpServlet {
+public class AdminQualityController implements Controller {
     private final Logger log = LogManager.getLogger(getClass());
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
             handleGet(request, response);
         }catch (IOException e){
@@ -31,7 +29,7 @@ public class AdminQualityController extends HttpServlet {
         }
     }
 
-    private void handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = Optional.ofNullable(request.getParameter("action")).orElse("");
         if (action.equals("add")) {
                 request.setAttribute("quality", new Quality());
@@ -49,7 +47,7 @@ public class AdminQualityController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             handlePost(request, response);
         } catch (IOException e) {

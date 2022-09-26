@@ -10,6 +10,7 @@ import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,21 +87,28 @@ public class MysqlCarDAO extends CarDao {
     @Override
     public List<Car> getAll() {
         List<Car> list = new ArrayList<>();
-        try (Connection connection = Database.dataSource.getConnection(); Statement statement = connection.createStatement()) {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.createStatement();
             if (statement.execute(MysqlConstants.GET_ALL_CAR)) {
-                ResultSet resultSet = statement.getResultSet();
+                resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(mapCar(resultSet));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return list;
     }
 
-    @Override // TODO delete
-    public HomeController.CarsInfo getAll(String brandId, String qualityId, String sortParam, int page) {
+    @Override
+    public Object[] getAll(String brandId, String qualityId, String sortParam, int page) {
 
         QueryBuilder queryBuilder = new QueryBuilder("SELECT * FROM cars WHERE true")
                 .setBrand(brandId)
@@ -108,27 +116,29 @@ public class MysqlCarDAO extends CarDao {
                 .setSort(sortParam);
 
         int pageCount = 0;
-        List<Car> list = new ArrayList<>();
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(queryBuilder.toString())
-        ) {
-            queryBuilder.setParameters(statement);
-            if (statement.execute()) {
-                ResultSet resultSet = statement.getResultSet();
-                while (resultSet.next()) {
-                    pageCount++;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        queryBuilder.setLimit(page);
+        List<Car> list = new ArrayList<>();
 
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(queryBuilder.toString());
+            queryBuilder.setParameters(statement);
+            if (statement.execute()) {
+                resultSet = statement.getResultSet();
+                while (resultSet.next()) {
+                    pageCount++;
+                }
+            }
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+
+        queryBuilder.setLimit(page);
 
         try {
             connection = Database.dataSource.getConnection();
@@ -140,39 +150,42 @@ public class MysqlCarDAO extends CarDao {
                     list.add(mapCar(resultSet));
                 }
             }
-        } catch (SQLException sqe) {
-            // TODO make function to describe exception
-            System.out.println("Error Code = " + sqe.getErrorCode());
-            System.out.println("SQL state = " + sqe.getSQLState());
-            System.out.println("Message = " + sqe.getMessage());
-            System.out.println("printTrace /n");
-            sqe.printStackTrace();
-            log.error(sqe.getMessage());
-//            throw new DbException("SQL error:" + sqe.getErrorCode());
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
 
-        HomeController.CarsInfo carsInfo = new HomeController().new CarsInfo();
-        carsInfo.setPageCount((int) Math.ceil((double) pageCount / 9));
-        carsInfo.setPage(page);
-        carsInfo.setCars(list);
-        return carsInfo;
+        Object[] values = new Object[]{
+                (int) Math.ceil((double) pageCount / 9),
+                page,
+                list
+        };
+        return values;
+
     }
 
     @Override
     public Car getById(int id) {
         Car car = null;
-        try (Connection connection = Database.dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(MysqlConstants.GET_CAR_BY_ID);) {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.GET_CAR_BY_ID);
             statement.setInt(1, id);
             if (statement.execute()) {
-                ResultSet resultSet = statement.getResultSet();
+                resultSet = statement.getResultSet();
                 if (resultSet.next()) {
                     car = mapCar(resultSet);
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return car;
     }

@@ -64,7 +64,7 @@ function countDaysRent(){
     let lease_begin = parseDateValue('lease_begin');
     let lease_finish = parseDateValue('lease_finish');
     document.getElementById("lease_term").value = datediff(lease_begin, lease_finish);
-    lease_termChange();
+    calculateAmount();
 }
 function valueFormatDate(date){
     const yyyy = date.getFullYear();
@@ -74,16 +74,30 @@ function valueFormatDate(date){
     if (mm < 10) mm = '0' + mm;
     return yyyy + '-' + mm + '-' + dd;
 }
-function lease_termChange(){
-    element = document.getElementById("lease_term");
-    days = parseInt(element.value);
+
+function calculateAmount(){
+    withDriver = document.getElementById("withDriver").value === "with-driver";
+    days = parseInt(document.getElementById("lease_term").value);
+    driverPrice = parseFloat(document.getElementById("driverPrice").value);
+
     document.getElementById('lease_finish').value =
         valueFormatDate(new Date().addDays(days));
-    document.getElementById('ammount').value =
-        (parseFloat(document.getElementById('price').value) * days)
-            .toFixed(2);
+
+    pricePerDay = parseFloat(document.getElementById('price').value);
+    if(withDriver){
+        pricePerDay += driverPrice;
+    }
+    amount = (pricePerDay * days)
+        .toFixed(2);
+    document.getElementById('amount').value = amount;
 }
+
 function afterLoad(){
+    element = document.getElementById("passportValid");
+    element.setAttribute("min", valueFormatDate(new Date()));
+    element.setAttribute("max", valueFormatDate((new Date()).addDays(10*365)));
+    delete element;
+
     element = document.getElementById("lease_begin");
     element.setAttribute("value", valueFormatDate(new Date()));
     element.setAttribute("min", valueFormatDate(new Date()));
@@ -100,6 +114,7 @@ function afterLoad(){
 document.getElementById('passportValid').addEventListener('change', checkPassportDate);
 document.getElementById("lease_begin").addEventListener("change", lease_beginChange);
 document.getElementById("lease_finish").addEventListener("change", lease_finishChange);
-document.getElementById("lease_term").addEventListener("change", lease_termChange);
+document.getElementById("lease_term").addEventListener("change", calculateAmount);
+document.getElementById("withDriver").addEventListener("change", calculateAmount);
 
 afterLoad();

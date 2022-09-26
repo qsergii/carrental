@@ -9,6 +9,7 @@
             auth="Container"
             type="javax.sql.DataSource"
             connectionProperties="zeroDateTimeBehavior=CONVERT_TO_NULL;"
+            defaultTransactionIsolation="READ_COMMITTED"
 
             maxTotal="10"
             maxIdle="5"

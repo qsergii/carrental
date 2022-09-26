@@ -29,7 +29,7 @@
                         <p class="text-muted">Already registered? <a href="login">Log In</a></p>
                         <form class="text-center" action="registration" method="post">
                             <div class="mb-3">
-                                <input class="form-control" type="text" name="login" placeholder="Login">
+                                <input class="form-control" type="text" name="login" placeholder="Login" required>
                             </div>
                             <div class="mb-3">
                                 <input id="phone" class="form-control" lass="form-control" type="text"
@@ -50,8 +50,8 @@
                             <div class="mb-3">
                                 <input class="form-control" type="password" name="password2" placeholder="Re-type password" required>
                             </div>
-                            <c:if test="${param.m != null}">
-                                <div class="alert alert-warning" role="alert">${param.m}</div>
+                            <c:if test="${param.message != null}">
+                                <div class="alert alert-warning" role="alert">${param.message}</div>
                             </c:if>
                             <div class="mb-3">
                                 <button class="btn btn-primary d-block w-100" type="submit">Sign Up</button>

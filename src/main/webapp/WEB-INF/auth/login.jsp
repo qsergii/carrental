@@ -29,11 +29,14 @@
                         <p class="text-muted">New here? <a href="registration">Sign Up</a></p>
                         <form class="text-center" method="post">
                             <div class="mb-3">
-                                <input class="form-control" type="text" name="login" placeholder="Login">
+                                <input class="form-control" type="text" name="login" placeholder="Login" required>
                             </div>
                             <div class="mb-3">
-                                <input class="form-control" type="password" name="password" placeholder="Password">
+                                <input class="form-control" type="password" name="password" placeholder="Password" required>
                             </div>
+                            <c:if test="${param.message != null}">
+                                <div class="alert alert-warning" role="alert">${param.message}</div>
+                            </c:if>
                             <div class="mb-3">
                                 <button class="btn btn-primary d-block w-100" type="submit">Sign in</button>
                             </div>

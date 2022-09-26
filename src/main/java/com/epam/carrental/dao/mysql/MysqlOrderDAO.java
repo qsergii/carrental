@@ -2,6 +2,7 @@ package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.Logging;
 import com.epam.carrental.dao.DAOFactory;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.OrderDao;
 import com.epam.carrental.dao.entity.Order;
@@ -20,18 +21,24 @@ public class MysqlOrderDAO extends OrderDao {
     @Override
     public List<Order> getAll() {
         List<Order> list = new ArrayList<>();
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                Statement statement = connection.createStatement()
-        ) {
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+                 connection = Database.dataSource.getConnection();
+                 statement = connection.createStatement();
+
             if (statement.execute(MysqlConstants.ORDER_GET_ALL)) {
-                ResultSet resultSet = statement.getResultSet();
+                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(mapResultSet(resultSet));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(e.getMessage());
+        }finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return list;
     }
@@ -86,12 +93,16 @@ public class MysqlOrderDAO extends OrderDao {
     }
 
     @Override
-    public boolean insert(Order order) {
+    public boolean insert(Order order, Connection connectionIn) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            if (connectionIn != null) {
+                connection = connectionIn;
+            } else {
+                connection = Database.dataSource.getConnection();
+            }
             statement = connection.prepareStatement(
                     "INSERT INTO orders " +
                             "(date, user_id, lease_begin, lease_finish, lease_term, with_driver, passport_number, passport_valid," +
@@ -122,17 +133,24 @@ public class MysqlOrderDAO extends OrderDao {
             log.error(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            DbUtils.closeQuietly(connection, statement, resultSet);
+            if (connectionIn != null) {
+                DbUtils.closeQuietly(null, statement, resultSet);
+            } else {
+                DbUtils.closeQuietly(connection, statement, resultSet);
+            }
         }
 
         return false;
     }
 
     public boolean update(Order order) {
-        try (
-                Connection connection = Database.dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(MysqlConstants.ORDER_UPDATE);
-        ) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(MysqlConstants.ORDER_UPDATE);
+
             int i = 0;
             statement.setDate(++i, new Date(order.getDate().getTime()));
             statement.setInt(++i, order.getUser().getId());
@@ -148,10 +166,41 @@ public class MysqlOrderDAO extends OrderDao {
 
             return statement.executeUpdate() > 0;
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(e.getMessage());
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return false;
+    }
+
+    @Override
+    public float getAmountSummaryByUser(User user) throws DBException {
+        if (user == null) {
+            throw new IllegalArgumentException("user can't be null");
+        }
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "SELECT SUM(price) FROM orders" +
+                            " WHERE user_id=?"
+            );
+            statement.setInt(1, user.getId());
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getFloat(1);
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new DBException("can't get result", e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+        return 0;
     }
 
     private Order mapResultSet(ResultSet resultSet) {
@@ -171,7 +220,7 @@ public class MysqlOrderDAO extends OrderDao {
             order.setRejected(resultSet.getBoolean("rejected"));
             order.setRejectReason(resultSet.getString("reject_reason"));
             return order;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(Logging.makeDescription(e));
             return null;
         }
