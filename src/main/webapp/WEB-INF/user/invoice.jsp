@@ -21,11 +21,7 @@
                     <form method="post">
                         <input type="hidden" name="id" value="${requestScope.invoice.id}">
 
-                        <div class="input-group">
-                            <span class="input-group-text">User:</span>
-                            <input class="form-control" type="text" name="name" readonly
-                                   value="${requestScope.invoice.user.login}"/>
-                        </div>
+                        <customtag:carImage car="${requestScope.invoice.order.car}"/>
 
                         <div id="name_group" class="input-group">
                             <span class="input-group-text">Order:</span>

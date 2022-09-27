@@ -5,6 +5,7 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.OrderDao;
+import com.epam.carrental.dao.entity.Car;
 import com.epam.carrental.dao.entity.Order;
 import com.epam.carrental.dao.entity.User;
 import org.apache.commons.dbutils.DbUtils;
@@ -32,7 +33,7 @@ public class MysqlOrderDAO extends OrderDao {
             if (statement.execute(MysqlConstants.ORDER_GET_ALL)) {
                  resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(mapResultSet(resultSet));
+                    list.add(extractOrder(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -54,7 +55,7 @@ public class MysqlOrderDAO extends OrderDao {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return mapResultSet(resultSet);
+                return extractOrder(resultSet);
             } else {
                 return null;
             }
@@ -82,10 +83,38 @@ public class MysqlOrderDAO extends OrderDao {
             statement.setInt(1, user.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                orders.add(mapResultSet(resultSet));
+                orders.add(extractOrder(resultSet));
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+        return orders;
+    }
+    @Override
+    public List<Order> getByCar(Car car) throws DBException {
+        if (car == null) {
+            throw new IllegalArgumentException("Car can't be null");
+        }
+        List<Order> orders = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "SELECT * FROM orders WHERE car_id = ? ORDER BY id desc"
+            );
+            statement.setInt(1, car.getId());
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                orders.add(extractOrder(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new DBException("Can't read orders", e);
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
@@ -203,7 +232,7 @@ public class MysqlOrderDAO extends OrderDao {
         return 0;
     }
 
-    private Order mapResultSet(ResultSet resultSet) {
+    private Order extractOrder(ResultSet resultSet) {
         try {
             Order order = new Order();
             order.setId(resultSet.getInt("id"));

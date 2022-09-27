@@ -12,4 +12,6 @@ public abstract class InvoiceDao {
     public abstract List<Invoice> getAll ();
     public abstract Invoice getById (int id);
     public abstract Invoice getByIdAndUser (int id, User user);
+
+    public abstract List<Invoice> getByUser(User user);
 }

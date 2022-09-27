@@ -3,9 +3,8 @@ package com.epam.carrental.controllers.admin;
 import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
-import com.epam.carrental.dao.entity.Brand;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.entity.Car;
-import com.epam.carrental.dao.entity.Quality;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -26,8 +25,9 @@ import java.util.UUID;
 public class AdminCarsController implements Controller {
 
     private final Logger log = LogManager.getLogger(this.getClass());
+
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, DBException {
         log.trace("get");
         if (request.getParameter("id") != null) {
             printCar(request, response);
@@ -36,7 +36,7 @@ public class AdminCarsController implements Controller {
         }
     }
 
-    private void printCar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void printCar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, DBException {
         String paramId = request.getParameter("id");
         Car car;
         int id = Integer.parseInt(paramId);
@@ -48,6 +48,9 @@ public class AdminCarsController implements Controller {
         request.setAttribute("car", car);
         request.setAttribute("brands", DAOFactory.getInstance().getBrandDAO().getAll());
         request.setAttribute("qualities", DAOFactory.getInstance().getQualityDAO().getAll());
+
+        request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getByCar(car));
+
         request.getRequestDispatcher("/WEB-INF/admin/car.jsp").forward(request, response);
     }
 
@@ -64,13 +67,20 @@ public class AdminCarsController implements Controller {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (request.getContentType().contains("multipart/form-data")) {
-            createCar(request, response);
-        } else {
-            response.sendError(400);
+            create(request, response);
+            return;
         }
+        String action = request.getParameter("action");
+        if (action == null) {
+            response.sendError(400);
+            return;
+        }
+        if(action.equals("delete")) {
+            delete(request, response);
+        };
     }
 
-    private void createCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int maxMemSize = 5_000_000;
         int maxFileSize = 5_000_000;
 
@@ -118,6 +128,9 @@ public class AdminCarsController implements Controller {
                 String fileName = element.getName();
                 boolean isInMemory = element.isInMemory();
                 long sizeInBytes = element.getSize();
+                if(sizeInBytes == 0){
+                    continue;
+                }
 
                 // Write the file
                 int index;
@@ -137,46 +150,36 @@ public class AdminCarsController implements Controller {
         write(car);
         response.sendRedirect("cars");
     }
-    private void doPostOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // properties
-        int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("-1"));
-        String name = request.getParameter("name");
-        String brandId = request.getParameter("brand");
-        String qualityId = request.getParameter("quality");
-
-        Brand brand = DAOFactory.getInstance().getBrandDAO().getById(Integer.parseInt(brandId));
-        Quality quality = DAOFactory.getInstance().getQualityDAO().getById(Integer.parseInt(qualityId));
-        String description = request.getParameter("description");
-        boolean blocked = Optional.ofNullable(request.getParameter("blocked")).orElse("").equals("on");
-        float price = Float.parseFloat(request.getParameter("price"));
-
-        Car car;
-        if (id == 0) {
-            car = new Car();
-        } else {
-            car = DAOFactory.getInstance().getCarDAO().getById(id);
-            if (car == null) {
-                response.sendError(400);
-                return;
-            }
-        }
-        car.setName(name);
-        car.setDescription(description);
-        car.setBlocked(blocked);
-        car.setPrice(price);
-        car.setBrand(brand);
-        car.setQuality(quality);
-
-        write(car);
-
-        response.sendRedirect("cars");
-    }
 
     private void write(Car car) {
         if (car.getId() == 0) {
             DAOFactory.getInstance().getCarDAO().insert(car);
         } else {
+            if(car.getImageFileName() == null) {
+                Car carFromDB = DAOFactory.getInstance().getCarDAO().getById(car.getId());
+                car.setImageFileName(carFromDB.getImageFileName());
+            }
             DAOFactory.getInstance().getCarDAO().update(car);
         }
     }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, DBException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Car car = DAOFactory.getInstance().getCarDAO().getById(id);
+        if(car == null){
+            response.sendRedirect("cars");
+            return;
+        }
+        try {
+            DAOFactory.getInstance().getCarDAO().delete(car);
+//            response.sendRedirect("cars");
+            response.getWriter().write("ok");
+        }catch (DBException e){
+            log.error(Logging.makeDescription(e));
+            String error = e.getMessage();
+//            response.sendRedirect("cars?id=" + id + "&message=" + error);
+            response.getWriter().write(error);
+        }
+    }
+
 }

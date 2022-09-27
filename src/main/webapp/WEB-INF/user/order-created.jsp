@@ -8,7 +8,7 @@
 <%@include file="/WEB-INF/jspf/header.jspf" %>
 
 <section>
-    <div class="container card order-new" style="padding-top: 54px;">
+    <div class="container card order-new">
         <div class="row">
             <div class="col">
                 <customtag:carImage car="${requestScope.order.car}" classElement="car-big"/>

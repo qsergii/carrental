@@ -13,31 +13,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UserOrdersController implements Controller {
+public class OrdersController implements Controller {
     private final Logger log = LogManager.getLogger(getClass());
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            handleGetRequest(request, response);
-        } catch (IOException | ServletException e) {
-            log.error(e.getMessage());
-            try {
-                response.sendError(500);
-            } catch (IOException e2) {
-                log.error(e2.getMessage());
-            }
-        }
-    }
-    private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String orderIdString = request.getParameter("id");
-        if (orderIdString == null || orderIdString.isEmpty()) {
-            printOrders(request, response);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        if (request.getParameter("id") != null) {
+            printOrder(request, response);
         } else {
-            printOrder(orderIdString, request, response);
+            printOrders(request, response);
         }
     }
 
+    private void printOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String orderIdString = request.getParameter("id");
+        Order order;
+        int id = Integer.parseInt(orderIdString);
+        if (id > 0) {
+            order = DAOFactory.getInstance().getOrderDAO().getById(id);
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("/WEB-INF/user/order.jsp").forward(request, response);
+        } else {
+            order = new Order();
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("/WEB-INF/user/order-confirm.jsp").forward(request, response);
+        }
+    }
     private void printOrders(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = (User) request.getAttribute("authUser");
         if(user == null){
@@ -52,16 +53,5 @@ public class UserOrdersController implements Controller {
             log.error(e.getMessage());
             log.error(Logging.makeDescription(e));
         }
-    }
-    private void printOrder(String orderIdString, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Order order;
-        int id = Integer.parseInt(orderIdString);
-        if (id > 0) {
-            order = DAOFactory.getInstance().getOrderDAO().getById(id);
-        } else {
-            order = new Order();
-        }
-        request.setAttribute("order", order);
-        request.getRequestDispatcher("/WEB-INF/user/order-confirm.jsp").forward(request, response);
     }
 }

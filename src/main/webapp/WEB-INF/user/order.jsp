@@ -11,7 +11,6 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
-    <%--    <%@ include file="header.jspf" %>--%>
 
     <section>
         <div class="container">
@@ -20,7 +19,10 @@
 
                 <div class="col">
                     <form method="post">
-                        <input type="hidden" name="id" value="${requestScope.order.id}">
+                        <input id="id" type="hidden" name="id" value="${requestScope.order.id}">
+                        <input id="carId" type="hidden" name="id" value="${requestScope.order.car.id}">
+
+                        <customtag:carImage car="${requestScope.order.car}"/>
 
                         <div id="name_group" class="input-group">
                             <span class="input-group-text">Car:</span>
@@ -68,16 +70,17 @@
                             <input class="form-control" type="text" name="name" readonly
                                    value="${requestScope.order.rejectReason}"/>
                         </div>
-                    </form>
+                        <br>
+                        <div class="input-group">
+                            <button id="reorderCar" type="button" class="btn btn-primary">Reorder car</button>
+                        </div>
 
-                    <form method="post">
-                        
                     </form>
-
 
                 </div>
             </div>
         </div>
+        <script src="${path}/assets/js/order.js"></script>
     </section>
 
 </div>

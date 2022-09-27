@@ -7,16 +7,16 @@
         required="true" %>
 
 <c:choose>
-    <c:when test="${requestScope.user == null}">
+    <c:when test="${requestScope.authUser == null}">
         <a class="btn btn-primary" role="button" href="${path}/login"><fmt:message key="user.login"/></a>
     </c:when>
     <c:otherwise>
         <div class="d-md-flex d-xl-flex align-items-md-center align-items-xl-center" id="client">
             <div>
                 <a id="client_link" class="nav-link"
-                   href="${path}/user">${requestScope.user.firstName} ${requestScope.user.lastName}</a>
+                   href="${path}/user">${requestScope.authUser.firstName} ${requestScope.authUser.lastName}</a>
                 <c:if test="${user.role != 'CLIENT'}">
-                   <fmt:message key="role.${user.role}"/>
+                   <fmt:message key="role.${authUser.role}"/>
                 </c:if>
 
             </div>

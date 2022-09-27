@@ -20,6 +20,9 @@
 
                 <div class="card-body">
                     <h4 class="card-title">Invoices</h4>
+                    <a href="?export=pdf"><img src="${path}/assets/img/pdf.png" alt="pdf" width="64"/></a>
+                    <a href="?export=xlsx"><img src="${path}/assets/img/xlsx.png" alt="xlsx" width="64"/></a>
+                    <a href="?export=csv"><img src="${path}/assets/img/csv.webp" alt="csv" width="64"/></a>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -30,7 +33,6 @@
                                 <th>Type</th>
                                 <th>Amount</th>
                                 <th>Payed</th>
-                                <th>User</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,8 +43,7 @@
                                     <td>${car.getOrder().getId()}</td>
                                     <td>${car.type}</td>
                                     <td>${car.amount}</td>
-                                    <td>${car.payed}</td>
-                                    <td>${car.user.login}</td>
+                                    <td><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

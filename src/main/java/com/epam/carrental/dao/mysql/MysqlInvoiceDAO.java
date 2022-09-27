@@ -90,7 +90,7 @@ public class MysqlInvoiceDAO extends InvoiceDao {
             if (statement.execute(MysqlConstants.INVOICE_GET_ALL)) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(mapResultSet(resultSet));
+                    list.add(extractInvoice(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -113,7 +113,7 @@ public class MysqlInvoiceDAO extends InvoiceDao {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return mapResultSet(resultSet);
+                return extractInvoice(resultSet);
             } else {
                 return null;
             }
@@ -141,7 +141,7 @@ public class MysqlInvoiceDAO extends InvoiceDao {
             preparedStatement.setInt(++i, user.getId());
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return mapResultSet(resultSet);
+                return extractInvoice(resultSet);
             } else {
                 return null;
             }
@@ -153,7 +153,33 @@ public class MysqlInvoiceDAO extends InvoiceDao {
         }
     }
 
-    private Invoice mapResultSet(ResultSet resultSet) {
+    @Override
+    public List<Invoice> getByUser(User user) {
+
+        List<Invoice> list = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "SELECT * FROM invoices WHERE user_id=?"
+            );
+            statement.setInt(1, user.getId());
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                list.add(extractInvoice(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+        return list;
+    }
+
+    private Invoice extractInvoice(ResultSet resultSet) {
         try {
             Invoice invoice = new Invoice();
             invoice.setId(resultSet.getInt("id"));

@@ -18,24 +18,23 @@ import static org.mockito.Mockito.*;
 
 public class FrontControllerTest {
 
-    @Test
-    public void doGetGeneral() throws IOException {
-//        HttpServletRequest request = mock(HttpServletRequest.class);
-//        HttpServletResponse response = mock(HttpServletResponse.class);
-//
-//        when(request.getParameter("login")).thenReturn("admin");
-//
-//        PipedReader pr = new PipedReader();
-//        PipedWriter pw = new PipedWriter(pr);
-//        PrintWriter out = new PrintWriter(pw, true);
-//        when(response.getWriter()).thenReturn(out);
-//
-//        FrontController rootController = new FrontController();
-//        rootController.doGet(request, response);
-//
-//        Scanner s = new Scanner(pr);
-//        Assert.assertEquals("Hi, admin", s.nextLine());
-//        s.close();
+    @Test(expected = IllegalStateException.class)
+    public void doGetGeneral() throws IOException, ServletException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        when(request.getParameter("login")).thenReturn("admin");
+
+        PipedReader pr = new PipedReader();
+        PipedWriter pw = new PipedWriter(pr);
+        PrintWriter out = new PrintWriter(pw, true);
+        when(response.getWriter()).thenReturn(out);
+
+        new FrontController().service(request, response);
+
+        Scanner s = new Scanner(pr);
+        Assert.assertEquals("Hi, admin", s.nextLine());
+        s.close();
     }
 
     @Test
@@ -54,4 +53,5 @@ public class FrontControllerTest {
 //        verify(request, never()).getSession();
 //        verify(dispatcher).forward(request, response);
     }
+
 }

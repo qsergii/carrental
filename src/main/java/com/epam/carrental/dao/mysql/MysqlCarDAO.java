@@ -1,16 +1,15 @@
 package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.Logging;
-import com.epam.carrental.controllers.user.HomeController;
 import com.epam.carrental.dao.CarDao;
 import com.epam.carrental.dao.DAOFactory;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.entity.Car;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -190,16 +189,43 @@ public class MysqlCarDAO extends CarDao {
         return car;
     }
 
+    @Override
+    public void delete(Car car) throws DBException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "DELETE FROM cars WHERE id=?"
+            );
+            statement.setInt(1, car.getId());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+            String message = e.getMessage();
+            String hiMessage;
+            if(message.equals("Cannot delete or update a parent row: a foreign key constraint fails (`carrental`.`orders`, CONSTRAINT `car_id_fk` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`))")){
+                hiMessage = "Can't delete car: placed in order(s)";
+            }else{
+                hiMessage = "Can't delete record";
+            }
+            throw new DBException(hiMessage, e);
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+    }
+
     private Car mapCar(ResultSet resultSet) throws SQLException {
-        Car car = new Car(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getString("description"),
-                resultSet.getBoolean("blocked"),
-                resultSet.getFloat("price"),
-                DAOFactory.getInstance().getQualityDAO().getById(resultSet.getInt("quality_id")),
-                DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id"))
-        );
+        Car car = new Car();
+        car.setId(resultSet.getInt("id"));
+        car.setName(resultSet.getString("name"));
+        car.setDescription(resultSet.getString("description"));
+        car.setBlocked(resultSet.getBoolean("blocked"));
+        car.setPrice(resultSet.getFloat("price"));
+        car.setQuality(DAOFactory.getInstance().getQualityDAO().getById(resultSet.getInt("quality_id")));
+        car.setBrand(DAOFactory.getInstance().getBrandDAO().getById(resultSet.getInt("brand_id")));
         car.setImageFileName(resultSet.getString("image_file_name"));
         return car;
     }

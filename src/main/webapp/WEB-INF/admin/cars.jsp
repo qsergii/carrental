@@ -46,7 +46,7 @@
                                     <td>${car.name}</td>
                                     <td>${car.getDescription()}</td>
                                     <td>${car.isBlocked()}</td>
-                                    <td><input type="checkbox"></td>
+                                    <td><input type="checkbox" ${car.blocked ? "checked" : ""} disabled></td>
                                     <td>${car.price}</td>
                                     <td>${car.getQuality().getName()}</td>
                                 </tr>

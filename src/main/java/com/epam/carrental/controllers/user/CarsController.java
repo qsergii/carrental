@@ -1,6 +1,5 @@
 package com.epam.carrental.controllers.user;
 
-import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Car;
@@ -13,35 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-
-public class CarController implements Controller {
+public class CarsController implements Controller {
     public final Logger log = LogManager.getLogger(this.getClass());
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try{
-            handleGetRequest(request, response);
-        }catch (IOException e){
-            log.error(Logging.makeDescription(e));
-            try{
-                response.sendError(500);
-            }catch (IOException e2){
-                log.error(Logging.makeDescription(e2));
-            }
-        }
-    }
-
-    private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("0"));
-        if (id > 0){
-            printCar(id, request, response);
+        if (request.getParameter("id") != null){
+            printCar(request, response);
         }else {
             response.sendError(404);
         }
     }
-    private void printCar(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    private void printCar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("0"));
         Car car = DAOFactory.getInstance().getCarDAO().getById(id);
         request.setAttribute("car", car);
-        request.setAttribute("title", car.getName());
         request.getRequestDispatcher("/WEB-INF/user/car.jsp").forward(request, response);
     }
 }

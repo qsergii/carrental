@@ -1,5 +1,6 @@
 package com.epam.carrental.controllers.auth;
 
+import com.epam.carrental.Mail;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.DBException;
@@ -8,6 +9,7 @@ import com.epam.carrental.dao.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,10 +63,13 @@ public class RegistrationController implements Controller {
         try {
             DAOFactory.getInstance().getUserDAO().insert(user);
             request.getSession().setAttribute("userId", user.getId());
+            Mail.send(email, "Registration complete", "Hello, " + firstName + "\nWe are glad to see you in our costumer family.");
             response.sendRedirect("home");
         } catch (DBException e) {
             log.error(e.getMessage());
             response.sendRedirect("registration?message=" + e.getMessage());
+        } catch (MessagingException e) {
+            throw new IOException("Can't send email", e);
         }
     }
 }

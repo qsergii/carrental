@@ -8,26 +8,7 @@ public class Car {
     float price;
     Brand brand;
     Quality quality;
-
     String imageFileName;
-    public Car() {}
-
-    public Car(
-            int id,
-            String name,
-            String description,
-            boolean blocked,
-            float price,
-            Quality quality,
-            Brand brand) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.blocked = blocked;
-        this.price = price;
-        this.quality = quality;
-        this.brand = brand;
-    }
 
     public int getId() {
         return id;

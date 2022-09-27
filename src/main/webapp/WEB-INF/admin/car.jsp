@@ -23,8 +23,12 @@
 
                 <div class="col">
 
+                    <c:if test="${param.message != null}">
+                        <div class="alert alert-warning" role="alert">${param.message}</div>
+                    </c:if>
+
                     <form action="cars" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="${requestScope.car.id}">
+                        <input id="id" type="hidden" name="id" value="${requestScope.car.id}">
 
                         <%--image--%>
                         <div class="input-group mb-3">
@@ -74,11 +78,58 @@
                             <input type="checkbox" class="form-check-input"
                                    name="blocked" ${requestScope.car.blocked ? 'checked' : ''}/>
                         </div>
+                        <br>
                         <div class="input-group">
-                            <button class="btn btn-primary" type="submit">Save</button>
+                            <button class="btn btn-primary" type="submit">Save</button> 
+                            <button id="deleteCar" class="btn btn-danger" type="button">Delete</button>
                         </div>
                     </form>
 
+<%--                    <form method="post">--%>
+<%--                        <input type="hidden" name="id" value="${requestScope.car.id}">--%>
+<%--                        <input type="hidden" name="action" value="delete">--%>
+<%--                        <button class="btn btn-danger" type="submit">Delete</button>--%>
+<%--                    </form>--%>
+
+                </div>
+            </div>
+        </div>
+        <script src="${path}/assets/js/admin-car.js"></script>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Orders</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Car</th>
+                                <th>User</th>
+                                <th>With driver</th>
+                                <th>Term</th>
+                                <th>Price</th>
+                                <th>Rejected</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.orders}" var="car">
+                                <tr class='clickable-row' data-href='orders?id=${car.getId()}'>
+                                    <td>${car.id}</td>
+                                    <td>${car.getCar().getBrand().getName()} ${car.getCar().getName()}</td>
+                                    <td>${car.getUser().getLogin()}</td>
+                                    <td>${car.isWithDriver()}</td>
+                                    <td>${car.getLeaseTerm()}</td>
+                                    <td>${car.getPrice()}</td>
+                                    <td>${car.rejected}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,16 +12,15 @@
 <%@include file="/WEB-INF/jspf/header.jspf" %>
 
 <section>
-    <div class="container card order" style="padding-top: 54px;">
+    <div class="container card order">
         <div class="row">
             <div class="col">
                 <customtag:carImage car="${requestScope.car}" classElement="car-big"/>
             </div>
             <div class="col">
-                <p class="card-header"
-                   style="font-weight: bold;color: var(--bs-indigo);font-size: 30px;">${requestScope.car.brand.name} ${requestScope.car.name}</p>
+                <p class="card-header">${requestScope.car.brand.name} ${requestScope.car.name}</p>
                 <p class="card-text">${requestScope.car.description}</p>
-                <p class="price" style="color: var(--bs-red);font-weight: bold;">$${requestScope.car.price} per 24h</p>
+                <p class="price">${requestScope.car.price} UAH / day</p>
 
                 <form action="create-order" method="post">
                     <input type="hidden" name="car-id" value="${requestScope.car.id}">

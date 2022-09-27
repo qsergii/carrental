@@ -9,9 +9,9 @@
 
 <div class="h-100 w-100 alert alert-warning fill-height">
     <div class="align-middle">
-        <p class="text-center d-xl-flex justify-content-xl-center align-items-xl-center" style="font-size: 130px;">
+        <p class="text-center d-xl-flex justify-content-xl-center align-items-xl-center error-code">
             ${pageContext.errorData.statusCode}<br></p>
-        <p class="text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="alert" style="font-size: 27px;">
+        <p class="text-center d-xl-flex justify-content-xl-center align-items-xl-center error-text" role="alert">
             <c:choose>
                 <c:when test="${pageContext.errorData.statusCode == 400}">
                     <fmt:message key="error.400"/>

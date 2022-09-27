@@ -11,4 +11,6 @@ public abstract class CarDao {
     public abstract Object[] getAll(String brandId, String qualityId, String sortName, int page);
 //    public abstract HomeController.CarsInfo getAll(String brandId, String qualityId, String sortName, int page);
     public abstract Car getById(int id);
+
+    public abstract void delete(Car car) throws DBException;
 }

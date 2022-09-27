@@ -22,6 +22,7 @@ Design patterns:
 - Singleton - com.epam.carrental.dao.Database
 - AbstractFactory - com.epam.carrental.dao.DAOFactory
 - FrontController - com.epam.carrental.controllers.FrontController
+- Factory - com.epam.carrental.export.Export
 
 Architectural patterns:
 - MVC
