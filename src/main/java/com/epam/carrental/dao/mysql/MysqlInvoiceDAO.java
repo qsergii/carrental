@@ -1,9 +1,11 @@
 package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.dao.DAOFactory;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.InvoiceDao;
 import com.epam.carrental.dao.entity.Invoice;
+import com.epam.carrental.dao.entity.Order;
 import com.epam.carrental.dao.entity.User;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
@@ -173,6 +175,32 @@ public class MysqlInvoiceDAO extends InvoiceDao {
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+        return list;
+    }
+
+    public List<Invoice> getByOrder(Order order) throws DBException {
+
+        List<Invoice> list = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "SELECT * FROM invoices WHERE order_id = ?"
+            );
+            statement.setInt(1, order.getId());
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                list.add(extractInvoice(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new DBException("Error on server while getting invoices", e);
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }

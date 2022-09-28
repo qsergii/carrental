@@ -1,5 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <html lang="en">
 
@@ -14,11 +14,11 @@
 
 <div class="container">
 
-    <%@include file="/WEB-INF/admin/header.jspf" %>
+<%--    <%@include file="/WEB-INF/admin/header.jspf" %>--%>
 
     <section>
-        <h2>Cars brands</h2>
-        <a href="?action=add">Create new</a>
+        <h2>Brands</h2>
+        <a class="btn btn-primary" href="?action=add">Create new</a>
 
         <table class="table">
             <tr>

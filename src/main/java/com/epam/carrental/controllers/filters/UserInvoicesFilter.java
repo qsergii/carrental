@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter("/invoices/*")
-public class InvoicesFilter implements Filter {
+public class UserInvoicesFilter implements Filter {
 
     private final Logger log = LogManager.getLogger(getClass());
 

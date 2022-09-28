@@ -17,7 +17,7 @@
     <section>
         <div class="container">
             <div class="card">
-                <%@ include file="header.jspf" %>
+<%--                <%@ include file="header.jspf" %>--%>
 
                 <div class="card-body">
                     <h4 class="card-title">Cars</h4>
@@ -38,17 +38,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${cars}" var="car">
-                                <tr class='clickable-row' data-href='cars?id=${car.getId()}'>
-                                    <td><customtag:carImage car="${car}"/></td>
-                                    <td>${car.getBrand().getName()}</td>
-                                    <td>${car.getQuality().getName()}</td>
-                                    <td>${car.name}</td>
-                                    <td>${car.getDescription()}</td>
-                                    <td>${car.isBlocked()}</td>
-                                    <td><input type="checkbox" ${car.blocked ? "checked" : ""} disabled></td>
-                                    <td>${car.price}</td>
-                                    <td>${car.getQuality().getName()}</td>
+                            <c:forEach items="${cars}" var="invoice">
+                                <tr class='clickable-row' data-href='cars?id=${invoice.getId()}'>
+                                    <td><customtag:carImage car="${invoice}"/></td>
+                                    <td>${invoice.getBrand().getName()}</td>
+                                    <td>${invoice.getQuality().getName()}</td>
+                                    <td>${invoice.name}</td>
+                                    <td>${invoice.getDescription()}</td>
+                                    <td>${invoice.isBlocked()}</td>
+                                    <td><input type="checkbox" ${invoice.blocked ? "checked" : ""} disabled></td>
+                                    <td>${invoice.price}</td>
+                                    <td>${invoice.getQuality().getName()}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

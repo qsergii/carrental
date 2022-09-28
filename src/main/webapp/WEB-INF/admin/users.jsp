@@ -11,7 +11,7 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
-    <%@ include file="header.jspf" %>
+<%--    <%@ include file="header.jspf" %>--%>
     <h2>Users</h2>
     <a class="btn btn-primary" href="?id=0">Add</a>
     <div class="table-responsive">
@@ -26,13 +26,13 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${requestScope.users}" var="car">
-                <tr class='clickable-row' data-href='users?id=${car.getId()}'>
-                    <td>${car.login}</td>
-                    <td>${car.role}</td>
-                    <td>${car.firstName}</td>
-                    <td>${car.lastName}</td>
-                    <td><input type="checkbox" ${car.blocked ? 'checked' : ''} disabled/></td>
+            <c:forEach items="${requestScope.users}" var="invoice">
+                <tr class='clickable-row' data-href='users?id=${invoice.getId()}'>
+                    <td>${invoice.login}</td>
+                    <td>${invoice.role}</td>
+                    <td>${invoice.firstName}</td>
+                    <td>${invoice.lastName}</td>
+                    <td><input type="checkbox" ${invoice.blocked ? 'checked' : ''} disabled/></td>
                 </tr>
             </c:forEach>
             </tbody>

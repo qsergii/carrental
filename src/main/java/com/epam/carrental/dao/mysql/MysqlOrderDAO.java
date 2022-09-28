@@ -244,7 +244,7 @@ public class MysqlOrderDAO extends OrderDao {
             order.setWithDriver(resultSet.getBoolean("with_driver"));
             order.setPassportNumber(resultSet.getString("passport_number"));
             order.setPassportValid(resultSet.getDate("passport_valid"));
-            order.setCar(DAOFactory.getInstance().getCarDAO().getById(resultSet.getInt("car_id")));
+            order.setCar(DAOFactory.getInstance().getCarDAO().getById(resultSet.getInt("car_id"), false));
             order.setPrice(resultSet.getFloat("price"));
             order.setRejected(resultSet.getBoolean("rejected"));
             order.setRejectReason(resultSet.getString("reject_reason"));

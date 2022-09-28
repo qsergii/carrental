@@ -163,3 +163,54 @@ input::-webkit-search-cancel-button {
 .error-text{
     font-size: 27px;
 }
+
+body{
+    background-color: #eee;
+}
+
+.language{
+    width: 30px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* USER CARD */
+#user{
+    /*display: flex;*/
+}
+.user_card:hover{
+    cursor: pointer;
+}
+.user_card{
+    /*background-color: #fff;*/
+    width: 170px;
+    height: 60px;
+    border-radius: 33px;
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    padding: 1rem !important;
+}
+.user_card img{
+    width: 50px;
+    margin-right: 8px;
+}
+.top-container{
+    display: flex;
+    align-items: center;
+}
+.profile-image{
+    border-radius: 10px;
+    border: 2px solid #5957f9;
+}
+.name{
+    font-size: 15px;
+    font-weight: bold;
+    color: #272727;
+    position: relative;
+    top: 8px;
+}
+.role{
+    font-size: 14px;
+    color: grey;
+    position: relative;
+    top: 2px;
+}

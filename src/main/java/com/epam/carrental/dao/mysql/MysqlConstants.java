@@ -35,16 +35,6 @@ public final class MysqlConstants {
     public static final String QUALITY_UPDATE = "UPDATE qualities SET name=? WHERE id=?";
     public static final String QUALITY_DELETE_BY_ID = "DELETE FROM qualities WHERE id=?";
 
-    /* CARS */
-
-    public static final String GET_ALL_CAR = "SELECT * FROM cars";
-
-    public static final String GET_CAR_BY_ID = "SELECT * FROM cars WHERE id=?";
-//    public static final String CAR_INSERT = "INSERT INTO cars (id, name, description, blocked, price, quality_id, brand_id) VALUES (default, ?, ?, ?, ?, ?, ?)";
-//    public static final String CAR_UPDATE = "UPDATE cars SET " +
-//            "name=?, description=?, blocked=?, price=?, quality_id=?, brand_id=? " +
-//            "WHERE id=?";
-
     /* USERS */
 
     public static final String USERS_GET_ALL = "SELECT * FROM users";

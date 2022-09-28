@@ -17,15 +17,15 @@ public class CarsController implements Controller {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") != null){
-            printCar(request, response);
+            writeCar(request, response);
         }else {
             response.sendError(404);
         }
     }
 
-    private void printCar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void writeCar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("0"));
-        Car car = DAOFactory.getInstance().getCarDAO().getById(id);
+        Car car = DAOFactory.getInstance().getCarDAO().getById(id, true);
         request.setAttribute("car", car);
         request.getRequestDispatcher("/WEB-INF/user/car.jsp").forward(request, response);
     }

@@ -41,7 +41,7 @@ public class AdminCarsController implements Controller {
         Car car;
         int id = Integer.parseInt(paramId);
         if (id > 0) {
-            car = DAOFactory.getInstance().getCarDAO().getById(id);
+            car = DAOFactory.getInstance().getCarDAO().getById(id, false);
         } else {
             car = new Car();
         }
@@ -57,7 +57,7 @@ public class AdminCarsController implements Controller {
     private void printCars(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("page", "cars");
-            request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll());
+            request.setAttribute("cars", DAOFactory.getInstance().getCarDAO().getAll(false));
             request.getRequestDispatcher("/WEB-INF/admin/cars.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
             log.error(Logging.makeDescription(e));
@@ -156,7 +156,7 @@ public class AdminCarsController implements Controller {
             DAOFactory.getInstance().getCarDAO().insert(car);
         } else {
             if(car.getImageFileName() == null) {
-                Car carFromDB = DAOFactory.getInstance().getCarDAO().getById(car.getId());
+                Car carFromDB = DAOFactory.getInstance().getCarDAO().getById(car.getId(), false);
                 car.setImageFileName(carFromDB.getImageFileName());
             }
             DAOFactory.getInstance().getCarDAO().update(car);
@@ -165,7 +165,7 @@ public class AdminCarsController implements Controller {
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, DBException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Car car = DAOFactory.getInstance().getCarDAO().getById(id);
+        Car car = DAOFactory.getInstance().getCarDAO().getById(id, false);
         if(car == null){
             response.sendRedirect("cars");
             return;

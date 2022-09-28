@@ -64,7 +64,7 @@ public class RegistrationController implements Controller {
             DAOFactory.getInstance().getUserDAO().insert(user);
             request.getSession().setAttribute("userId", user.getId());
             Mail.send(email, "Registration complete", "Hello, " + firstName + "\nWe are glad to see you in our costumer family.");
-            response.sendRedirect("home");
+            LoginController.afterLoginRedirect(request, response);
         } catch (DBException e) {
             log.error(e.getMessage());
             response.sendRedirect("registration?message=" + e.getMessage());

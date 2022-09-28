@@ -10,7 +10,7 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
-    <%@ include file="header.jspf" %>
+<%--    <%@ include file="header.jspf" %>--%>
 
     <section>
         <div class="container">
@@ -116,15 +116,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.orders}" var="car">
-                                <tr class='clickable-row' data-href='orders?id=${car.getId()}'>
-                                    <td>${car.id}</td>
-                                    <td>${car.getCar().getBrand().getName()} ${car.getCar().getName()}</td>
-                                    <td>${car.getUser().getLogin()}</td>
-                                    <td>${car.isWithDriver()}</td>
-                                    <td>${car.getLeaseTerm()}</td>
-                                    <td>${car.getPrice()}</td>
-                                    <td>${car.rejected}</td>
+                            <c:forEach items="${requestScope.orders}" var="invoice">
+                                <tr class='clickable-row' data-href='orders?id=${invoice.getId()}'>
+                                    <td>${invoice.id}</td>
+                                    <td>${invoice.getCar().getBrand().getName()} ${invoice.getCar().getName()}</td>
+                                    <td>${invoice.getUser().getLogin()}</td>
+                                    <td>${invoice.isWithDriver()}</td>
+                                    <td>${invoice.getLeaseTerm()}</td>
+                                    <td>${invoice.getPrice()}</td>
+                                    <td>${invoice.rejected}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

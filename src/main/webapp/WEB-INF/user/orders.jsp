@@ -44,15 +44,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.orders}" var="car">
-                                <tr class='clickable-row' data-href='orders?id=${car.getId()}'>
-                                    <td>${car.id}</td>
-                                    <td>${car.getCar().getBrand().getName()} ${car.getCar().getName()}</td>
-                                    <td>${car.isWithDriver()}</td>
-                                    <td>${car.getLeaseTerm()}</td>
+                            <c:forEach items="${requestScope.orders}" var="invoice">
+                                <tr class='clickable-row' data-href='orders?id=${invoice.getId()}'>
+                                    <td>${invoice.id}</td>
+                                    <td>${invoice.getCar().getBrand().getName()} ${invoice.getCar().getName()}</td>
+                                    <td>${invoice.isWithDriver()}</td>
+                                    <td>${invoice.getLeaseTerm()}</td>
                                     <td class="text-sm-end">
-                                        <fmt:formatNumber value="${car.price}" type="number" minFractionDigits = "2"/> UAH</td>
-                                    <td>${car.rejected ? "yes" : "no"}</td>
+                                        <fmt:formatNumber value="${invoice.price}" type="number" minFractionDigits = "2"/> UAH</td>
+                                    <td>${invoice.rejected ? "yes" : "no"}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

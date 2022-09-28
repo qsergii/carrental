@@ -3,6 +3,7 @@ package com.epam.carrental.controllers.manager;
 import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.entity.Invoice;
 import com.epam.carrental.dao.entity.Order;
 import org.apache.logging.log4j.LogManager;
@@ -17,30 +18,16 @@ import java.util.Date;
 public class ManagerOrdersController implements Controller {
     private final Logger log = LogManager.getLogger(getClass());
 
-    /* GET */
-
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            handleGetRequest(request, response);
-        } catch (IOException | ServletException e) {
-            log.error(e.getMessage());
-            try {
-                response.sendError(500);
-            } catch (IOException e2) {
-                log.error(e2.getMessage());
-            }
-        }
-    }
-    private void handleGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, DBException {
         String orderIdString = request.getParameter("id");
-        if (orderIdString == null || orderIdString.isEmpty()) {
-            printOrders(request, response);
+        if (orderIdString != null) {
+            printOrder(request, response);
         } else {
-            printOrder(orderIdString, request, response);
+            printList(request, response);
         }
     }
-    private void printOrders(HttpServletRequest request, HttpServletResponse response) {
+    private void printList(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getAll());
             request.getRequestDispatcher("/WEB-INF/manager/orders.jsp").forward(request, response);
@@ -50,7 +37,8 @@ public class ManagerOrdersController implements Controller {
             throw new RuntimeException(e);
         }
     }
-    private void printOrder(String orderIdString, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void printOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DBException {
+        String orderIdString = request.getParameter("id");
         Order order;
         int id = Integer.parseInt(orderIdString);
         if (id > 0) {
@@ -59,27 +47,12 @@ public class ManagerOrdersController implements Controller {
             order = new Order();
         }
         request.setAttribute("order", order);
-        request.getRequestDispatcher("/WEB-INF/manager/order-confirm.jsp").forward(request, response);
+        request.setAttribute("invoices", DAOFactory.getInstance().getInvoiceDAO().getByOrder(order));
+        request.getRequestDispatcher("/WEB-INF/manager/order.jsp").forward(request, response);
     }
-
-    /* POST */
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response){
-        try {
-            handlePostRequest(request, response);
-        } catch (IOException e) {
-            log.error(e.getStackTrace() +", "+ e.getMessage());
-            try {
-                response.sendError(500);
-            } catch (IOException e2) {
-                log.error(e2.getMessage());
-            }
-        }
-    }
-
-    private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
         if(action == null){
             response.sendError(400);

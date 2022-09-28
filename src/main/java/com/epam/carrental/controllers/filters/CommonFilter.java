@@ -4,6 +4,7 @@ import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.User;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
+@WebFilter("/*")
 public class CommonFilter extends HttpFilter {
     private String encoding;
 
@@ -73,8 +75,4 @@ public class CommonFilter extends HttpFilter {
         request.setAttribute("authUser", user);
     }
 
-    @Override
-    public void destroy() {
-        // not needed
-    }
 }

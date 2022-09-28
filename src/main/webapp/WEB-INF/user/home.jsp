@@ -62,11 +62,11 @@
         </form>
     </div>
 
-    <div class="container py-4 py-xl-5">
+    <div id="cars" class="container py-4 py-xl-5">
         <h1>Rent car in one minute</h1>
         <div class="border-3 mx-auto row" id="cards">
-            <c:forEach items="${cars}" var="car">
-                <my:car car="${car}"/>
+            <c:forEach items="${cars}" var="invoice">
+                <my:car car="${invoice}"/>
             </c:forEach>
         </div>
     </div>

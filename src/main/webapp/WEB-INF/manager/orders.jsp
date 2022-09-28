@@ -17,13 +17,9 @@
     <section>
         <div class="container">
             <div class="card">
-                <%--                <%@ include file="/WEB-INF/header.jspf" %>--%>
-
                 <div class="card-body">
-                    <h4 class="card-title">Cars</h4>
-                    <p class="card-text">List of cars.<br>To add a car - press Add button.<br>To edit (or delete) car -
-                        press on line of a car.</p>
-                    <a class="btn btn-primary" href="cars?id=0">Add</a>
+                    <h4 class="card-title">Orders</h4>
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -38,15 +34,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.orders}" var="car">
-                                <tr class='clickable-row' data-href='orders?id=${car.getId()}'>
-                                    <td>${car.id}</td>
-                                    <td>${car.getCar().getBrand().getName()} ${car.getCar().getName()}</td>
-                                    <td>${car.getUser().getLogin()}</td>
-                                    <td>${car.isWithDriver()}</td>
-                                    <td>${car.getLeaseTerm()}</td>
-                                    <td>${car.getPrice()}</td>
-                                    <td>${car.rejected}</td>
+                            <c:forEach items="${requestScope.orders}" var="invoice">
+                                <tr class='clickable-row' data-href='orders?id=${invoice.getId()}'>
+                                    <td>${invoice.id}</td>
+                                    <td>${invoice.getCar().getBrand().getName()} ${invoice.getCar().getName()}</td>
+                                    <td>${invoice.getUser().getLogin()}</td>
+                                    <td>${invoice.isWithDriver()}</td>
+                                    <td>${invoice.getLeaseTerm()}</td>
+                                    <td class="align-content-end">${invoice.getPrice()}</td>
+                                    <td>${invoice.rejected ? "Yes" : ""}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

@@ -22,7 +22,8 @@
                 <p class="card-text">${requestScope.car.description}</p>
                 <p class="price">${requestScope.car.price} UAH / day</p>
 
-                <form action="create-order" method="post">
+                <form action="orders" method="post">
+                    <input type="hidden" name="action" value="create"/>
                     <input type="hidden" name="car-id" value="${requestScope.car.id}">
                     <input type="hidden" id="driverPrice" name="driverPrice" value="${requestScope.driverPrice}">
                     <input id="price" type="hidden"

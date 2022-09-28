@@ -18,7 +18,7 @@
             <customtag:carImage car="${car}"/>
 
             <p><fmt:formatNumber value="${car.price}" type="number" minFractionDigits = "2"/> UAH/24h</p>
-            <a class="btn btn-primary" href="cars?id=${car.getId()}">Rent</a>
+            <a class="btn btn-primary" href="orders?car_id=${car.getId()}">Rent</a>
         </div>
     </div>
 </div>

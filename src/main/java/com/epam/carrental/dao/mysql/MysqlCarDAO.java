@@ -84,7 +84,7 @@ public class MysqlCarDAO extends CarDao {
     }
 
     @Override
-    public List<Car> getAll() {
+    public List<Car> getAll(boolean onlyUnblocked) {
         List<Car> list = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
@@ -92,7 +92,9 @@ public class MysqlCarDAO extends CarDao {
         try {
             connection = Database.dataSource.getConnection();
             statement = connection.createStatement();
-            if (statement.execute(MysqlConstants.GET_ALL_CAR)) {
+            if (statement.execute(
+                    "SELECT * FROM cars" + (onlyUnblocked ? " AND blocked = false" : "")
+            )) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(mapCar(resultSet));
@@ -109,7 +111,9 @@ public class MysqlCarDAO extends CarDao {
     @Override
     public Object[] getAll(String brandId, String qualityId, String sortParam, int page) {
 
-        QueryBuilder queryBuilder = new QueryBuilder("SELECT * FROM cars WHERE true")
+        QueryBuilder queryBuilder = new QueryBuilder(
+                "SELECT * FROM cars WHERE blocked = false"
+        )
                 .setBrand(brandId)
                 .setQuality(qualityId)
                 .setSort(sortParam);
@@ -165,7 +169,7 @@ public class MysqlCarDAO extends CarDao {
     }
 
     @Override
-    public Car getById(int id) {
+    public Car getById(int id, boolean onlyUnblocked) {
         Car car = null;
 
         Connection connection = null;
@@ -173,7 +177,9 @@ public class MysqlCarDAO extends CarDao {
         ResultSet resultSet = null;
         try {
             connection = Database.dataSource.getConnection();
-            statement = connection.prepareStatement(MysqlConstants.GET_CAR_BY_ID);
+            statement = connection.prepareStatement(
+                    "SELECT * FROM cars WHERE id = ?" + (onlyUnblocked ? " AND blocked=false" : "")
+            );
             statement.setInt(1, id);
             if (statement.execute()) {
                 resultSet = statement.getResultSet();

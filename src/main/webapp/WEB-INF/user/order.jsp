@@ -83,6 +83,43 @@
         <script src="${path}/assets/js/order.js"></script>
     </section>
 
+    <section id="invoices">
+        <div class="container">
+            <div class="card">
+
+                <div class="card-body">
+                    <h4 class="card-title">Invoices</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Date</th>
+                                <th>Order</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Payed</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.invoices}" var="invoice">
+                                <tr class='clickable-row' data-href='invoices?id=${invoice.getId()}'>
+                                    <td>${invoice.id}</td>
+                                    <td>${invoice.getDate()}</td>
+                                    <td>${invoice.getOrder().getId()}</td>
+                                    <td>${invoice.type}</td>
+                                    <td>${invoice.amount}</td>
+                                    <td><input type="checkbox" ${invoice.payed ? "checked" : ""} disabled/></td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>
 
 <%@include file="/WEB-INF/jspf/footer.jspf" %>
