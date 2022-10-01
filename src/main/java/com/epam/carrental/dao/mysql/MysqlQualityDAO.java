@@ -1,6 +1,7 @@
 package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.Logging;
+import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.Database;
 import com.epam.carrental.dao.QualityDao;
 import com.epam.carrental.dao.entity.Quality;
@@ -13,57 +14,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlQualityDAO extends QualityDao {
-    private Logger log = LogManager.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     @Override
-    public void create(Quality quality) {
+    public void insert(Quality quality) throws DBException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             connection = Database.dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_ADD, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO qualities (name) VALUES (?)"
+                    , Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, quality.getName());
-            int rowCount = preparedStatement.executeUpdate();
-            if (rowCount > 0) {
-                resultSet = preparedStatement.getResultSet();
-                if (resultSet.next()) {
-                    quality.setId(resultSet.getInt("id"));
-                }
+            preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                quality.setId(resultSet.getInt(1));
             }
         } catch (SQLException e) {
             log.error(Logging.makeDescription(e));
+            String message = e.getMessage();
+            if (message.matches("Duplicate entry '(.*)' for key 'qualities.name_UNIQUE'")) {
+                throw new DBException("Duplicate name, try different", e);
+            } else {
+                throw new DBException("Can't insert quality", e);
+            }
         } finally {
             DbUtils.closeQuietly(connection, preparedStatement, resultSet);
         }
     }
 
     @Override
-    public boolean update(Quality quality) {
+    public void update(Quality quality) throws DBException {
         Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement = null;
         try {
             connection = Database.dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_UPDATE, Statement.RETURN_GENERATED_KEYS);
-
-            preparedStatement.setString(1, quality.getName());
-            preparedStatement.setInt(2, quality.getId());
-            int rowCount = preparedStatement.executeUpdate();
-            if (rowCount > 0) {
-                resultSet = preparedStatement.getResultSet();
-                if (resultSet.next()) {
-                    quality.setId(resultSet.getInt("id"));
-                    return true;
-                }
-            }
+            statement = connection.prepareStatement(
+                    "UPDATE qualities SET name = ? WHERE id = ?"
+            );
+            statement.setString(1, quality.getName());
+            statement.setInt(2, quality.getId());
+            statement.executeUpdate();
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(Logging.makeDescription(e));
+            throw new DBException("Can't update quality: " + e.getMessage(), e);
         } finally {
-            DbUtils.closeQuietly(connection, preparedStatement, resultSet);
+            DbUtils.closeQuietly(connection, statement, null);
         }
-        return false;
     }
 
     @Override
@@ -149,23 +149,26 @@ public class MysqlQualityDAO extends QualityDao {
     }
 
     @Override
-    public boolean delete(Quality quality) {
+    public void delete(Quality quality) throws DBException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = Database.dataSource.getConnection();
-            statement = connection.prepareStatement(MysqlConstants.QUALITY_DELETE_BY_ID);
+            statement = connection.prepareStatement(
+                    "DELETE FROM qualities WHERE id = ?"
+            );
             statement.setInt(1, quality.getId());
-            if (statement.execute()) {
-                return true;
-            }
-            return false;
+            statement.execute();
         } catch (SQLException e) {
             log.error(e.getMessage());
+            String message = e.getMessage();
+            if (message.equals("Cannot delete or update a parent row: a foreign key constraint fails (`carrental`.`cars`, CONSTRAINT `quality_fk` FOREIGN KEY (`quality_id`) REFERENCES `qualities` (`id`))")) {
+                throw new DBException("Quality used in cars, can't delete", e);
+            } else {
+                throw new DBException("Can't delete quality", e);
+            }
         } finally {
-            DbUtils.closeQuietly(connection, statement, resultSet);
+            DbUtils.closeQuietly(connection, statement, null);
         }
-        return false;
     }
 }

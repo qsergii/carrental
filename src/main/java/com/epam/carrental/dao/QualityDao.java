@@ -5,10 +5,15 @@ import com.epam.carrental.dao.entity.Quality;
 import java.util.List;
 
 public abstract class QualityDao {
-    public abstract void create(Quality quality);
-    public abstract boolean update(Quality quality);
+    public abstract void insert(Quality quality) throws DBException;
+
+    public abstract void update(Quality quality) throws DBException;
+
     public abstract List<Quality> getAll();
+
     public abstract List<Quality> getAllAvailible();
+
     public abstract Quality getById(int id);
-    public abstract boolean delete(Quality quality);
+
+    public abstract void delete(Quality quality) throws DBException;
 }

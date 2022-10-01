@@ -5,7 +5,9 @@ import com.epam.carrental.dao.CarDao;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.DBException;
 import com.epam.carrental.dao.Database;
+import com.epam.carrental.dao.entity.Brand;
 import com.epam.carrental.dao.entity.Car;
+import com.epam.carrental.dao.entity.Quality;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +99,7 @@ public class MysqlCarDAO extends CarDao {
             )) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(mapCar(resultSet));
+                    list.add(extractCar(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -105,6 +107,58 @@ public class MysqlCarDAO extends CarDao {
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
+        return list;
+    }
+
+    public List<Car> getByBrand(Brand brand) {
+        List<Car> list = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "SELECT * FROM cars WHERE brand_id = ?"
+            );
+            statement.setInt(1, brand.getId());
+            statement.execute();
+            resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                list.add(extractCar(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+
+        return list;
+    }
+
+    public List<Car> getByQuality(Quality quality) {
+        List<Car> list = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Database.dataSource.getConnection();
+            statement = connection.prepareStatement(
+                    "SELECT * FROM cars WHERE quality_id = ?"
+            );
+            statement.setInt(1, quality.getId());
+            statement.execute();
+            resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                list.add(extractCar(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error(Logging.makeDescription(e));
+        } finally {
+            DbUtils.closeQuietly(connection, statement, resultSet);
+        }
+
         return list;
     }
 
@@ -150,7 +204,7 @@ public class MysqlCarDAO extends CarDao {
             if (statement.execute()) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    list.add(mapCar(resultSet));
+                    list.add(extractCar(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -165,7 +219,6 @@ public class MysqlCarDAO extends CarDao {
                 list
         };
         return values;
-
     }
 
     @Override
@@ -184,7 +237,7 @@ public class MysqlCarDAO extends CarDao {
             if (statement.execute()) {
                 resultSet = statement.getResultSet();
                 if (resultSet.next()) {
-                    car = mapCar(resultSet);
+                    car = extractCar(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -212,9 +265,9 @@ public class MysqlCarDAO extends CarDao {
             log.error(Logging.makeDescription(e));
             String message = e.getMessage();
             String hiMessage;
-            if(message.equals("Cannot delete or update a parent row: a foreign key constraint fails (`carrental`.`orders`, CONSTRAINT `car_id_fk` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`))")){
+            if (message.equals("Cannot delete or update a parent row: a foreign key constraint fails (`carrental`.`orders`, CONSTRAINT `car_id_fk` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`))")) {
                 hiMessage = "Can't delete car: placed in order(s)";
-            }else{
+            } else {
                 hiMessage = "Can't delete record";
             }
             throw new DBException(hiMessage, e);
@@ -223,7 +276,7 @@ public class MysqlCarDAO extends CarDao {
         }
     }
 
-    private Car mapCar(ResultSet resultSet) throws SQLException {
+    private Car extractCar(ResultSet resultSet) throws SQLException {
         Car car = new Car();
         car.setId(resultSet.getInt("id"));
         car.setName(resultSet.getString("name"));
@@ -277,13 +330,13 @@ public class MysqlCarDAO extends CarDao {
             if (sortParam != null && !sortParam.isEmpty()) {
                 queryString.append(" ORDER BY ");
                 switch (sortParam) {
-                    case "price":
+                    case "by_price":
                         queryString.append("price");
                         break;
                     case "price-desc":
                         queryString.append("price desc");
                         break;
-                    case "name":
+                    case "by name":
                         queryString.append("name");
                         break;
                     case "name-desc":
@@ -318,4 +371,3 @@ public class MysqlCarDAO extends CarDao {
         }
     }
 }
-

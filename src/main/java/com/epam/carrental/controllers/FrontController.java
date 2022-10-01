@@ -19,9 +19,9 @@ import java.util.Map;
 ;
 
 /**
-* Main controller
+ * Main controller
  * receive all request, map dispatcher, take processing to it
- * */
+ */
 @WebServlet("/")
 public class FrontController extends HttpServlet {
 
@@ -50,6 +50,7 @@ public class FrontController extends HttpServlet {
         // admin
         dispatchers.put("/admin", com.epam.carrental.controllers.admin.AdminController.class);
         dispatchers.put("/admin/cars", com.epam.carrental.controllers.admin.AdminCarsController.class);
+        dispatchers.put("/admin/orders", com.epam.carrental.controllers.admin.AdminOrdersController.class);
         dispatchers.put("/admin/brands", com.epam.carrental.controllers.admin.AdminBrandsController.class);
         dispatchers.put("/admin/qualities", com.epam.carrental.controllers.admin.AdminQualityController.class);
         dispatchers.put("/admin/driver", com.epam.carrental.controllers.admin.AdminDriverController.class);
@@ -58,10 +59,10 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        doMethod((HttpServletRequest) req, (HttpServletResponse)res);
+        doMethod((HttpServletRequest) req, (HttpServletResponse) res);
     }
 
-    private void doMethod(HttpServletRequest request, HttpServletResponse response){
+    private void doMethod(HttpServletRequest request, HttpServletResponse response) {
         log.trace("service");
 
         String uri = StringUtils.difference((String) getServletContext().getAttribute("path"), request.getRequestURI());
@@ -93,11 +94,11 @@ public class FrontController extends HttpServlet {
         }
     }
 
-    public void ProcessInternalError(HttpServletResponse response, Exception exception){
+    public void ProcessInternalError(HttpServletResponse response, Exception exception) {
         log.error(Logging.makeDescription(exception));
         try {
             response.sendError(500);
-        }catch (IOException exceptionSendError){
+        } catch (IOException exceptionSendError) {
             log.error(Logging.makeDescription(exceptionSendError));
         }
     }

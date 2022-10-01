@@ -12,7 +12,7 @@
 <%@include file="/WEB-INF/jspf/header.jspf" %>
 
 <section>
-    <div class="container card order">
+    <div class="container content order">
         <div class="row">
             <div class="col">
                 <customtag:carImage car="${requestScope.car}" classElement="car-big"/>
@@ -54,7 +54,7 @@
                     <div class="input-group">
                         <span class="input-group-text">Begin rent:</span>
                         <input id="lease_begin" class="form-control" type="date"
-                               name="lease_begin" required >
+                               name="lease_begin" required>
                     </div>
                     <div class="input-group">
                         <span class="input-group-text">Finish rent:</span>
@@ -63,7 +63,8 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text">Days rent:</span>
-                        <input id="lease_term" class="form-control" type="number" name="lease-term" min="1" max="30" required/>
+                        <input id="lease_term" class="form-control" type="number" name="lease-term" min="1" max="30"
+                               required/>
                     </div>
 
                     <div class="input-group">

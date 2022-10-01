@@ -1,0 +1,12 @@
+INSERT INTO carrental.brands (id, name) VALUES (5, 'Audi');
+INSERT INTO carrental.brands (id, name) VALUES (40, 'Chevrolet');
+INSERT INTO carrental.brands (id, name) VALUES (1, 'Dodge');
+INSERT INTO carrental.brands (id, name) VALUES (42, 'Ford');
+INSERT INTO carrental.brands (id, name) VALUES (3, 'Hunday');
+INSERT INTO carrental.brands (id, name) VALUES (41, 'Intermediate');
+INSERT INTO carrental.brands (id, name) VALUES (39, 'Jeep');
+INSERT INTO carrental.brands (id, name) VALUES (2, 'Mazda');
+INSERT INTO carrental.brands (id, name) VALUES (37, 'Nissan');
+INSERT INTO carrental.brands (id, name) VALUES (17, 'Tesla');
+INSERT INTO carrental.brands (id, name) VALUES (38, 'Toyota');
+INSERT INTO carrental.brands (id, name) VALUES (16, 'АвтоЗАЗ');

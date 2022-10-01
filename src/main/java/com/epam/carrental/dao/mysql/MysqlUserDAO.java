@@ -25,7 +25,7 @@ public class MysqlUserDAO extends UserDao {
         if (user == null) {
             return null;
         }
-        if (user.getPassword().equals(userToCheck.getPassword())) {
+        if (user.getPassword().equals(userToCheck.getPassword()) && !user.isBlocked()) {
             return user;
         }
         return null;
@@ -137,7 +137,7 @@ public class MysqlUserDAO extends UserDao {
             statement = connection.prepareStatement(
                     "UPDATE users " +
                             "SET login=?, phone=?, email=?, first_name=?, last_name=?, " +
-                                "password=?, role=?, blocked=?,  passport_number=?, passport_valid=? " +
+                            "password=?, role=?, blocked=?,  passport_number=?, passport_valid=? " +
                             "WHERE id=?"
             );
 

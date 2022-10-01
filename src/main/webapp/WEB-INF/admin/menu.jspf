@@ -1,15 +1,21 @@
 <li class="nav-item">
-    <a class="nav-link active" href="${path}/admin/driver"><fmt:message key="menu.admin.driver"/></a>
+    <a class="nav-link ${requestScope.uri == '/admin/driver' ? 'active' : ''}" href="${path}/admin/driver"><fmt:message
+            key="menu.admin.driver"/></a>
 </li>
 <li class="nav-item">
-    <a class="nav-link active" href="${path}/admin/cars"><fmt:message key="menu.admin.cars"/></a>
+    <a class="nav-link ${requestScope.uri == '/admin/cars' ? 'active' : ''}" href="${path}/admin/cars"><fmt:message
+            key="menu.admin.cars"/></a>
 </li>
 <li class="nav-item">
-    <a class="nav-link active" href="${path}/admin/brands"><fmt:message key="menu.admin.brands"/></a>
+    <a class="nav-link ${requestScope.uri == '/admin/brands' ? 'active' : ''}" href="${path}/admin/brands"><fmt:message
+            key="menu.admin.brands"/></a>
 </li>
 <li class="nav-item">
-    <a class="nav-link active" href="${path}/admin/qualities"><fmt:message key="menu.admin.qualities"/></a>
+    <a class="nav-link ${requestScope.uri == '/admin/qualities' ? 'active' : ''}"
+       href="${path}/admin/qualities"><fmt:message key="menu.admin.qualities"/></a>
 </li>
 <li class="nav-item">
-    <a class="nav-link active" href="${path}/admin/users"><fmt:message key="menu.admin.users"/></a>
+    <a class="nav-link ${requestScope.uri == '/admin/users' ? 'active' : ''}" href="${path}/admin/users"><fmt:message
+            key="menu.admin.users"/></a>
+</li>
 </li>

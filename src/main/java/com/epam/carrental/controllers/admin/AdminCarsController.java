@@ -75,9 +75,10 @@ public class AdminCarsController implements Controller {
             response.sendError(400);
             return;
         }
-        if(action.equals("delete")) {
+        if (action.equals("delete")) {
             delete(request, response);
-        };
+        }
+        ;
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -93,18 +94,20 @@ public class AdminCarsController implements Controller {
 
         List<FileItem> requestItems = upload.parseRequest(request);
         Car car = new Car();
+        String value;
         for (FileItem element : requestItems) {
             String fieldName = element.getFieldName();
+            value = new String(element.getString().getBytes("iso-8859-1"), "UTF-8");
             if (element.isFormField()) {
                 switch (fieldName) {
                     case "id":
                         car.setId(Integer.parseInt(element.getString()));
                         break;
                     case "name":
-                        car.setName(element.getString());
+                        car.setName(value);
                         break;
                     case "description":
-                        car.setDescription(element.getString());
+                        car.setDescription(value);
                         break;
                     case "blocked":
                         car.setBlocked(Optional.ofNullable(element.getString()).orElse("").equals("on"));
@@ -128,7 +131,7 @@ public class AdminCarsController implements Controller {
                 String fileName = element.getName();
                 boolean isInMemory = element.isInMemory();
                 long sizeInBytes = element.getSize();
-                if(sizeInBytes == 0){
+                if (sizeInBytes == 0) {
                     continue;
                 }
 
@@ -155,7 +158,7 @@ public class AdminCarsController implements Controller {
         if (car.getId() == 0) {
             DAOFactory.getInstance().getCarDAO().insert(car);
         } else {
-            if(car.getImageFileName() == null) {
+            if (car.getImageFileName() == null) {
                 Car carFromDB = DAOFactory.getInstance().getCarDAO().getById(car.getId(), false);
                 car.setImageFileName(carFromDB.getImageFileName());
             }
@@ -163,10 +166,10 @@ public class AdminCarsController implements Controller {
         }
     }
 
-    private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, DBException {
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Car car = DAOFactory.getInstance().getCarDAO().getById(id, false);
-        if(car == null){
+        if (car == null) {
             response.sendRedirect("cars");
             return;
         }
@@ -174,7 +177,7 @@ public class AdminCarsController implements Controller {
             DAOFactory.getInstance().getCarDAO().delete(car);
 //            response.sendRedirect("cars");
             response.getWriter().write("ok");
-        }catch (DBException e){
+        } catch (DBException e) {
             log.error(Logging.makeDescription(e));
             String error = e.getMessage();
 //            response.sendRedirect("cars?id=" + id + "&message=" + error);

@@ -35,10 +35,10 @@ public class OrdersController implements Controller {
         if (session.getAttribute("user") != null && session.getAttribute("car") != null) {
             Car car = (Car) session.getAttribute("car");
             session.removeAttribute("car");
-            response.sendRedirect("orders?car_id="+car.getId());
+            response.sendRedirect("orders?car_id=" + car.getId());
         } else if (request.getParameter("id") != null) {
             printOrder(request, response);
-        }else if(request.getParameter("car_id") != null){
+        } else if (request.getParameter("car_id") != null) {
             printNewOrder(request, response);
         } else {
             printList(request, response);
@@ -63,7 +63,7 @@ public class OrdersController implements Controller {
 
     private void printList(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = (User) request.getAttribute("authUser");
-        if(user == null){
+        if (user == null) {
             response.sendRedirect("login");
             return;
         }
@@ -164,22 +164,20 @@ public class OrdersController implements Controller {
             Invoice invoice = new Invoice(order, Invoice.Type.RENT);
             DAOFactory.getInstance().getInvoiceDAO().insert(invoice, connection);
             connection.commit();
-            connection.setAutoCommit(true);
             savePassportInformationToUser(user, passportNumber, passportValid);
             response.sendRedirect("orders?id=" + order.getId());
-        }catch (SQLException e){
-            if(connection != null){
+        } catch (SQLException e) {
+            if (connection != null) {
                 connection.rollback();
             }
             log.error(Logging.makeDescription(e));
             response.sendError(500);
-        }
-        finally {
+        } finally {
             DbUtils.closeQuietly(connection);
         }
     }
 
-    private void savePassportInformationToUser(User user, String passportNumber, Date passportValid){
+    private void savePassportInformationToUser(User user, String passportNumber, Date passportValid) {
         user.setPassportNumber(passportNumber);
         user.setPassportValid(passportValid);
         DAOFactory.getInstance().getUserDAO().update(user);

@@ -3,7 +3,8 @@
 <script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.1.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/scripts.js"></script>
 
-<footer class="text-center bg-dark">
+<footer class="text-center mt-auto">
+    <hr/>
     <div class="container text-white py-4 py-lg-5">
         <p class="text-muted mb-0">Copyright © 2022 Epam</p>
     </div>

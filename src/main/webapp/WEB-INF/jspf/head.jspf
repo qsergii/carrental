@@ -15,4 +15,5 @@
     <link rel="stylesheet" href="${path}/assets/css/styles.css">
 
     <link rel="icon" type="image/x-icon" href="${path}/assets/img/favicon.ico">
+    <title>RENAR</title>
 </head>

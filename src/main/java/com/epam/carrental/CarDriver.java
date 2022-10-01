@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Store price for driver service
  * Data stores in file
- * */
+ */
 public class CarDriver {
     private static final Logger log = LogManager.getLogger(CarDriver.class);
 
@@ -38,7 +38,7 @@ public class CarDriver {
         writeToFile();
     }
 
-    private static void writeToFile(){
+    private static void writeToFile() {
 
         try {
             File file = new File(fileName);

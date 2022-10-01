@@ -102,14 +102,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.invoices}" var="invoice">
-                                <tr class='clickable-row' data-href='invoices?id=${invoice.getId()}'>
-                                    <td>${invoice.id}</td>
-                                    <td>${invoice.getDate()}</td>
-                                    <td>${invoice.getOrder().getId()}</td>
-                                    <td>${invoice.type}</td>
-                                    <td>${invoice.amount}</td>
-                                    <td><input type="checkbox" ${invoice.payed ? "checked" : ""} disabled/></td>
+                            <c:forEach items="${requestScope.invoices}" var="car">
+                                <tr class='clickable-row' data-href='invoices?id=${car.getId()}'>
+                                    <td>${car.id}</td>
+                                    <td>${car.getDate()}</td>
+                                    <td>${car.getOrder().getId()}</td>
+                                    <td>${car.type}</td>
+                                    <td>${car.amount}</td>
+                                    <td><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

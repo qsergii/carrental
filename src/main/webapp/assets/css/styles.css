@@ -70,9 +70,25 @@
 }
 
 body {
-    background: rgb(240, 243, 245);
+    /*background: rgb(240, 243, 245);*/
+    background-color: #eee;
     font-family: "Centra No2", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-synthesis: none;
+    /*height:100vh;*/
+}
+
+.content {
+    background-color: RGB(248, 249, 250);
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+footer {
+    margin-top: 10px;
+    padding-top: 10px;
+    height: 30px;
+    background-color: #eeeeee;
 }
 
 .order form span {
@@ -112,12 +128,14 @@ form span {
     margin: 5px 0;
     /*padding-top: 54px;*/
 }
+
 .card-header {
     font-weight: bold;
     color: var(--bs-indigo);
     font-size: 30px;
 }
-.order-new{
+
+.order-new {
     padding-top: 54px;
 }
 
@@ -135,7 +153,8 @@ form span {
 .car-big {
     max-width: 600px;
     max-height: 300px;
-
+    width: 250px;
+    height: auto;
 }
 
 input::-webkit-search-cancel-button {
@@ -154,34 +173,38 @@ input::-webkit-search-cancel-button {
     cursor: pointer;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .clickable-row:hover {
     background-color: #d7d8e3;
 }
+
 .error-code {
     font-size: 130px;
 }
-.error-text{
+
+.error-text {
     font-size: 27px;
 }
 
-body{
-    background-color: #eee;
-}
-
-.language{
+.language {
     width: 30px;
     height: 20px;
     margin-right: 10px;
 }
 
 /* USER CARD */
-#user{
+#user {
     /*display: flex;*/
 }
-.user_card:hover{
+
+.user_card:hover {
     cursor: pointer;
 }
-.user_card{
+
+.user_card {
     /*background-color: #fff;*/
     width: 170px;
     height: 60px;
@@ -189,26 +212,31 @@ body{
     /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
     padding: 1rem !important;
 }
-.user_card img{
+
+.user_card img {
     width: 50px;
     margin-right: 8px;
 }
-.top-container{
+
+.top-container {
     display: flex;
     align-items: center;
 }
-.profile-image{
+
+.profile-image {
     border-radius: 10px;
     border: 2px solid #5957f9;
 }
-.name{
+
+.name {
     font-size: 15px;
     font-weight: bold;
     color: #272727;
     position: relative;
     top: 8px;
 }
-.role{
+
+.role {
     font-size: 14px;
     color: grey;
     position: relative;

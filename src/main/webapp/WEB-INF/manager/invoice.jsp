@@ -36,6 +36,13 @@
                         </div>
 
                         <div class="input-group">
+                            <span class="input-group-text">Client:</span>
+                            <input class="form-control pointer" type="text" name="name" readonly
+                                   value="${requestScope.invoice.user.login}"
+                                   onclick="window.location='${path}/user?id='${user.id}"/>
+                        </div>
+
+                        <div class="input-group">
                             <span class="input-group-text">Amount:</span>
                             <input class="form-control" type="text" name="name" readonly
                                    value="${requestScope.invoice.amount}"/>

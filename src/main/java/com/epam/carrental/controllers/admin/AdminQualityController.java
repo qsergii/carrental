@@ -1,7 +1,10 @@
 package com.epam.carrental.controllers.admin;
 
+import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
+import com.epam.carrental.dao.DBException;
+import com.epam.carrental.dao.entity.Car;
 import com.epam.carrental.dao.entity.Quality;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public class AdminQualityController implements Controller {
@@ -17,50 +21,38 @@ public class AdminQualityController implements Controller {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try{
-            handleGet(request, response);
-        }catch (IOException e){
-            log.error(e.getMessage());
-            try {
-                response.sendError(500);
-            }catch (IOException e2){
-                log.error(e2.getMessage());
-            }
+        if (request.getParameter("id") != null) {
+            printCard(request, response);
+        } else {
+            printList(request, response);
         }
     }
 
-    public void handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = Optional.ofNullable(request.getParameter("action")).orElse("");
-        if (action.equals("add")) {
-                request.setAttribute("quality", new Quality());
-                request.getRequestDispatcher("/WEB-INF/admin/quality.jsp").forward(request, response);
-        } else if (action.equals("edit")) {
-                int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse(""));
-                Quality quality = DAOFactory.getInstance().getQualityDAO().getById(id);
-                request.setAttribute("quality", quality);
-                request.getRequestDispatcher("/WEB-INF/admin/quality.jsp").forward(request, response);
+    private static void printCard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        Quality quality;
+        List<Car> cars;
+
+        if (id > 0) {
+            quality = DAOFactory.getInstance().getQualityDAO().getById(id);
+            cars = DAOFactory.getInstance().getCarDAO().getByQuality(quality);
         } else {
-                request.setAttribute("page", "qualities");
-                request.setAttribute("brands", DAOFactory.getInstance().getQualityDAO().getAll());
-                request.getRequestDispatcher("/WEB-INF/admin/qualities.jsp").forward(request, response);
+            quality = new Quality();
+            cars = null;
         }
+        request.setAttribute("quality", quality);
+        request.setAttribute("cars", cars);
+        request.getRequestDispatcher("/WEB-INF/admin/quality.jsp").forward(request, response);
+    }
+
+    private static void printList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("qualities", DAOFactory.getInstance().getQualityDAO().getAll());
+        request.getRequestDispatcher("/WEB-INF/admin/qualities.jsp").forward(request, response);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            handlePost(request, response);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            try {
-                response.sendError(500);
-            }catch (Exception e2){
-                log.error(e2.getMessage());
-            }
-        }
-    }
-
-    private void handlePost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, DBException {
         Quality quality;
 
         int id = Integer.parseInt(Optional.ofNullable(request.getParameter("id")).orElse("0"));
@@ -78,26 +70,38 @@ public class AdminQualityController implements Controller {
         String action = Optional.ofNullable(request.getParameter("action")).orElse("");
         if (action.equals("delete")) {
             deleteQuality(request, response, quality);
-            return;
+        } else {
+            insertUpdate(request, response, quality);
         }
+    }
 
+    private static void insertUpdate(HttpServletRequest request, HttpServletResponse response, Quality quality) throws IOException {
         String name = request.getParameter("name");
         if (name == null || name.isEmpty()) {
             response.sendRedirect("quality?message=name can't be empty");
             return;
         }
         quality.setName(name);
-        if (quality.getId() == 0) {
-            DAOFactory.getInstance().getQualityDAO().create(quality);
-        } else {
-            DAOFactory.getInstance().getQualityDAO().update(quality);
+        try {
+            if (quality.getId() == 0) {
+                DAOFactory.getInstance().getQualityDAO().insert(quality);
+            } else {
+                DAOFactory.getInstance().getQualityDAO().update(quality);
+            }
+            response.sendRedirect("qualities");
+        } catch (DBException e) {
+            response.sendRedirect("qualities?id=" + quality.getId() + "&message=" + e.getMessage());
         }
-        response.sendRedirect("qualities");
     }
 
     private void deleteQuality(HttpServletRequest request, HttpServletResponse response, Quality quality) throws IOException {
-        DAOFactory.getInstance().getQualityDAO().delete(quality);
-        response.sendRedirect("qualities");
+        try {
+            DAOFactory.getInstance().getQualityDAO().delete(quality);
+            response.getWriter().print("ok");
+        } catch (DBException e) {
+            log.error(Logging.makeDescription(e));
+            response.getWriter().print(e.getMessage());
+        }
     }
 
 }

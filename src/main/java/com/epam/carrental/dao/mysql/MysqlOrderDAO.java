@@ -27,18 +27,18 @@ public class MysqlOrderDAO extends OrderDao {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-                 connection = Database.dataSource.getConnection();
-                 statement = connection.createStatement();
+            connection = Database.dataSource.getConnection();
+            statement = connection.createStatement();
 
             if (statement.execute(MysqlConstants.ORDER_GET_ALL)) {
-                 resultSet = statement.getResultSet();
+                resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(extractOrder(resultSet));
                 }
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
-        }finally {
+        } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
         }
         return list;
@@ -92,6 +92,7 @@ public class MysqlOrderDAO extends OrderDao {
         }
         return orders;
     }
+
     @Override
     public List<Order> getByCar(Car car) throws DBException {
         if (car == null) {

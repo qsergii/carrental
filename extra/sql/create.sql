@@ -9,9 +9,9 @@ create table brands
 (
     id   int auto_increment primary key,
     name varchar(100) not null,
-    constraint cars_brands_id_uindex
+    constraint id_UNIQUE
         unique (id),
-    constraint cars_brands_name_uindex
+    constraint name_UNIQUE
         unique (name)
 );
 
@@ -19,8 +19,10 @@ create table qualities
 (
     id   int auto_increment primary key,
     name varchar(100) not null,
-    constraint id_unique
-        unique (id)
+    constraint id_UNIQUE
+        unique (id),
+    constraint name_UNIQUE
+        unique (name)
 );
 
 create table cars
@@ -33,7 +35,7 @@ create table cars
     quality_id      int                  not null,
     brand_id        int                  not null,
     image_file_name varchar(100)         null,
-    constraint cars_id_uindex
+    constraint id_UNIQUE
         unique (id),
     constraint brand_id_fk
         foreign key (brand_id) references brands (id),
@@ -77,7 +79,7 @@ create table orders
     reject_reason   varchar(100)                null,
     return_date     datetime                    null,
     return_damage   varchar(100)                null,
-    constraint orders_id_uindex
+    constraint id_UNIQUE
         unique (id),
     constraint car_id_fk
         foreign key (car_id) references cars (id),
@@ -96,7 +98,7 @@ create table invoices
     payed      tinyint(1) null,
     payed_date date       null,
 
-    constraint invoices_id_uindex
+    constraint id_UNIQUE
         unique (id),
     constraint order_id
         foreign key (order_id) references orders (id),

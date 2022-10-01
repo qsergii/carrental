@@ -1,5 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="custom" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="filetags" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <%@ include file="/WEB-INF/jspf/head.jspf" %>
@@ -10,11 +12,9 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
-<%--    <%@ include file="header.jspf" %>--%>
 
     <section>
         <div class="container">
-            <p>Car</p>
             <div class="row row-cols-1">
 
                 <div class="col">
@@ -22,12 +22,8 @@
                 </div>
 
                 <div class="col">
-
-                    <c:if test="${param.message != null}">
-                        <div class="alert alert-warning" role="alert">${param.message}</div>
-                    </c:if>
-
-                    <form action="cars" method="post" enctype="multipart/form-data">
+                    <filetags:message/>
+                    <form action="cars" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
                         <input id="id" type="hidden" name="id" value="${requestScope.car.id}">
 
                         <%--image--%>
@@ -40,10 +36,7 @@
                             <span class="input-group-text">Brand:</span>
                             <select id="brand" class="form-select" name="brand">
                                 <c:forEach items="${requestScope.brands}" var="brand">
-                                    <option value="${brand.id}"
-                                        ${requestScope.car.brand.equals(brand) ? 'selected' : ''}>
-                                            ${brand.name}
-                                    </option>
+                                    <option value="${brand.id}" ${requestScope.car.brand.equals(brand) ? 'selected' : ''}>${brand.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -56,9 +49,9 @@
                         <div id="quality_group" class="input-group">
                             <span class="input-group-text">Quality:</span>
                             <select id="quality" class="form-select" name="quality" required>
-                                <c:forEach items="${requestScope.qualities}" var="quality">
-                                    <option value="${quality.id}" ${requestScope.car.quality.equals(quality) ? 'selected' : ''}>
-                                            ${quality.getName()}
+                                <c:forEach items="${requestScope.qualities}" var="brand">
+                                    <option value="${brand.id}" ${requestScope.car.quality.equals(brand) ? 'selected' : ''}>
+                                            ${brand.getName()}
                                     </option>
                                 </c:forEach>
                             </select>
@@ -80,17 +73,11 @@
                         </div>
                         <br>
                         <div class="input-group">
-                            <button class="btn btn-primary" type="submit">Save</button> 
+                            <button class="btn btn-primary" type="submit">Save</button>
+                             
                             <button id="deleteCar" class="btn btn-danger" type="button">Delete</button>
                         </div>
                     </form>
-
-<%--                    <form method="post">--%>
-<%--                        <input type="hidden" name="id" value="${requestScope.car.id}">--%>
-<%--                        <input type="hidden" name="action" value="delete">--%>
-<%--                        <button class="btn btn-danger" type="submit">Delete</button>--%>
-<%--                    </form>--%>
-
                 </div>
             </div>
         </div>
@@ -116,15 +103,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.orders}" var="invoice">
-                                <tr class='clickable-row' data-href='orders?id=${invoice.getId()}'>
-                                    <td>${invoice.id}</td>
-                                    <td>${invoice.getCar().getBrand().getName()} ${invoice.getCar().getName()}</td>
-                                    <td>${invoice.getUser().getLogin()}</td>
-                                    <td>${invoice.isWithDriver()}</td>
-                                    <td>${invoice.getLeaseTerm()}</td>
-                                    <td>${invoice.getPrice()}</td>
-                                    <td>${invoice.rejected}</td>
+                            <c:forEach items="${requestScope.orders}" var="car">
+                                <tr class='clickable-row' data-href='orders?id=${car.getId()}'>
+                                    <td>${car.id}</td>
+                                    <td>${car.getCar().getBrand().getName()} ${car.getCar().getName()}</td>
+                                    <td>${car.getUser().getLogin()}</td>
+                                    <td>${car.isWithDriver()}</td>
+                                    <td>${car.getLeaseTerm()}</td>
+                                    <td>${car.getPrice()}</td>
+                                    <td>${car.rejected}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

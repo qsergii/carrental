@@ -10,10 +10,14 @@
 
 <div class="container-sm">
     <form method="post">
-        <label>Current price:</label>
-        <input class="form-control" value="${requestScope.driverPrice}" readonly/>
-        <label for="price">New price: </label>
-        <input id="price" class="form-control" name="price" type="number" value="${requestScope.driverPrice}"><br>
+        <div class="input-group mb-3">
+            <span class="input-group-text" for="inBase">Current price:</span>
+            <input id="inBase" class="form-control" value="${requestScope.driverPrice}" readonly/>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" for="price">New price: </span>
+            <input id="price" class="form-control" name="price" type="number" required><br>
+        </div>
         <button class="btn btn-primary" type="submit"><fmt:message key="button.save"/></button>
     </form>
 </div>
