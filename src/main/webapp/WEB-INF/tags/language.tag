@@ -1,15 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:choose>
     <c:when test="${sessionScope.language == 'en'}">
-        <a class="" role="button" href="?lang=ua">
-            <img id="language" class="language" src="${path}/assets/img/flag_ua.png" alt="ua"/>
-        </a>
+        <c:set var="lang" value="ua" scope="page"/>
     </c:when>
     <c:otherwise>
-        <a class="" role="button" href="?lang=en">
-            <img id="language" class="language" src="${path}/assets/img/flag_en.png" alt="en"/>
-        </a>
+        <c:set var="lang" value="en" scope="page"/>
     </c:otherwise>
 </c:choose>
+<a class="" role="button" href="?lang=${pageScope.lang}">
+    <img id="language" class="language" src="${path}/assets/img/flag_${pageScope.lang}.png" alt="${pageScope.lang}"/>
+</a>

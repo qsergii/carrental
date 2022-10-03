@@ -8,7 +8,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import static com.epam.carrental.LanguageBundle.lang;
 
 public class CSV implements Exporter {
     @Override
@@ -18,6 +21,7 @@ public class CSV implements Exporter {
             response.setHeader(
                     "Content-disposition",
                     "attachment; filename=export.csv");
+            response.setHeader("Content-Type", "text/csv; charset=UTF-8");
             writeCsv(invoices, ';', response.getOutputStream());
         } catch (IOException e) {
             throw new RuntimeException("can't greate pdf file: " + e.getMessage(), e);
@@ -26,18 +30,18 @@ public class CSV implements Exporter {
 
     public static <T> void writeCsv(List<Invoice> docs, char separator, OutputStream output) throws IOException {
 
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8));
 
         // header
-        writer.append("Invoice");
+        writer.append(lang("invoices.Invoices"));
         writer.append(separator);
-        writer.append("Order");
+        writer.append(lang("orders.Order"));
         writer.append(separator);
-        writer.append("Amount");
+        writer.append(lang("Amount"));
         writer.append(separator);
-        writer.append("Type");
+        writer.append(lang("Type"));
         writer.append(separator);
-        writer.append("Payed");
+        writer.append(lang("Payed"));
         writer.newLine();
 
         for (Invoice doc : docs) {
@@ -47,9 +51,9 @@ public class CSV implements Exporter {
             writer.append(separator);
             writer.append(String.format("%.2f", doc.getAmount()));
             writer.append(separator);
-            writer.append(String.valueOf(doc.getType()));
+            writer.append(lang("type." + String.valueOf(doc.getType())));
             writer.append(separator);
-            writer.append(doc.isPayed() ? "Yes" : "No");
+            writer.append(lang(doc.isPayed() ? "Yes" : "No"));
             writer.newLine();
         }
         writer.flush();

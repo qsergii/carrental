@@ -1,5 +1,6 @@
 package com.epam.carrental.controllers.filters;
 
+import com.epam.carrental.LanguageBundle;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.User;
 
@@ -56,8 +57,9 @@ public class CommonFilter extends HttpFilter {
         }
 //        request.setAttribute("language", language);
         session.setAttribute("language", language);
+        LanguageBundle.setLanguage(language);
 
-        Config.set( session, Config.FMT_LOCALE, new java.util.Locale(language, language.toUpperCase(Locale.ROOT)) );
+        Config.set(session, Config.FMT_LOCALE, new java.util.Locale(language, language.toUpperCase(Locale.ROOT)));
 //        Config.set( session, Config.FMT_LOCALE, new java.util.Locale("en", "US") );
     }
 

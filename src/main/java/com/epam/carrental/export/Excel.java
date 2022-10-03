@@ -1,5 +1,6 @@
 package com.epam.carrental.export;
 
+import com.epam.carrental.LanguageBundle;
 import com.epam.carrental.dao.entity.Invoice;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -13,11 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class Excel implements Exporter{
+public class Excel implements Exporter {
 
     @Override
     public void export(HttpServletRequest request, HttpServletResponse response, List docs) {
-        try{
+        try {
             response.setContentType("application/xlsx");
             response.setHeader(
                     "Content-disposition",
@@ -28,33 +29,30 @@ public class Excel implements Exporter{
             writeHeaderLine(sheet);
             writeDataLines(workbook, sheet, docs);
             workbook.write(response.getOutputStream());
-//            String excelFilePath = "c:\\temp\\Reviews-export.xlsx";
-//            FileOutputStream outputStream = new FileOutputStream(excelFilePath);
-//            workbook.write(outputStream);
             workbook.close();
-
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("can't create xlsx file: " + e.getMessage(), e);
         }
     }
+
     private void writeHeaderLine(XSSFSheet sheet) {
 
         Row headerRow = sheet.createRow(0);
 
         Cell headerCell = headerRow.createCell(0);
-        headerCell.setCellValue("Invoice");
+        headerCell.setCellValue(lang("invoices.Invoices"));
 
         headerCell = headerRow.createCell(1);
-        headerCell.setCellValue("Order");
+        headerCell.setCellValue(lang("orders.Order"));
 
         headerCell = headerRow.createCell(2);
-        headerCell.setCellValue("Amount");
+        headerCell.setCellValue(lang("Amount"));
 
         headerCell = headerRow.createCell(3);
-        headerCell.setCellValue("Type");
+        headerCell.setCellValue(lang("Type"));
 
         headerCell = headerRow.createCell(4);
-        headerCell.setCellValue("Payed");
+        headerCell.setCellValue(lang("Payed"));
     }
 
     private void writeDataLines(XSSFWorkbook workbook,
@@ -79,14 +77,14 @@ public class Excel implements Exporter{
             cellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
             cell.setCellStyle(cellStyle);
 
-            cell.setCellValue(doc.getType().toString());
-
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(doc.getAmount());
-
-            cell = row.createCell(columnCount);
-            cell.setCellValue(doc.isPayed());
+            cell.setCellValue(lang("type." + String.valueOf(doc.getType())));
+            row.createCell(columnCount++).setCellValue(doc.getAmount());
+            row.createCell(columnCount).setCellValue(lang(doc.isPayed() ? "Yes" : "No"));
 
         }
+    }
+
+    private String lang(String key) {
+        return LanguageBundle.getString(key);
     }
 }

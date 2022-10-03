@@ -1,20 +1,15 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
-<head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
-    <title>Administration</title>
-</head>
+<%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
-
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <div class="container">
 
     <section>
         <div class="container">
-            <p>Order ${requestScope.order.id}</p>
+            <h1><fmt:message key="Order"/> #${requestScope.order.id}</h1>
             <div class="row row-cols-1">
 
                 <div class="col">
@@ -25,54 +20,50 @@
                         <customtag:carImage car="${requestScope.order.car}"/>
 
                         <div id="name_group" class="input-group">
-                            <span class="input-group-text">Car:</span>
+                            <span class="input-group-text"><fmt:message key="Car"/>:</span>
                             <input class="form-control" type="text" name="name" readonly
                                    value="${requestScope.order.car.brand.name} ${requestScope.order.car.name}"/>
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-text">User:</span>
-                            <input class="form-control" type="text" name="name" readonly
-                                   value="${requestScope.order.user.login}"/>
-                        </div>
-
-                        <div class="input-group">
-                            <span class="input-group-text">Passport number:</span>
+                            <span class="input-group-text"><fmt:message key="orders.passport_number"/>:</span>
                             <input class="form-control" type="text" name="name" readonly
                                    value="${requestScope.order.passportNumber}"/>
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-text">Passport valid:</span>
+                            <span class="input-group-text"><fmt:message key="orders.passport_valid"/>:</span>
                             <input class="form-control" type="text" name="name" readonly
                                    value="${requestScope.order.passportValid}"/>
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-text">Price:</span>
+                            <span class="input-group-text"><fmt:message key="Price"/>:</span>
                             <input class="form-control" name="price" type="number" min="0.01" step="0.01" readonly
                                    value="${requestScope.order.price}"/>
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-text">With driver:</span>
+                            <span class="input-group-text"><fmt:message key="orders.with_driver"/>:</span>
                             <input type="checkbox" class="form-check-input" disabled
                                    name="blocked" ${requestScope.order.withDriver ? 'checked':''} />
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-text">Rejected:</span>
+                            <span class="input-group-text"><fmt:message key="orders.rejected"/>:</span>
                             <input type="checkbox" class="form-check-input" disabled
                                    name="rejected" ${requestScope.order.rejected ? 'checked':''} />
                         </div>
                         <div class="input-group">
-                            <span class="input-group-text">Rejected reason:</span>
+                            <span class="input-group-text"><fmt:message key="orders.rejected_reason"/>:</span>
                             <input class="form-control" type="text" name="name" readonly
                                    value="${requestScope.order.rejectReason}"/>
                         </div>
+
                         <br>
                         <div class="input-group">
-                            <button id="reorderCar" type="button" class="btn btn-primary">Reorder car</button>
+                            <button id="reorderCar" type="button" class="btn btn-primary"><fmt:message
+                                    key="orders.reorder"/></button>
                         </div>
 
                     </form>
@@ -88,17 +79,17 @@
             <div class="card">
 
                 <div class="card-body">
-                    <h4 class="card-title">Invoices</h4>
+                    <h4 class="card-title"><fmt:message key="invoices.Invoices"/></h4>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Date</th>
-                                <th>Order</th>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Payed</th>
+                                <th><fmt:message key="invoices.Invoice"/></th>
+                                <th><fmt:message key="Date"/></th>
+                                <th><fmt:message key="Order"/></th>
+                                <th><fmt:message key="Type"/></th>
+                                <th><fmt:message key="Amount"/></th>
+                                <th><fmt:message key="Payed"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -107,7 +98,7 @@
                                     <td>${car.id}</td>
                                     <td>${car.getDate()}</td>
                                     <td>${car.getOrder().getId()}</td>
-                                    <td>${car.type}</td>
+                                    <td><fmt:message key="type.${car.type}"/></td>
                                     <td>${car.amount}</td>
                                     <td><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
                                 </tr>

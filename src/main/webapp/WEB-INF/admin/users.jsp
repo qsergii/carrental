@@ -2,44 +2,41 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <html lang="en">
-<head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
-    <title>Administration</title>
-</head>
+<%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
-
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
-<div class="container">
-    <h2>Users</h2>
-    <a class="btn btn-primary" href="?id=0">Add</a>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Login</th>
-                <th>Role</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Blocked</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${requestScope.users}" var="car">
-                <tr class='clickable-row' data-href='users?id=${car.getId()}'>
-                    <td>${car.login}</td>
-                    <td>${car.role}</td>
-                    <td>${car.firstName}</td>
-                    <td>${car.lastName}</td>
-                    <td><input type="checkbox" ${car.blocked ? 'checked' : ''} disabled/></td>
+<section>
+    <div class="container content">
+        <h2><fmt:message key="user.Users"/></h2>
+        <a class="btn btn-primary" href="?id=0"><fmt:message key="button.add"/></a>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><fmt:message key="user.login"/></th>
+                    <th><fmt:message key="user.role"/></th>
+                    <th><fmt:message key="user.first_name"/></th>
+                    <th><fmt:message key="user.last_name"/></th>
+                    <th><fmt:message key="user.blocked"/></th>
                 </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <c:forEach items="${requestScope.users}" var="user">
+                    <tr class='clickable-row' data-href='users?id=${user.getId()}'>
+                        <td>${user.login}</td>
+                        <td>${user.role}</td>
+                        <td>${user.firstName}</td>
+                        <td>${user.lastName}</td>
+                        <td><input type="checkbox" ${user.blocked ? 'checked' : ''} disabled/></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</section>
 
 <%@include file="/WEB-INF/jspf/footer.jspf" %>
-
 </body>
 </html>

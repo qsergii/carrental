@@ -4,7 +4,6 @@
 <html>
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
-
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <section class="container">
@@ -38,23 +37,23 @@
                     </select>
                 </div>
                 <div class="col">
-                    <span><fmt:message key="Sort_by"/>:</span>
+                    <span><fmt:message key="sort.Sort_by"/>:</span>
                     <select id="sort_by" class="form-select">
                         <option></option>
-                        <optgroup label="<fmt:message key="By_price"/>">
+                        <optgroup label="<fmt:message key="sort.By_price"/>">
                             <option value="price" ${param.sort == "price" ? 'selected=""' : ''}><fmt:message
-                                    key="by_price"/>
+                                    key="sort.by_price"/>
                             </option>
                             <option value="price-desc" ${param.sort == "price-desc" ? 'selected=""' : ''}>
-                                <fmt:message key="by_price_desc"/>
+                                <fmt:message key="sort.by_price_desc"/>
                             </option>
                         </optgroup>
                         <optgroup label="<fmt:message
-                                    key="By_name"/>">
+                                    key="sort.By_name"/>">
                             <option value="name" ${param.sort == "name" ? 'selected=""' : ''}><fmt:message
-                                    key="by_ name"/></option>
+                                    key="sort.by_name"/></option>
                             <option value="name-desc" ${param.sort == "name-desc" ? 'selected=""' : ''}>
-                                <fmt:message key="by_name_desc"/>
+                                <fmt:message key="sort.by_name_desc"/>
                             </option>
                         </optgroup>
                     </select>

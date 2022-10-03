@@ -2,60 +2,46 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <html lang="en">
-
-<head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
-    <title>Administration</title>
-</head>
-
+<%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
-
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <section id="cars">
-    <div class="container">
-        <div class="container">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Cars</h4>
-                    <p class="card-text">List of cars.<br>To add a car - press Add button.<br>To edit (or delete) car -
-                        press on line of a car.</p>
-                    <a class="btn btn-primary" href="cars?id=0">Add</a>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Picture</th>
-                                <th>Brand</th>
-                                <th>Quality</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Blocked</th>
-                                <th>Price</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${cars}" var="car">
-                                <tr class='clickable-row' data-href='cars?id=${car.getId()}'>
-                                    <td><customtag:carImage car="${car}"/></td>
-                                    <td>${car.getBrand().getName()}</td>
-                                    <td>${car.getQuality().getName()}</td>
-                                    <td>${car.name}</td>
-                                    <td>${car.getDescription()}</td>
-                                    <td><input type="checkbox" ${car.blocked ? "checked" : ""} disabled></td>
-                                    <td>${car.price}</td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="container content">
+        <h1><fmt:message key="cars.cars"/></h1>
+        <a class="btn btn-primary" href="cars?id=0"><fmt:message key="Add"/></a>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><fmt:message key="cars.picture"/></th>
+                    <th><fmt:message key="cars.brand"/></th>
+                    <th><fmt:message key="cars.quality"/></th>
+                    <th><fmt:message key="cars.name"/></th>
+                    <th><fmt:message key="cars.description"/></th>
+                    <th><fmt:message key="cars.blocked"/></th>
+                    <th><fmt:message key="Price"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${cars}" var="car">
+                    <tr class='clickable-row' data-href='cars?id=${car.getId()}'>
+                        <td><customtag:carImage car="${car}"/></td>
+                        <td>${car.getBrand().getName()}</td>
+                        <td>${car.getQuality().getName()}</td>
+                        <td>${car.name}</td>
+                        <td>${car.getDescription()}</td>
+                        <td><input type="checkbox" ${car.blocked ? "checked" : ""} disabled></td>
+                        <td class="text-sm-end"><fmt:formatNumber value="${car.price}" type="number"
+                                                                  minFractionDigits="2"/></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
     </div>
 </section>
 
 <%@include file="/WEB-INF/jspf/footer.jspf" %>
-
 </body>
 </html>

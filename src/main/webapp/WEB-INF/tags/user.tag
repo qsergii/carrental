@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="d-flex">
-            <a class="btn btn-outline-success" role="button" href="${path}/logout"><fmt:message key="user.logout"/></a>
+            <a class="btn btn-outline-success" role="button" href="${path}/logout"><fmt:message key="auth.logout"/></a>
         </div>
     </c:otherwise>
 </c:choose>

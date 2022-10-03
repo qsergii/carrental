@@ -1,7 +1,9 @@
 package com.epam.carrental.export;
 
+import com.epam.carrental.LanguageBundle;
 import com.epam.carrental.dao.entity.Invoice;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -13,8 +15,9 @@ import java.util.List;
 
 /**
  * Create PDF files
- * */
-public class PDF implements Exporter{
+ */
+public class PDF implements Exporter {
+    private Font font;
 
     @Override
     public void export(HttpServletRequest request, HttpServletResponse response, List docs) {
@@ -23,25 +26,27 @@ public class PDF implements Exporter{
             response.setHeader(
                     "Content-disposition",
                     "attachment; filename=export.pdf");
-//                    "inline; filename=export.pdf");
 
             Document document = new Document();
             PdfWriter.getInstance(document, response.getOutputStream());
 
             document.open();
 
-            Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-            Chunk chunk = new Chunk("Invoices", font);
+            String fontFilePath = PDF.class.getClassLoader().getResource("fonts/FreeSans.ttf").getFile();
+            BaseFont bf = BaseFont.createFont(fontFilePath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            font = new Font(bf, 11, Font.NORMAL);
+
+            Chunk chunk = new Chunk(lang("invoices.Invoice"), font(16));
             document.add(chunk);
 
-            document.add( Chunk.NEWLINE );
-            document.add( Chunk.NEWLINE );
-            document.add( new Paragraph( " " ) );
+            document.add(Chunk.NEWLINE);
+            document.add(Chunk.NEWLINE);
+            document.add(new Paragraph(" "));
             document.add(getTable(docs));
 
             document.close();
-        }catch (IOException | DocumentException e){
-            throw new RuntimeException("can't greate pdf file: " + e.getMessage(), e);
+        } catch (IOException | DocumentException | NullPointerException e) {
+            throw new RuntimeException("can't create pdf file: " + e.getMessage(), e);
         }
     }
 
@@ -50,11 +55,11 @@ public class PDF implements Exporter{
         PdfPTable table = new PdfPTable(5);
 
         // Header
-        addHeaderCell(table, "Invoice");
-        addHeaderCell(table, "Order");
-        addHeaderCell(table, "Amount");
-        addHeaderCell(table, "Type");
-        addHeaderCell(table, "Payed");
+        addHeaderCell(table, lang("invoices.Invoices"));
+        addHeaderCell(table, lang("orders.Order"));
+        addHeaderCell(table, lang("Amount"));
+        addHeaderCell(table, lang("Type"));
+        addHeaderCell(table, lang("Payed"));
 
         float totalAmount = 0;
         for (Invoice doc : list) {
@@ -65,15 +70,14 @@ public class PDF implements Exporter{
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
 
-            table.addCell(String.valueOf(doc.getType()));
-            table.addCell(doc.isPayed() ? "Yes" : "No");
+            table.addCell(new Phrase(lang("type." + String.valueOf(doc.getType())), font));
+            table.addCell(lang(doc.isPayed() ? "Yes" : "No"));
 
             totalAmount += doc.getAmount();
         }
 
         // total
         PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(list.size())));
-//        cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
         table.addCell(cell1);
 
         table.addCell("");
@@ -88,12 +92,23 @@ public class PDF implements Exporter{
         return table;
     }
 
-    private void addHeaderCell(PdfPTable table, String text){
+    private void addHeaderCell(PdfPTable table, String text) {
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         cell.setBorderWidth(2);
-        cell.setPhrase(new Phrase(text));
+        cell.setPhrase(new Phrase(text, font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
+    }
+
+    private String lang(String key) {
+        return LanguageBundle.getString(key);
+    }
+
+    private Font font(int size) throws DocumentException, IOException {
+        String fontFilePath = PDF.class.getClassLoader().getResource("fonts/FreeSans.ttf").getFile();
+        BaseFont bf = BaseFont.createFont(fontFilePath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        return new Font(bf, size, Font.NORMAL);
     }
 
 }

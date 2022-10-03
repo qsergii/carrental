@@ -78,7 +78,7 @@ body {
 }
 
 .content {
-    background-color: RGB(248, 249, 250);
+    background-color: white;
     margin-top: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -108,6 +108,7 @@ form span {
 .blockquote {
     max-width: 900px;
     height: 100px;
+    margin-top: 10px;
 }
 
 #quote_author {
@@ -241,4 +242,9 @@ input::-webkit-search-cancel-button {
     color: grey;
     position: relative;
     top: 2px;
+}
+
+/* ORDERS */
+#order_new form span {
+    width: 180px;
 }

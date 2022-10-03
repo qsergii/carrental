@@ -330,7 +330,7 @@ public class MysqlCarDAO extends CarDao {
             if (sortParam != null && !sortParam.isEmpty()) {
                 queryString.append(" ORDER BY ");
                 switch (sortParam) {
-                    case "by_price":
+                    case "sort.by_price":
                         queryString.append("price");
                         break;
                     case "price-desc":

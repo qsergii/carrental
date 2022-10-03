@@ -13,7 +13,7 @@ public class Mail {
 
     private static final Session session;
 
-    static{
+    static {
         Properties prop = new Properties();
         prop.put("mail.smtp.auth", true);
         prop.put("mail.smtp.starttls.enable", "true");
