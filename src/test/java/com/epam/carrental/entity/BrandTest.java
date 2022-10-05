@@ -1,6 +1,6 @@
 package com.epam.carrental.entity;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Assertions;
 
 public class BrandTest {
 

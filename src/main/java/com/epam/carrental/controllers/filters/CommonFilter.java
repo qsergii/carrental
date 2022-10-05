@@ -26,8 +26,8 @@ public class CommonFilter extends HttpFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         setEncoding(request);
-        setLanguage(request);
         authorizeUser(request);
+        setLanguage(request);
 
         chain.doFilter(request, response);
     }
@@ -42,6 +42,7 @@ public class CommonFilter extends HttpFilter {
         String language = null;
         HttpServletRequest request = (HttpServletRequest) req;
         HttpSession session = request.getSession();
+        User user = (User) request.getAttribute("authUser");
 
         String languageFromRequest = request.getParameter("lang");
         if (languageFromRequest != null) {
@@ -50,17 +51,25 @@ public class CommonFilter extends HttpFilter {
             String languageFromSession = (String) session.getAttribute("language");
             if (languageFromSession != null) {
                 language = languageFromSession;
+            } else if (user != null) {
+                String languageFromUser = user.getLanguage();
+                if (languageFromUser != null) {
+                    language = languageFromUser;
+                }
             }
         }
         if (language == null) {
             language = "en";
         }
-//        request.setAttribute("language", language);
+
         session.setAttribute("language", language);
+        if (user != null && (user.getLanguage() == null || !user.getLanguage().equals(language))) {
+            user.setLanguage(language);
+            DAOFactory.getInstance().getUserDAO().update(user);
+        }
         LanguageBundle.setLanguage(language);
 
         Config.set(session, Config.FMT_LOCALE, new java.util.Locale(language, language.toUpperCase(Locale.ROOT)));
-//        Config.set( session, Config.FMT_LOCALE, new java.util.Locale("en", "US") );
     }
 
     private void authorizeUser(ServletRequest request) {

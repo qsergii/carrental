@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <absolute-ordering />
+    <absolute-ordering/>
 
     <error-page>
         <location>/WEB-INF/errors/error.jsp</location>
@@ -17,6 +17,7 @@
             c:\temp\
         </param-value>
     </context-param>
+    <!--localization-->
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>messages</param-value>

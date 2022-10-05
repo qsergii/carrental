@@ -28,13 +28,12 @@ public class Quote extends TagSupport {
         String quote = quotes[quoteIndex][0];
         String quoteAuthor = quotes[quoteIndex][1];
 
-
         JspWriter out = pageContext.getOut();
         try {
             out.print("    <section>\n" +
                     "        <div class=\"container blockquote bg-light\">\n" +
-                    "            <p id=\"quote\">\""+quote+"\"</p>\n" +
-                    "            <p id=\"quote_author\">"+quoteAuthor+"</p>\n" +
+                    "            <p id=\"quote\">\"" + quote + "\"</p>\n" +
+                    "            <p id=\"quote_author\">" + quoteAuthor + "</p>\n" +
                     "        </div>\n" +
                     "    </section>");
         } catch (IOException e) {

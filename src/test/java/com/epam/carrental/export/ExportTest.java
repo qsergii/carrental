@@ -1,28 +1,28 @@
 package com.epam.carrental.export;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Assertions;
 
 public class ExportTest {
 
     @Test
     public void pdfTest() {
         Exporter export = Export.export("pdf");
-        Assert.assertEquals(export.getClass(), PDF.class);
+        Assertions.assertEquals(export.getClass(), PDF.class);
     }
 
     @Test
     public void xlsxTest() {
         Exporter export = Export.export("xlsx");
-        Assert.assertEquals(export.getClass(), Excel.class);
+        Assertions.assertEquals(export.getClass(), Excel.class);
     }
 
     @Test
     public void csvTest() {
         Exporter export = Export.export("csv");
-        Assert.assertEquals(export.getClass(), CSV.class);
+        Assertions.assertEquals(export.getClass(), CSV.class);
     }
 
 }

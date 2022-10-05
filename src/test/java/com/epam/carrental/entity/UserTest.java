@@ -1,8 +1,8 @@
 package com.epam.carrental.entity;
 
 import com.epam.carrental.dao.entity.User;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UserTest {
 
@@ -11,7 +11,7 @@ public class UserTest {
         int id = 1;
         User user = new User();
         user.setId(id);
-        Assert.assertEquals(user.getId(), 1);
+        Assertions.assertEquals(user.getId(), 1);
     }
 
 //    @Test(expected = NullPointerException.class)

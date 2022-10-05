@@ -21,7 +21,7 @@ public class MysqlUserDAO extends UserDao {
     private final Logger log = LogManager.getLogger(getClass());
 
     public User validate(User userToCheck) {
-        User user = getUserByLogin(userToCheck.getLogin());
+        User user = getUserByLogin(userToCheck.getLogin(), null);
         if (user == null) {
             return null;
         }
@@ -55,12 +55,16 @@ public class MysqlUserDAO extends UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public User getUserByLogin(String login, Connection connectionIn) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            if (connectionIn != null) {
+                connection = connectionIn;
+            } else {
+                connection = Database.dataSource.getConnection();
+            }
             statement = connection.prepareStatement(MysqlConstants.GET_USER_BY_LOGIN);
 
             statement.setString(1, login);
@@ -73,7 +77,11 @@ public class MysqlUserDAO extends UserDao {
         } catch (SQLException | DBException e) {
             throw new RuntimeException(e);
         } finally {
-            DbUtils.closeQuietly(connection, statement, resultSet);
+            if (connectionIn != null) {
+                DbUtils.closeQuietly(null, statement, resultSet);
+            } else {
+                DbUtils.closeQuietly(connection, statement, resultSet);
+            }
         }
     }
 
@@ -92,8 +100,8 @@ public class MysqlUserDAO extends UserDao {
             connection = Database.dataSource.getConnection();
             statement = connection.prepareStatement(
                     "INSERT INTO users " +
-                            "(login, phone, email, first_name, last_name, password, passport_number, passport_valid, role, blocked) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                            "(login, phone, email, first_name, last_name, password, passport_number, passport_valid, role, blocked, language) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     , Statement.RETURN_GENERATED_KEYS);
 
             int i = 0;
@@ -107,6 +115,7 @@ public class MysqlUserDAO extends UserDao {
             statement.setDate(++i, user.getPassportValid() != null ? new Date(user.getPassportValid().getTime()) : null);
             statement.setInt(++i, user.getRole().getId());
             statement.setBoolean(++i, user.isBlocked());
+            statement.setString(++i, user.getLanguage());
             statement.execute();
 
             resultSet = statement.getGeneratedKeys();
@@ -137,7 +146,7 @@ public class MysqlUserDAO extends UserDao {
             statement = connection.prepareStatement(
                     "UPDATE users " +
                             "SET login=?, phone=?, email=?, first_name=?, last_name=?, " +
-                            "password=?, role=?, blocked=?,  passport_number=?, passport_valid=? " +
+                            "password=?, role=?, blocked=?,  passport_number=?, passport_valid=?, language = ? " +
                             "WHERE id=?"
             );
 
@@ -152,6 +161,7 @@ public class MysqlUserDAO extends UserDao {
             statement.setBoolean(++i, user.isBlocked());
             statement.setString(++i, user.getPassportNumber());
             statement.setDate(++i, user.getPassportValid() != null ? new Date(user.getPassportValid().getTime()) : null);
+            statement.setString(++i, user.getLanguage());
             statement.setInt(++i, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -199,6 +209,7 @@ public class MysqlUserDAO extends UserDao {
             user.setBlocked(resultSet.getBoolean("blocked"));
             user.setPassportNumber(resultSet.getString("passport_number"));
             user.setPassportValid(resultSet.getDate("passport_valid"));
+            user.setLanguage(resultSet.getString("language"));
             return user;
         } catch (SQLException e) {
             log.error(Logging.makeDescription(e));

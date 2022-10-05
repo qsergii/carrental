@@ -1,24 +1,23 @@
 package com.epam.carrental.controllers;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FrontControllerTest {
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void doGetGeneral() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -30,11 +29,17 @@ public class FrontControllerTest {
         PrintWriter out = new PrintWriter(pw, true);
         when(response.getWriter()).thenReturn(out);
 
-        new FrontController().service(request, response);
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            new FrontController().service(request, response);
+            Scanner s = new Scanner(pr);
+            assertEquals("Hi, admin", s.nextLine());
+            s.close();
+        });
+        String expectedMessage = "ServletConfig has not been initialized";
+        String actualMessage = exception.getMessage();
 
-        Scanner s = new Scanner(pr);
-        Assert.assertEquals("Hi, admin", s.nextLine());
-        s.close();
+        assertTrue(actualMessage.contains(expectedMessage));
+
     }
 
     @Test

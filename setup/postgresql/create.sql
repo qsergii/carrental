@@ -7,7 +7,7 @@ drop table IF EXISTS users;
 
 create table brands
 (
-    id   int auto_increment primary key,
+    id   SERIAL primary key,
     name varchar(100) not null,
     constraint id_UNIQUE
         unique (id),
@@ -17,7 +17,7 @@ create table brands
 
 create table qualities
 (
-    id   int auto_increment primary key,
+    id   SERIAL primary key,
     name varchar(100) not null,
     constraint id_UNIQUE
         unique (id),
@@ -27,15 +27,15 @@ create table qualities
 
 create table cars
 (
-    id              int auto_increment primary key,
+    id             SERIAL primary key,
     name            varchar(100)         not null,
     description     varchar(200)         null,
-    blocked         tinyint(1) default 0 not null,
+    blocked         int default 0 not null,
     price           float                not null,
     quality_id      int                  not null,
     brand_id        int                  not null,
     image_file_name varchar(100)         null,
-    constraint id_UNIQUE
+    constraint id_UNIQUE_cars
         unique (id),
     constraint brand_id_fk
         foreign key (brand_id) references brands (id),
@@ -56,6 +56,7 @@ create table users
     blocked         tinyint(1)   not null DEFAULT 0,
     passport_number varchar(50)  null,
     passport_valid  date         null,
+    language        varchar(2)   null,
     constraint id_UNIQUE
         unique (id),
     constraint login_UNIQUE

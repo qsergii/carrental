@@ -32,8 +32,13 @@ public class LanguageBundle {
         return LanguageBundle.getString(key);
     }
 
+    public static String getLanguage() {
+        return language;
+    }
+
     public static void setLanguage(String language) {
         LanguageBundle.language = language;
     }
+
 
 }

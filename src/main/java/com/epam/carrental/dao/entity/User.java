@@ -3,13 +3,14 @@ package com.epam.carrental.dao.entity;
 import com.epam.carrental.AppSettings;
 import com.google.common.hash.Hashing;
 import org.apache.commons.codec.digest.DigestUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Objects;
 
 /**
  * User entity
- * */
+ */
 public class User {
     private int id;
     private String login;
@@ -20,9 +21,9 @@ public class User {
     private String password;
     private Role role;
     private boolean blocked;
-
     private String passportNumber;
     private Date passportValid;
+    private String language;
 
     public User() {
     }
@@ -82,6 +83,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public void setPasswordAndSecure(String password) {
         this.password = getPasswordHash(password);
     }
@@ -118,13 +120,22 @@ public class User {
         this.passportValid = passportValid;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     /**
      * Get hash from password + solt
      * Method for calculation hash string set in main settings with param "hashMethod".
-     *  Possible values: "google" or other = "sha256" method
+     * Possible values: "google" or other = "sha256" method
+     *
      * @param password password from user
      * @return hash string
-     * */
+     */
     public String getPasswordHash(String password) {
         String solt = AppSettings.PROPERTIES.getProperty("passwordSolt");
         String sha256hex;

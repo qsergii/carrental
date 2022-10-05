@@ -1,14 +1,15 @@
 package com.epam.carrental;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class AppSettingsTest {
 
     @Test
-    public void test(){
+    public void test() {
         AppSettings appSettings = new AppSettings();
-        Assert.assertNotNull(appSettings);
+        Assertions.assertNotNull(appSettings);
     }
 
 }

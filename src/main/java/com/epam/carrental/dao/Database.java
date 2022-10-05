@@ -23,7 +23,7 @@ public class Database {
             try {
                 Context initContext = new InitialContext();
                 Context envContext = (Context) initContext.lookup("java:/comp/env");
-                dataSource = (DataSource) envContext.lookup("jdbc/carrental");
+                dataSource = (DataSource) envContext.lookup("jdbc/mysql.carrental");
             } catch (NamingException e) {
                 e.printStackTrace();
             }
