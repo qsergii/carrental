@@ -73,16 +73,12 @@ public class CommonFilter extends HttpFilter {
     }
 
     private void authorizeUser(ServletRequest request) {
-
         User user = null;
-
         HttpSession session = ((HttpServletRequest) request).getSession();
         Integer userId = (Integer) session.getAttribute("userId");
-
         if (userId != null) {
             user = DAOFactory.getInstance().getUserDAO().getUserById(userId);
         }
-
         request.setAttribute("authUser", user);
     }
 

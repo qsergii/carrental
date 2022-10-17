@@ -4,6 +4,9 @@ import com.epam.carrental.dao.entity.Quality;
 
 import java.util.List;
 
+/**
+ * Abstract class to quality methods
+ */
 public abstract class QualityDao {
     public abstract void insert(Quality quality) throws DBException;
 

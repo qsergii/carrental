@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Fabric of fabric to get factory to manage entity in database
+ */
 public abstract class DAOFactory {
 
     private static final Logger log = LogManager.getLogger(DAOFactory.class);
@@ -14,8 +17,8 @@ public abstract class DAOFactory {
     private static DAOFactory instance;
     private static String daoFactoryFCN = AppSettings.PROPERTIES.getProperty("daoFactoryFCN");
 
-    public static synchronized DAOFactory getInstance(){
-        if(instance == null){
+    public static synchronized DAOFactory getInstance() {
+        if (instance == null) {
             try {
                 Class<?> classExmp = Class.forName((DAOFactory.daoFactoryFCN));
                 instance = (DAOFactory) classExmp.getDeclaredConstructor().newInstance();
@@ -28,13 +31,19 @@ public abstract class DAOFactory {
         return instance;
     }
 
-    protected DAOFactory(){}
+    protected DAOFactory() {
+    }
 
     public abstract UserDao getUserDAO();
+
     public abstract OrderDao getOrderDAO();
+
     public abstract InvoiceDao getInvoiceDAO();
+
     public abstract CarDao getCarDAO();
+
     public abstract BrandDao getBrandDAO();
+
     public abstract QualityDao getQualityDAO();
 
 }

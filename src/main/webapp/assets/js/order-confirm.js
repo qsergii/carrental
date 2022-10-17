@@ -1,4 +1,4 @@
-Date.prototype.addDays = function(days) {
+Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
@@ -16,23 +16,29 @@ function checkPassportDate() {
     }
     return true;
 }
-function lease_beginChange(){
+
+function lease_beginChange() {
     let element = document.getElementById('lease_begin');
-    let selectedDate = parseDateValue('lease_begin');
+
+    let dateBegin = parseDateValue('lease_begin');
+    let dateFinish = parseDateValue('lease_finish');
     let now = getDateNow();
-    if (selectedDate < now) {
+    if (dateBegin < now) {
         alert("Date must be in the future");
         element.value = "";
-    }else{
+    } else if (dateBegin >= dateFinish) {
+        document.getElementById('lease_finish').value = '';
+    } else {
         let lease_finish = parseDateValue('lease_finish');
-        if(lease_finish <= lease_begin) {
+        if (lease_finish <= lease_begin) {
             alert("Finish rent must be after begin rent");
             document.getElementById('lease_finish').value = '';
         }
     }
     countDaysRent();
 }
-function lease_finishChange(){
+
+function lease_finishChange() {
     let element = document.getElementById('lease_finish');
 
     let lease_begin = parseDateValue('lease_begin');
@@ -41,32 +47,37 @@ function lease_finishChange(){
     if (lease_finish < now) {
         alert("Date must be in the future");
         element.value = "";
-    }else if(lease_finish <= lease_begin) {
+    } else if (lease_finish <= lease_begin) {
         alert("Finish rent must be after begin rent");
         element.value = "";
     }
     countDaysRent();
 }
-function parseDateValue(elementId){
+
+function parseDateValue(elementId) {
     let element = document.getElementById(elementId);
     let selectedText = element.value;
     return new Date(selectedText);
 }
-function getDateNow(){
-    return new Date().setUTCHours(0,0,0,0);
+
+function getDateNow() {
+    return new Date().setUTCHours(0, 0, 0, 0);
 }
+
 function datediff(first, second) {
     // Take the difference between the dates and divide by milliseconds per day.
     // Round to nearest whole number to deal with DST.
-    return Math.round((second-first)/(1000*60*60*24));
+    return Math.round((second - first) / (1000 * 60 * 60 * 24));
 }
-function countDaysRent(){
+
+function countDaysRent() {
     let lease_begin = parseDateValue('lease_begin');
     let lease_finish = parseDateValue('lease_finish');
     document.getElementById("lease_term").value = datediff(lease_begin, lease_finish);
     calculateAmount();
 }
-function valueFormatDate(date){
+
+function valueFormatDate(date) {
     const yyyy = date.getFullYear();
     let mm = date.getMonth() + 1; // Months start at 0!
     let dd = date.getDate();
@@ -75,7 +86,7 @@ function valueFormatDate(date){
     return yyyy + '-' + mm + '-' + dd;
 }
 
-function calculateAmount(){
+function calculateAmount() {
     withDriver = document.getElementById("withDriver").value === "with-driver";
     days = parseInt(document.getElementById("lease_term").value);
     driverPrice = parseFloat(document.getElementById("driverPrice").value);
@@ -84,7 +95,7 @@ function calculateAmount(){
         valueFormatDate(new Date().addDays(days));
 
     pricePerDay = parseFloat(document.getElementById('price').value);
-    if(withDriver){
+    if (withDriver) {
         pricePerDay += driverPrice;
     }
     amount = (pricePerDay * days)
@@ -92,10 +103,10 @@ function calculateAmount(){
     document.getElementById('amount').value = amount;
 }
 
-function afterLoad(){
+function afterLoad() {
     element = document.getElementById("passportValid");
     element.setAttribute("min", valueFormatDate(new Date()));
-    element.setAttribute("max", valueFormatDate((new Date()).addDays(10*365)));
+    element.setAttribute("max", valueFormatDate((new Date()).addDays(10 * 365)));
     delete element;
 
     element = document.getElementById("lease_begin");

@@ -14,7 +14,6 @@ public class AdminDriverController implements Controller {
 
     private final Logger log = LogManager.getLogger(this.getClass());
 
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("driverPrice", CarDriver.getPrice());

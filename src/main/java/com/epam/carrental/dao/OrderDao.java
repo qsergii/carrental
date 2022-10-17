@@ -7,10 +7,16 @@ import com.epam.carrental.dao.entity.User;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * Abstract class to order methods
+ */
 public abstract class OrderDao {
     public abstract List<Order> getAll();
+
     public abstract Order getById(int id);
+
     public abstract List<Order> getByCar(Car car) throws DBException;
+
     public abstract boolean insert(Order order, Connection connection);
 
     public abstract boolean update(Order order);

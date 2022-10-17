@@ -10,6 +10,7 @@
     <div class="container content">
 
         <h1 class="card-title"><fmt:message key="invoices.Invoices"/></h1>
+        <a id="a_print" href="?export=print"><img src="${path}/assets/img/printer.png" alt="print" width="64"/></a>
         <a href="?export=pdf"><img src="${path}/assets/img/pdf.png" alt="pdf" width="64"/></a>
         <a href="?export=xlsx"><img src="${path}/assets/img/xlsx.png" alt="xlsx" width="64"/></a>
         <a href="?export=csv"><img src="${path}/assets/img/csv.webp" alt="csv" width="64"/></a>
@@ -43,6 +44,7 @@
             </table>
         </div>
     </div>
+    <script src="${path}/assets/js/invoices.js"></script>
 </section>
 
 <%@include file="/WEB-INF/jspf/footer.jspf" %>

@@ -7,6 +7,9 @@ import com.epam.carrental.dao.entity.User;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * Abstract class to invoice method
+ */
 public abstract class InvoiceDao {
     public abstract void insert(Invoice invoice, Connection connection);
 
@@ -19,5 +22,6 @@ public abstract class InvoiceDao {
     public abstract Invoice getByIdAndUser(int id, User user);
 
     public abstract List<Invoice> getByUser(User user);
+
     public abstract List<Invoice> getByOrder(Order order) throws DBException;
 }

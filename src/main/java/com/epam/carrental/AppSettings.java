@@ -12,8 +12,8 @@ public class AppSettings {
 
     /**
      * Main property to store properties
-     * */
-    public final static Properties PROPERTIES = new Properties();
+     */
+    public static final Properties PROPERTIES = new Properties();
 
     static {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();

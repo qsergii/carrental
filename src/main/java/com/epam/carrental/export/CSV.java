@@ -13,6 +13,9 @@ import java.util.List;
 
 import static com.epam.carrental.LanguageBundle.lang;
 
+/**
+ * Generate csv file of invoices
+ */
 public class CSV implements Exporter {
     @Override
     public void export(HttpServletRequest request, HttpServletResponse response, List invoices) {

@@ -43,8 +43,10 @@ public class Brand {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null || !obj.getClass().equals(this.getClass()))
+        if (obj == null || !obj.getClass().equals(this.getClass()))
             return false;
+        if (obj == this)
+            return true;
 
         Brand that = (Brand) obj;
 

@@ -2,7 +2,7 @@ package com.epam.carrental.export;
 
 /**
  * Factory for exporter format
- * */
+ */
 public class Export {
     public static Exporter export(String format) {
         switch (format) {
@@ -12,6 +12,8 @@ public class Export {
                 return new Excel();
             case "csv":
                 return new CSV();
+            case "print":
+                return new Printer();
             default:
                 throw new IllegalArgumentException("don't support format " + format);
         }

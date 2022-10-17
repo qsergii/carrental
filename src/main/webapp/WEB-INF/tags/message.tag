@@ -2,4 +2,4 @@
 
 <c:if test="${not empty param.message}">
     <div class="alert alert-warning" role="alert">${param.message}</div>
-</c:if>
+</c:if

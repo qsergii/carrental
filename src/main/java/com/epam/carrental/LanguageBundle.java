@@ -5,6 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * Class use for set language and get strings in selected language
+ * from program code
+ */
 public class LanguageBundle {
     private static final Logger log = LogManager.getLogger(LanguageBundle.class);
 

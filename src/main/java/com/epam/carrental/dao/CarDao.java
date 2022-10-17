@@ -6,6 +6,9 @@ import com.epam.carrental.dao.entity.Quality;
 
 import java.util.List;
 
+/**
+ * Abstract class to car method
+ */
 public abstract class CarDao {
     public abstract void insert(Car car);
 

@@ -26,7 +26,6 @@ public class RegistrationController implements Controller {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         String login = Optional.ofNullable(request.getParameter("login")).orElse("");
         if (login.isEmpty()) {
             response.sendRedirect("registration?message=Login empty. Type login and try again");
@@ -63,12 +62,14 @@ public class RegistrationController implements Controller {
         try {
             DAOFactory.getInstance().getUserDAO().insert(user);
             request.getSession().setAttribute("userId", user.getId());
-            Mail.send(email, "Registration complete", "Hello, " + firstName + "\nWe are glad to see you in our costumer family.");
+            Mail.send(email, "Registration complete", "Hello, " + firstName
+                    + "\nWe are glad to see you in our costumer family.");
             LoginController.afterLoginRedirect(request, response);
         } catch (DBException e) {
             log.error(e.getMessage());
             response.sendRedirect("registration?message=" + e.getMessage());
         } catch (MessagingException e) {
+            log.error(e.getMessage());
             throw new IOException("Can't send email", e);
         }
     }

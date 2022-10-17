@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ tag pageEncoding="UTF-8" description="user card in top right corner" %>
 
 <%@ attribute
         name="user"

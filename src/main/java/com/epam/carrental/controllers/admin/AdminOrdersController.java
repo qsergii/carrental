@@ -1,6 +1,5 @@
 package com.epam.carrental.controllers.admin;
 
-import com.epam.carrental.Logging;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.DBException;
@@ -20,26 +19,21 @@ public class AdminOrdersController implements Controller {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, DBException {
-        String orderIdString = request.getParameter("id");
-        if (orderIdString != null) {
-            printOrder(request, response);
+        String dispatcher;
+        if (request.getParameter("id") != null) {
+            dispatcher = printOrder(request, response);
         } else {
-            printList(request, response);
+            dispatcher = printList(request, response);
         }
+        request.getRequestDispatcher(dispatcher).forward(request, response);
     }
 
-    private void printList(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getAll());
-            request.getRequestDispatcher("/WEB-INF/admin/orders.jsp").forward(request, response);
-        } catch (IOException e) {
-            log.error(Logging.makeDescription(e));
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        }
+    private String printList(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getAll());
+        return "/WEB-INF/admin/orders.jsp";
     }
 
-    private void printOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DBException {
+    private String printOrder(HttpServletRequest request, HttpServletResponse response) throws DBException {
         String orderIdString = request.getParameter("id");
         Order order;
         int id = Integer.parseInt(orderIdString);
@@ -50,7 +44,8 @@ public class AdminOrdersController implements Controller {
         }
         request.setAttribute("order", order);
         request.setAttribute("invoices", DAOFactory.getInstance().getInvoiceDAO().getByOrder(order));
-        request.getRequestDispatcher("/WEB-INF/admin/order.jsp").forward(request, response);
+
+        return "/WEB-INF/admin/order.jsp";
     }
 
     @Override

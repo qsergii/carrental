@@ -15,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Log start and finish of application
  * load user instance from DB
- * */
+ */
 @WebListener
 public class ContextListener implements ServletContextListener {
 

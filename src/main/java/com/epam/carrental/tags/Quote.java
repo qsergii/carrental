@@ -5,6 +5,10 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * Class for tag
+ * to generate a quote of car
+ */
 public class Quote extends TagSupport {
 
     private static final String[][] quotes = {

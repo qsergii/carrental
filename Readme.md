@@ -43,7 +43,7 @@ Architectural patterns:
 - Install MySQL server.
     - Create user and write username and password in file /META-INF/context.xml
     - assign all Object, DDL rights.
-    - run scripts from file /extra/sql/create.sql
+    - run scripts from file /extra/sql/create-tables.sql
     - for demo data run scripts from file /extra/sql/{table name}.sql for each table (if needed)
 - Make registration as user, in table users change data in column 'role' to 0. This user become admin.
 - Under admin get into Driver menu and set Driver price.

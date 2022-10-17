@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Class for sending email using external server
+ */
 public class Mail {
 
     private static final Session session;

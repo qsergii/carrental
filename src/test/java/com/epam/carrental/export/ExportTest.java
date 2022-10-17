@@ -3,8 +3,6 @@ package com.epam.carrental.export;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.Assertions;
-
 public class ExportTest {
 
     @Test
@@ -23,6 +21,13 @@ public class ExportTest {
     public void csvTest() {
         Exporter export = Export.export("csv");
         Assertions.assertEquals(export.getClass(), CSV.class);
+    }
+
+    @Test
+    public void csvPrinter() {
+        Exporter export = Export.export("print");
+        Assertions.assertEquals(export.getClass(), Printer.class);
+//        export.export();
     }
 
 }

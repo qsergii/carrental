@@ -5,6 +5,9 @@ import com.epam.carrental.dao.entity.User;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * Abstract class to user methods
+ */
 public abstract class UserDao {
     public abstract User validate(User user);
 

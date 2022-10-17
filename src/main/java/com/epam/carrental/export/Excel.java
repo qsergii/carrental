@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Generate Excel file export for invoices
+ */
 public class Excel implements Exporter {
 
     @Override

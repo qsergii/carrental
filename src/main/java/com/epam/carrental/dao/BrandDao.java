@@ -4,6 +4,9 @@ import com.epam.carrental.dao.entity.Brand;
 
 import java.util.List;
 
+/**
+ * Abstract class to brands method
+ */
 public abstract class BrandDao {
     public abstract void insert(Brand carBrand) throws DBException;
 

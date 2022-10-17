@@ -10,6 +10,10 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Class for tag to generate car image
+ * depends on car image exist
+ */
 public class CarImage extends TagSupport {
     private final Logger log = LogManager.getLogger(getClass());
     private Car car;
@@ -26,7 +30,7 @@ public class CarImage extends TagSupport {
     @Override
     public int doStartTag() {
 
-        if(car == null){
+        if (car == null) {
             log.error("car equal null");
             return SKIP_BODY;
         }
@@ -39,7 +43,7 @@ public class CarImage extends TagSupport {
         }
         JspWriter out = pageContext.getOut();
         try {
-            out.print("<picture><img class=\""+classElement+"\" src=\"" + context.getAttribute("path") + subFolder + "/" + fileName + "\"></picture>");
+            out.print("<picture><img class=\"" + classElement + "\" src=\"" + context.getAttribute("path") + subFolder + "/" + fileName + "\"></picture>");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
