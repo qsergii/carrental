@@ -20,9 +20,9 @@ public class ManagerInvoicesController implements Controller {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if(request.getParameter("export") != null){
+        if (request.getParameter("export") != null) {
             export(request, response);
-        }else if(request.getParameter("id") != null){
+        } else if (request.getParameter("id") != null) {
             printOne(request, response);
         } else {
             printList(request, response);
@@ -31,7 +31,7 @@ public class ManagerInvoicesController implements Controller {
 
     private void export(HttpServletRequest request, HttpServletResponse response) {
         String export = request.getParameter("export");
-        if(export != null){
+        if (export != null) {
             List<Invoice> invoices = DAOFactory.getInstance().getInvoiceDAO().getAll();
             Exporter exporter = Export.export(export);
             exporter.export(request, response, invoices);

@@ -1,5 +1,7 @@
 package com.epam.carrental.controllers.auth;
 
+import com.epam.carrental.Captcha;
+import com.epam.carrental.LanguageBundle;
 import com.epam.carrental.controllers.Controller;
 import com.epam.carrental.dao.DAOFactory;
 import com.epam.carrental.dao.entity.Car;
@@ -19,6 +21,12 @@ public class LoginController implements Controller {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String captcha = request.getParameter("captcha");
+        if (!Captcha.isCorrect(request, captcha)) {
+            response.sendRedirect("login?message=" + LanguageBundle.getString("auth.captcha_incorrect"));
+            return;
+        }
+
         String login = Optional.ofNullable(request.getParameter("login")).orElse("");
         if (login.isEmpty()) {
             response.sendRedirect("login?message=Login empty. Type login and try again");

@@ -14,11 +14,11 @@ public class UserController implements Controller {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             printUser(request, response);
-        }catch (IOException e){
+        } catch (IOException e) {
             Logging.makeDescription(e);
-            try{
+            try {
                 response.sendError(500);
-            }catch (Exception e2){
+            } catch (Exception e2) {
                 Logging.makeDescription(e2);
             }
         } catch (ServletException e) {
@@ -28,7 +28,7 @@ public class UserController implements Controller {
 
     public void printUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         User user = (User) request.getAttribute("authUser");
-        if(user == null){
+        if (user == null) {
             response.sendRedirect("login");
             return;
         }

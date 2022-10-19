@@ -14,7 +14,6 @@ import java.io.IOException;
  */
 public class CarDriver {
     private static final Logger log = LogManager.getLogger(CarDriver.class);
-
     private static int price = 0;
     private static final String fileName;
 

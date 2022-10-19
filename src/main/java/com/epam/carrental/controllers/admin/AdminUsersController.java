@@ -81,7 +81,7 @@ public class AdminUsersController implements Controller {
         user.setLogin(login);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        if(!password.isEmpty()) {
+        if (!password.isEmpty()) {
             user.setPasswordAndSecure(password);
         }
         user.setRole(role);

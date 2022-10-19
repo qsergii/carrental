@@ -1,6 +1,5 @@
-package com.epam.carrental.entity;
+package com.epam.carrental.dao.entity;
 
-import com.epam.carrental.dao.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

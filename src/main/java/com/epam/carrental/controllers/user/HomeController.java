@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-
 public class HomeController implements Controller {
 
     private final Logger log = LogManager.getLogger(this.getClass());

@@ -63,6 +63,10 @@
                                 <input class="form-control" type="password" name="password2"
                                        placeholder="<fmt:message key="signup.Re_type_password"/>" required>
                             </div>
+                            <div class="mb-3">
+                                <img src="${path}/captcha/image.jpg"/>
+                                <input class="form-control" type="text" name="captcha" placeholder="captcha" required>
+                            </div>
                             <c:if test="${param.message != null}">
                                 <div class="alert alert-warning" role="alert">${param.message}</div>
                             </c:if>

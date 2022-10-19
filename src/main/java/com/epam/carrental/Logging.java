@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 /**
  * Util for create debug info
- * */
+ */
 public class Logging {
 
     public static String makeDescription(Exception exception) {

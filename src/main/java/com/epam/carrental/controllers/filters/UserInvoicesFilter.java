@@ -19,13 +19,13 @@ public class UserInvoicesFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
 
         try {
-            User user = (User)request.getAttribute("authUser");
-            if(user == null){
-                ((HttpServletResponse)response).sendRedirect("login");
-            }else{
+            User user = (User) request.getAttribute("authUser");
+            if (user == null) {
+                ((HttpServletResponse) response).sendRedirect("login");
+            } else {
                 chain.doFilter(request, response);
             }
-        } catch (IOException | ServletException e ) {
+        } catch (IOException | ServletException e) {
             log.error(Logging.makeDescription(e));
         }
     }

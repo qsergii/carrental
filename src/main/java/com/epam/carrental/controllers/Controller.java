@@ -10,7 +10,10 @@ import java.sql.SQLException;
 
 public interface Controller {
     default void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, SQLException, ServletException, DBException {}
+            throws IOException, SQLException, ServletException, DBException {
+    }
+
     default void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {}
+            throws Exception {
+    }
 }

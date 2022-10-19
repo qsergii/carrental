@@ -137,6 +137,14 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-inline -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
@@ -257,7 +265,7 @@
                     <execution>
                         <phase>compile</phase>
                         <goals>
-                            <goal>check</goal>
+                            <!--                            <goal>check</goal>-->
                         </goals>
                     </execution>
                 </executions>

@@ -13,10 +13,10 @@ public class SecurityManagerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        User user = (User)request.getAttribute("authUser");
-        if(user == null || (user.getRole() != Role.ADMIN && user.getRole() != Role.MANAGER)){
-            ((HttpServletResponse)response).sendError(403);
-        }else{
+        User user = (User) request.getAttribute("authUser");
+        if (user == null || (user.getRole() != Role.ADMIN && user.getRole() != Role.MANAGER)) {
+            ((HttpServletResponse) response).sendError(403);
+        } else {
             chain.doFilter(request, response);
         }
     }

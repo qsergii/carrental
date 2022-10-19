@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-;
-
 /**
  * Main controller
  * receive all request, map dispatcher, take processing to it
@@ -42,6 +40,7 @@ public class FrontController extends HttpServlet {
         dispatchers.put("/login", com.epam.carrental.controllers.auth.LoginController.class);
         dispatchers.put("/logout", com.epam.carrental.controllers.auth.LogoutController.class);
         dispatchers.put("/registration", com.epam.carrental.controllers.auth.RegistrationController.class);
+        dispatchers.put("/captcha/image.jpg", com.epam.carrental.Captcha.class);
 
         // manager
         dispatchers.put("/manager/orders", com.epam.carrental.controllers.manager.ManagerOrdersController.class);

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-class PrinterTest {
+class ExcelTest {
 
     @Test
     void export() {
@@ -17,7 +17,8 @@ class PrinterTest {
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
         List list = new ArrayList();
 
-        Printer export = new Printer();
-        Assertions.assertThrows(RuntimeException.class, () -> export.export(request, response, list));
+        Assertions.assertThrows(
+                NoClassDefFoundError.class,
+                () -> new Excel().export(request, response, list));
     }
 }

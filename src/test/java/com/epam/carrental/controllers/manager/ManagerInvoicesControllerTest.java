@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class ManagerInvoicesControllerTest {
 
     @Test
-    void doGet() {
+    void testDoGet() {
         Controller controller = new ManagerInvoicesController();
         Assertions.assertThrows(NullPointerException.class, () -> {
             controller.doGet(null, null);
@@ -15,10 +15,11 @@ class ManagerInvoicesControllerTest {
     }
 
     @Test
-    void doPost() {
+    void testDoPost() {
         Controller controller = new ManagerInvoicesController();
         Assertions.assertThrows(NullPointerException.class, () -> {
-            controller.doGet(null, null);
+            controller.doPost(null, null);
         });
     }
+
 }

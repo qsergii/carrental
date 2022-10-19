@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-class PrinterTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class PDFTest {
 
     @Test
     void export() {
@@ -17,7 +19,7 @@ class PrinterTest {
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
         List list = new ArrayList();
 
-        Printer export = new Printer();
+        PDF export = new PDF();
         Assertions.assertThrows(RuntimeException.class, () -> export.export(request, response, list));
     }
 }

@@ -31,8 +31,7 @@ public class CSV implements Exporter {
         }
     }
 
-    public static <T> void writeCsv(List<Invoice> docs, char separator, OutputStream output) throws IOException {
-
+    private void writeCsv(List<Invoice> docs, char separator, OutputStream output) throws IOException {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8));
 
         // header

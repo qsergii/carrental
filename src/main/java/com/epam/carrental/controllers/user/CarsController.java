@@ -14,11 +14,12 @@ import java.util.Optional;
 
 public class CarsController implements Controller {
     public final Logger log = LogManager.getLogger(this.getClass());
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getParameter("id") != null){
+        if (request.getParameter("id") != null) {
             writeCar(request, response);
-        }else {
+        } else {
             response.sendError(404);
         }
     }

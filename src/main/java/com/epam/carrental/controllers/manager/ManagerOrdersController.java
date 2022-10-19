@@ -27,6 +27,7 @@ public class ManagerOrdersController implements Controller {
             printList(request, response);
         }
     }
+
     private void printList(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("orders", DAOFactory.getInstance().getOrderDAO().getAll());
@@ -37,6 +38,7 @@ public class ManagerOrdersController implements Controller {
             throw new RuntimeException(e);
         }
     }
+
     private void printOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DBException {
         String orderIdString = request.getParameter("id");
         Order order;
@@ -54,11 +56,11 @@ public class ManagerOrdersController implements Controller {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
-        if(action == null){
+        if (action == null) {
             response.sendError(400);
             return;
         }
-        switch (action){
+        switch (action) {
             case "reject":
                 reject(request, response);
                 break;
@@ -101,7 +103,7 @@ public class ManagerOrdersController implements Controller {
         order.setDateReturn(new Date());
         order.setReturnDamage(damage);
         DAOFactory.getInstance().getOrderDAO().update(order);
-        if(amount != null && !amount.isEmpty()){
+        if (amount != null && !amount.isEmpty()) {
             Invoice invoice = new Invoice();
             invoice.setType(Invoice.Type.DAMAGE);
             invoice.setUser(order.getUser());

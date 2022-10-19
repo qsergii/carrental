@@ -42,6 +42,10 @@
                                 <div class="alert alert-warning" role="alert">${param.message}</div>
                             </c:if>
                             <div class="mb-3">
+                                <img src="${path}/captcha/image.jpg"/>
+                                <input class="form-control" type="text" name="captcha" placeholder="captcha" required>
+                            </div>
+                            <div class="mb-3">
                                 <button class="btn btn-primary d-block w-100" type="submit"><fmt:message
                                         key="login.sign_in"/></button>
                             </div>

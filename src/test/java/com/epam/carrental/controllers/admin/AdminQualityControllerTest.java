@@ -1,0 +1,32 @@
+package com.epam.carrental.controllers.admin;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AdminQualityControllerTest {
+
+    @Test
+    void doGet() throws ServletException, IOException {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        AdminQualityController controller = new AdminQualityController();
+        Assertions.assertThrows(NullPointerException.class, () -> controller.doGet(request, response));
+    }
+
+    @Test
+    void doPost() throws Exception {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        AdminQualityController controller = new AdminQualityController();
+//        Assertions.assertThrows(NumberFormatException.class, () -> controller.doPost(request, response));
+        controller.doPost(request, response);
+    }
+}
