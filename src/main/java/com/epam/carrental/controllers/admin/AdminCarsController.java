@@ -78,7 +78,6 @@ public class AdminCarsController implements Controller {
         if (action.equals("delete")) {
             delete(request, response);
         }
-        ;
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {

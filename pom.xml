@@ -145,7 +145,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -166,13 +165,6 @@
             <artifactId>ini4j</artifactId>
             <version>0.5.4</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
-        <!--        <dependency>-->
-        <!--            <groupId>javax.mail</groupId>-->
-        <!--            <artifactId>mail</artifactId>-->
-        <!--            <version>1.4.7</version>-->
-        <!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
         <dependency>
@@ -209,6 +201,13 @@
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.3</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/com.adobe.granite/com.adobe.granite.poi -->
         <dependency>
             <groupId>com.adobe.granite</groupId>

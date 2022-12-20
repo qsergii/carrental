@@ -32,18 +32,22 @@
                                 key="login.sign_up"/></a></p>
                         <form class="text-center" method="post">
                             <div class="mb-3">
-                                <input class="form-control" type="text" name="login" placeholder="Login" required>
+                                <input class="form-control" type="text" name="login"
+                                       placeholder="<fmt:message key="auth.login_word"/>"
+                                       required>
                             </div>
                             <div class="mb-3">
-                                <input class="form-control" type="password" name="password" placeholder="Password"
-                                       required>
+                                <input class="form-control" type="password" name="password" placeholder=
+                                <fmt:message key="auth.password"/>
+                                        required>
                             </div>
                             <c:if test="${param.message != null}">
                                 <div class="alert alert-warning" role="alert">${param.message}</div>
                             </c:if>
                             <div class="mb-3">
                                 <img src="${path}/captcha/image.jpg"/>
-                                <input class="form-control" type="text" name="captcha" placeholder="captcha" required>
+                                <input class="form-control" type="text" name="captcha"
+                                       placeholder="<fmt:message key="auth.captcha"/>" required>
                             </div>
                             <div class="mb-3">
                                 <button class="btn btn-primary d-block w-100" type="submit"><fmt:message

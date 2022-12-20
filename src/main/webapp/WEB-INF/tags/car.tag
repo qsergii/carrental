@@ -5,12 +5,12 @@
 
 <div class="col-sm-4">
     <div class="card">
-        <div class="card-body">
+        <div class="card-body d-flex flex-column justify-content-center">
             <span class="card-title">${car.brand.name}</span>
-            <span class="text-muted card-subtitle mb-2">${car.name}, <span>${car.quality.name}</span></span><br/>
-            <span class="card-text">${car.description} </span><br/>
+            <span class="text-muted card-subtitle mb-2">${car.name}, <span>${car.quality.name}</span></span>
+            <span class="card-text">${car.description}<br/></span>
             <customtag:carImage car="${car}"/>
-            <p><fmt:formatNumber value="${car.price}" type="number" minFractionDigits="2"/>
+            <p class="text-center"><fmt:formatNumber value="${car.price}" type="number" minFractionDigits="2"/>
                 <fmt:message key="UAH_per_day"/>
             </p>
             <a class="btn btn-primary" href="orders?car_id=${car.id}"><fmt:message key="Rent"/></a>

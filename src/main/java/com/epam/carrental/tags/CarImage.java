@@ -43,7 +43,8 @@ public class CarImage extends TagSupport {
         }
         JspWriter out = pageContext.getOut();
         try {
-            out.print("<picture><img class=\"" + classElement + "\" src=\"" + context.getAttribute("path") + subFolder + "/" + fileName + "\"></picture>");
+            out.print("<picture class=\"d-flex justify-content-center\"><img class=\"" + classElement + "\" src=\""
+                    + context.getAttribute("path") + subFolder + "/" + fileName + "\"></picture>");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -11,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 public class LoginController implements Controller {
@@ -23,7 +26,8 @@ public class LoginController implements Controller {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String captcha = request.getParameter("captcha");
         if (!Captcha.isCorrect(request, captcha)) {
-            response.sendRedirect("login?message=" + LanguageBundle.getString("auth.captcha_incorrect"));
+            response.setCharacterEncoding("UTF-8");
+            response.sendRedirect("login?message=" + encodeValue(LanguageBundle.getString("auth.captcha_incorrect")));
             return;
         }
 
@@ -56,5 +60,9 @@ public class LoginController implements Controller {
         } else {
             response.sendRedirect("home");
         }
+    }
+
+    private String encodeValue(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
     }
 }

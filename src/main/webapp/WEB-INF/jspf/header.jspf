@@ -16,7 +16,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                     <ul class="nav nav-tabs">
                         <c:if test="${requestScope.authUser != null}">
                             <c:choose>
@@ -32,9 +31,11 @@
                             </c:choose>
                         </c:if>
                     </ul>
-
                 </ul>
 
+                <div class="header-phone">
+                    <a id="client_link" class="nav-link" href="tel:+380505005050">+380(50)500-50-50</a>
+                </div>
                 <filetags:language/>
                 <c:if test="${requestScope.uri != '/login' && requestScope.uri != '/registration'}">
                     <filetags:user user="${requestScope.authUser}"/>

@@ -22,17 +22,19 @@ public class MysqlQualityDAO extends QualityDao {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             preparedStatement = connection.prepareStatement(
-                    "INSERT INTO qualities (name) VALUES (?)"
-                    , Statement.RETURN_GENERATED_KEYS);
+                    "INSERT INTO qualities (name) VALUES (?)",
+                    Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, quality.getName());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 quality.setId(resultSet.getInt(1));
+                return;
             }
+            throw new DBException("Can't insert quality");
         } catch (SQLException e) {
             log.error(Logging.makeDescription(e));
             String message = e.getMessage();
@@ -51,7 +53,7 @@ public class MysqlQualityDAO extends QualityDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.prepareStatement(
                     "UPDATE qualities SET name = ? WHERE id = ?"
             );
@@ -73,7 +75,7 @@ public class MysqlQualityDAO extends QualityDao {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.createStatement();
 
             if (statement.execute(MysqlConstants.QUALITY_GET_ALL)) {
@@ -86,7 +88,7 @@ public class MysqlQualityDAO extends QualityDao {
                 }
                 resultSet.close();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
@@ -100,7 +102,7 @@ public class MysqlQualityDAO extends QualityDao {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.createStatement();
 
             if (statement.execute(MysqlConstants.QUALITIES_GET_ALL_AVAILIBLE)) {
@@ -113,7 +115,7 @@ public class MysqlQualityDAO extends QualityDao {
                 }
                 resultSet.close();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
@@ -127,9 +129,8 @@ public class MysqlQualityDAO extends QualityDao {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             preparedStatement = connection.prepareStatement(MysqlConstants.QUALITY_GET_BY_ID);
-
             preparedStatement.setInt(1, id);
             if (preparedStatement.execute()) {
                 resultSet = preparedStatement.getResultSet();
@@ -140,7 +141,7 @@ public class MysqlQualityDAO extends QualityDao {
                     );
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, preparedStatement, resultSet);
@@ -153,7 +154,7 @@ public class MysqlQualityDAO extends QualityDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.prepareStatement(
                     "DELETE FROM qualities WHERE id = ?"
             );

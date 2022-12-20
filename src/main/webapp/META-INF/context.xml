@@ -1,5 +1,4 @@
 <Context>
-    <!--mysql-->
     <Resource
             name="jdbc/mysql.carrental"
             driverClassName="com.mysql.cj.jdbc.Driver"

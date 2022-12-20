@@ -18,4 +18,3 @@
     <a class="nav-link ${requestScope.uri == '/admin/users' ? 'active' : ''}" href="${path}/admin/users"><fmt:message
             key="menu.admin.users"/></a>
 </li>
-</li>

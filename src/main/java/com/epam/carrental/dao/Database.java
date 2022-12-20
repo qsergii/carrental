@@ -8,6 +8,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Class store connection link to database
@@ -27,6 +29,15 @@ public class Database {
             } catch (NamingException e) {
                 log.error(Logging.makeDescription(e));
             }
+        }
+    }
+
+    public static Connection getConnection() throws DBException {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            log.error("Can't get connection from datasourse, " + Logging.makeDescription(e));
+            throw new DBException("Can't connect to database", e);
         }
     }
 

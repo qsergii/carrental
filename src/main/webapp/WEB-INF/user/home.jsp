@@ -8,7 +8,7 @@
 
 <c:if test="${empty param.brand && empty param.quality && empty param.sort}">
     <customtag:Quote/>
-    <section id="slider">
+    <section id="slider" class="container">
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
@@ -55,7 +55,7 @@
     </section>
 </c:if>
 
-<section>
+<main>
     <div id="filters" class="container">
         <form>
             <div class="row">
@@ -109,7 +109,7 @@
     </div>
 
     <div id="cars" class="container py-4 py-xl-5">
-        <h1><fmt:message key="Rent_car_in_one_minute"/></h1>
+        <h1 class="text-center"><fmt:message key="Rent_car_in_one_minute"/></h1>
         <div class="border-3 mx-auto row" id="cards">
             <c:forEach items="${cars}" var="car">
                 <my:car car="${car}"/>
@@ -117,7 +117,7 @@
         </div>
     </div>
 
-    <div id="pagination" class="d-lg-flex justify-content-lg-center">
+    <div id="pagination" class="d-flex justify-content-center">
         <c:set var="thisPage" value="${not empty param.page ? param.page :  1}" scope="page"/>
         <nav>
             <ul class="pagination">
@@ -128,15 +128,16 @@
                         <a class="page_change page-link">${i}</a>
                     </li>
                 </c:forEach>
-                <li class="page-item"><a class="page-link page_change" aria-label="Next"><span
-                        aria-hidden="true">»</span></a>
+                <li class="page-item">
+                    <a class="page-link page_change" aria-label="Next">
+                        <span aria-hidden="true">»</span></a>
                 </li>
             </ul>
         </nav>
     </div>
 
     <script src="${path}/assets/js/home.js"/>
-</section>
+</main>
 
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
 

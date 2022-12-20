@@ -22,7 +22,7 @@ public class MysqlBrandDAO extends BrandDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.prepareStatement(
                     "INSERT INTO brands (name) VALUES (?)"
                     , Statement.RETURN_GENERATED_KEYS);
@@ -50,16 +50,16 @@ public class MysqlBrandDAO extends BrandDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.prepareStatement(
                     "UPDATE brands SET name = ? WHERE id = ?"
             );
             statement.setString(1, brand.getName());
             statement.setInt(2, brand.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
-            throw new DBException("Can't update brand", e);
+            throw new DBException("Can't update brand");
         } finally {
             DbUtils.closeQuietly(connection, statement, null);
         }
@@ -74,7 +74,7 @@ public class MysqlBrandDAO extends BrandDao {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.createStatement();
             if (statement.execute(MysqlConstants.BRAND_GET_ALL)) {
                 resultSet = statement.getResultSet();
@@ -86,7 +86,7 @@ public class MysqlBrandDAO extends BrandDao {
                 }
                 resultSet.close();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
@@ -101,7 +101,7 @@ public class MysqlBrandDAO extends BrandDao {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.createStatement();
 
             if (statement.execute(MysqlConstants.BRAND_GET_ALL_AVAILIBLE)) {
@@ -114,7 +114,7 @@ public class MysqlBrandDAO extends BrandDao {
                 }
                 resultSet.close();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
@@ -128,7 +128,7 @@ public class MysqlBrandDAO extends BrandDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.prepareStatement(MysqlConstants.BRAND_GET_BY_ID);
             statement.setInt(1, id);
             if (statement.execute()) {
@@ -140,7 +140,7 @@ public class MysqlBrandDAO extends BrandDao {
                     );
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
         } finally {
             DbUtils.closeQuietly(connection, statement, resultSet);
@@ -153,20 +153,20 @@ public class MysqlBrandDAO extends BrandDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Database.dataSource.getConnection();
+            connection = Database.getConnection();
             statement = connection.prepareStatement(
                     "DELETE FROM brands WHERE id = ?"
             );
             statement.setInt(1, brand.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             log.error(Logging.makeDescription(e));
 
             String message = e.getMessage();
             if (message.equals("Cannot delete or update a parent row: a foreign key constraint fails (`carrental`.`cars`, CONSTRAINT `brand_id_fk` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`))")) {
-                throw new DBException("Can't delete brand because it used in cars", e);
+                throw new DBException("Can't delete brand because it used in cars");
             } else {
-                throw new DBException("Can't delete brand", e);
+                throw new DBException("Can't delete brand");
             }
         } finally {
             DbUtils.closeQuietly(connection, statement, null);
