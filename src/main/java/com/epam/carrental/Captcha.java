@@ -19,11 +19,6 @@ public class Captcha implements Controller {
     private static String sessionParamName = "captchaCode";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            Mail.send("qsergey@gmail.com", "Test", "This is body");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         response.setContentType("image/jpg");
         /*
          * Define number characters contains the captcha image, declare global
