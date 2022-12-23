@@ -72,21 +72,24 @@
         </form>
 
         <hr/>
+        <%--Amount summary--%>
         <div>
             <div class="mb-3 row"><label class="form-label col-sm-2 col-form-label"><fmt:message
                     key="orders.amount_summary"/>:</label>
                 <div class="col-sm-10">
                     <input class="form-control form-control" type="text" name="login"
-                           value="${requestScope.amountSummary}" readonly/>
+                           value="<fmt:formatNumber value="${requestScope.amountSummary}" type="number" minFractionDigits="2"/>"
+                           readonly/>
                 </div>
             </div>
         </div>
     </div>
 
+    <%--Orders--%>
     <div class="container content">
         <h2><fmt:message key="orders.Orders"/></h2>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th><fmt:message key="orders.Order"/></th>
@@ -100,14 +103,16 @@
                 <tbody>
                 <c:forEach items="${requestScope.orders}" var="order">
                     <tr class='clickable-row' data-href='orders?id=${order.getId()}'>
-                        <td>${order.id}</td>
+                        <td class="text-end">${order.id}</td>
                         <td>${order.getCar().getBrand().getName()} ${order.getCar().getName()}</td>
-                        <td><input type="checkbox" ${order.isWithDriver() ? "checked" : ""} disabled/></td>
-                        <td>${order.getLeaseTerm()}</td>
+                        <td class="text-center"><input type="checkbox" ${order.isWithDriver() ? "checked" : ""}
+                                                       disabled/></td>
+                        <td class="text-end">${order.getLeaseTerm()}</td>
                         <td class="text-sm-end">
                             <fmt:formatNumber value="${order.price}" type="number" minFractionDigits="2"/>
                         </td>
-                        <td><input type="checkbox" ${order.rejected ? "checked" : ""} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${order.rejected ? "checked" : ""} disabled/>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>

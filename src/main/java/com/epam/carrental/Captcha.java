@@ -10,12 +10,20 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Captcha implements Controller {
     private static String sessionParamName = "captchaCode";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            Mail.send("qsergey@gmail.com", "Test", "This is body");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         response.setContentType("image/jpg");
         /*
          * Define number characters contains the captcha image, declare global
@@ -37,9 +45,15 @@ public class Captcha implements Controller {
         /*
          * Possible random characters in the image
          */
+//        Set<Character> prohibitedChars = new HashSet(Arrays.asList("iI1l".toCharArray()));
+        Set<Character> prohibitedChars = new HashSet(Arrays.asList("qwertyuopasdfghjkzxcvbnm23456789".toCharArray()));
         Random randChars = new Random();
-        String sImageCode = (Long.toString(Math.abs(randChars.nextLong()), 36)).substring(0, iTotalChars);
-
+        String sImageCode = (Long.toString(Math.abs(randChars.nextLong()), 36))
+//                .chars()
+//                .filter(i -> prohibitedChars.contains((char) i))
+//                .mapToObj(i -> "" + (char) i)
+//                .collect(Collectors.joining())
+                .substring(0, iTotalChars);
         /*
          * BufferedImage is used to create a create new image
          */

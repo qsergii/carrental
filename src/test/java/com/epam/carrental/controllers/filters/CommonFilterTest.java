@@ -13,7 +13,6 @@ class CommonFilterTest {
 
     @Test
     void init() throws ServletException, NoSuchFieldException, IllegalAccessException {
-
         Field field = CommonFilter.class.getDeclaredField("encoding");
         field.setAccessible(true);
 
@@ -22,7 +21,7 @@ class CommonFilterTest {
         CommonFilter filter = new CommonFilter();
         filter.init(config);
         String value = (String) field.get(filter);
-        Assertions.assertNull(value);
+        Assertions.assertEquals("UTF-8", value);
     }
 
     @Test

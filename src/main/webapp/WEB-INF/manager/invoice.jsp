@@ -49,7 +49,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="Payed"/>:</span>
                         <input class="form-control" type="text" name="name" readonly
-                               value="${requestScope.invoice.payedDate}"/>
+                               value="<fmt:formatDate value="${requestScope.invoice.payedDate}"  pattern="dd.MM.yyyy"/>"/>
                     </div>
 
                 </form>

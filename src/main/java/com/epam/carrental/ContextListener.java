@@ -23,7 +23,6 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-
         log.info("servlet initialize");
 
         ServletContext context = event.getServletContext();

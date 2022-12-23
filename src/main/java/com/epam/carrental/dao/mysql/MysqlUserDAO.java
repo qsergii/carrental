@@ -1,6 +1,7 @@
 package com.epam.carrental.dao.mysql;
 
 import com.epam.carrental.ContextListener;
+import com.epam.carrental.LanguageBundle;
 import com.epam.carrental.dao.DBException;
 import com.epam.carrental.Logging;
 import com.epam.carrental.dao.Database;
@@ -128,7 +129,9 @@ public class MysqlUserDAO extends UserDao {
         } catch (SQLException e) {
             String message = e.getMessage();
             if (message.matches("^Duplicate entry '(.*)' for key 'users\\.login_UNIQUE'$")) {
-                throw new DBException("User " + user.getLogin() + " already exist. Try different login", e);
+                log.error(user.getLogin() + " - Login already exist. Try different login");
+                throw new DBException(user.getLogin() + " - " + LanguageBundle.getStringEncoded("auth.login_exist"), e);
+//                throw new DBException("User " + user.getLogin() + " already exist. Try different login", e);
             } else {
                 throw new DBException("Can't create user", e);
             }
@@ -161,7 +164,7 @@ public class MysqlUserDAO extends UserDao {
             statement.setBoolean(++i, user.isBlocked());
             statement.setString(++i, user.getPassportNumber());
             statement.setDate(++i, user.getPassportValid() != null ? new Date(user.getPassportValid().getTime()) : null);
-            statement.setString(++i, user.getLanguage());
+            statement.setString(++i, user.getLanguage().substring(0, 2));
             statement.setInt(++i, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

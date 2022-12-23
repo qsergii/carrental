@@ -34,13 +34,13 @@
                         <div class="input-group">
                             <span class="input-group-text"><fmt:message key="orders.passport_valid"/>:</span>
                             <input class="form-control" type="text" name="name" readonly
-                                   value="${requestScope.order.passportValid}"/>
+                                   value="<fmt:formatDate value="${requestScope.order.passportValid}" pattern="dd.MM.yyyy"/>"/>
                         </div>
 
                         <div class="input-group">
                             <span class="input-group-text"><fmt:message key="Price"/>:</span>
                             <input class="form-control" name="price" type="number" min="0.01" step="0.01" readonly
-                                   value="${requestScope.order.price}"/>
+                                   value="<fmt:formatNumber value="${requestScope.order.price}" type="number" minFractionDigits="2"/>"/>
                         </div>
 
                         <div class="input-group">
@@ -77,13 +77,12 @@
     <section id="invoices">
         <div class="container">
             <div class="card">
-
                 <div class="card-body">
                     <h4 class="card-title"><fmt:message key="invoices.Invoices"/></h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-bordered">
                             <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th><fmt:message key="invoices.Invoice"/></th>
                                 <th><fmt:message key="Date"/></th>
                                 <th><fmt:message key="Order"/></th>
@@ -95,12 +94,14 @@
                             <tbody>
                             <c:forEach items="${requestScope.invoices}" var="car">
                                 <tr class='clickable-row' data-href='invoices?id=${car.getId()}'>
-                                    <td>${car.id}</td>
-                                    <td>${car.getDate()}</td>
-                                    <td>${car.getOrder().getId()}</td>
+                                    <td class="text-end">${car.id}</td>
+                                    <td><fmt:formatDate value="${car.getDate()}" pattern="dd.MM.yyyy"/></td>
+                                    <td class="text-end">${car.getOrder().getId()}</td>
                                     <td><fmt:message key="type.${car.type}"/></td>
-                                    <td>${car.amount}</td>
-                                    <td><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
+                                    <td class="text-end"><fmt:formatNumber value="${car.amount}" type="number"
+                                                                           minFractionDigits="2"/></td>
+                                    <td class="text-center"><input type="checkbox" ${car.payed ? "checked" : ""}
+                                                                   disabled/></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

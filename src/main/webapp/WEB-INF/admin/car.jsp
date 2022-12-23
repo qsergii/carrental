@@ -53,11 +53,13 @@
                         </select>
                     </div>
 
+                    <%--price--%>
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="Price"/>:</span>
                         <input class="form-control" name="price" type="number" min="0.01" step="0.01"
                                value="${requestScope.car.price}"/>
                     </div>
+
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="cars.description"/>:</span>
                         <textarea class="form-control" id="description"
@@ -81,11 +83,12 @@
     <script src="${path}/assets/js/admin-car.js"></script>
 </section>
 
+<%--Orders--%>
 <section>
     <div class="container content">
         <h2><fmt:message key="orders.Orders"/></h2>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th class="text-sm-center"><fmt:message key="orders.Order"/></th>
@@ -101,11 +104,12 @@
                     <tr class='clickable-row' data-href='orders?id=${car.getId()}'>
                         <td class="text-sm-end">${car.id}</td>
                         <td>${car.getUser().getLogin()}</td>
-                        <td><input type="checkbox" ${car.isWithDriver() ? "checked" : ""} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${car.withDriver ? "checked" : ""} disabled/>
+                        </td>
                         <td class="text-sm-end">${car.getLeaseTerm()}</td>
                         <td class="text-sm-end"><fmt:formatNumber value="${car.getPrice()}" type="number"
                                                                   minFractionDigits="2"/></td>
-                        <td><input type="checkbox" ${car.rejected ? "checked" : ""} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${car.rejected ? "checked" : ""} disabled/></td>
                     </tr>
                 </c:forEach>
                 </tbody>

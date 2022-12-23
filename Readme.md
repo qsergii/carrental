@@ -39,6 +39,8 @@ Architectural patterns:
 
 # Deployment
 
+-Tomcat - create resource to mysql database (for example in file context.xml) with name "jdbc/mysql.carrental"
+
 - Deploy application
 - Install MySQL server.
     - Create user and write username and password in file /META-INF/context.xml

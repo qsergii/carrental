@@ -47,12 +47,12 @@
                             <div class="mb-3">
                                 <input class="form-control" type="text" name="first_name"
                                        placeholder="<fmt:message key="signup.FirstName"/>"
-                                       required>
+                                       required minlength="2">
                             </div>
                             <div class="mb-3">
                                 <input class="form-control" type="text" name="last_name"
                                        placeholder="<fmt:message key="signup.LastName"/>"
-                                       required>
+                                       required minlength="2">
                             </div>
                             <div class="mb-3">
                                 <input class="form-control" type="password" name="password"
@@ -63,13 +63,17 @@
                                 <input class="form-control" type="password" name="password2"
                                        placeholder="<fmt:message key="signup.Re_type_password"/>" required>
                             </div>
+
                             <div class="mb-3">
-                                <img src="${path}/captcha/image.jpg"/>
-                                <input class="form-control" type="text" name="captcha" placeholder="captcha" required>
+                                <img src="${path}/captcha/image.jpg"/><br/><br/>
+                                <input class="form-control" type="text" name="captcha"
+                                       placeholder="<fmt:message key="auth.captcha"/>" required>
                             </div>
                             <c:if test="${param.message != null}">
                                 <div class="alert alert-warning" role="alert">${param.message}</div>
                             </c:if>
+
+
                             <div class="mb-3">
                                 <button class="btn btn-primary d-block w-100" type="submit"><fmt:message
                                         key="signup.signup"/></button>

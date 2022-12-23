@@ -112,7 +112,12 @@ public class AdminCarsController implements Controller {
                         car.setBlocked(Optional.ofNullable(element.getString()).orElse("").equals("on"));
                         break;
                     case "price":
-                        car.setPrice(Float.parseFloat(element.getString()));
+                        float price = 0;
+                        String priceString = element.getString();
+                        if (!priceString.isEmpty()) {
+                            price = Float.parseFloat(element.getString());
+                        }
+                        car.setPrice(price);
                         break;
                     case "quality":
                         car.setQuality(DAOFactory.getInstance().getQualityDAO().getById(Integer.parseInt(element.getString())));

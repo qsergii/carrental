@@ -24,7 +24,7 @@
     </context-param>
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
-        <param-value>en</param-value>
+        <param-value>en_US</param-value>
     </context-param>
 
     <session-config>

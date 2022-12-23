@@ -7,10 +7,6 @@ com.epam.carrental.controllers.manager
 com.epam.carrental.controllers.user
 com.epam.carrental.dao
 com.epam.carrental.dao.entity
-com.epam.carrental.dao.mssql
 com.epam.carrental.dao.mysql
-com.epam.carrental.dao.oracle
-com.epam.carrental.dao.postgres
-com.epam.carrental.entity
 com.epam.carrental.export
 com.epam.carrental.tags

@@ -123,10 +123,6 @@ form span {
     font-style: italic;
 }
 
-/*.card {*/
-/*    margin: 5px 0;*/
-/*    !*padding-top: 54px;*!*/
-/*}*/
 .card {
     margin: 10px;
     margin-right: 0;
@@ -202,10 +198,6 @@ input::-webkit-search-cancel-button {
 }
 
 /* USER CARD */
-#user {
-    /*display: flex;*/
-}
-
 .user_card:hover {
     cursor: pointer;
 }

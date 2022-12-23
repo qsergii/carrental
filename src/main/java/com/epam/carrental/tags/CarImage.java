@@ -29,7 +29,6 @@ public class CarImage extends TagSupport {
 
     @Override
     public int doStartTag() {
-
         if (car == null) {
             log.error("car equal null");
             return SKIP_BODY;

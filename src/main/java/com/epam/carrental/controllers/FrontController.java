@@ -50,6 +50,7 @@ public class FrontController extends HttpServlet {
         dispatchers.put("/admin", com.epam.carrental.controllers.admin.AdminController.class);
         dispatchers.put("/admin/cars", com.epam.carrental.controllers.admin.AdminCarsController.class);
         dispatchers.put("/admin/orders", com.epam.carrental.controllers.admin.AdminOrdersController.class);
+        dispatchers.put("/admin/invoices", com.epam.carrental.controllers.admin.AdminInvoicesController.class);
         dispatchers.put("/admin/brands", com.epam.carrental.controllers.admin.AdminBrandsController.class);
         dispatchers.put("/admin/qualities", com.epam.carrental.controllers.admin.AdminQualityController.class);
         dispatchers.put("/admin/driver", com.epam.carrental.controllers.admin.AdminDriverController.class);

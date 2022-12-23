@@ -11,9 +11,9 @@
         <h2><fmt:message key="user.Users"/></h2>
         <a class="btn btn-primary" href="?id=0"><fmt:message key="button.add"/></a>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
-                <tr>
+                <tr class="text-center">
                     <th><fmt:message key="user.login"/></th>
                     <th><fmt:message key="user.role"/></th>
                     <th><fmt:message key="user.first_name"/></th>
@@ -28,7 +28,7 @@
                         <td>${user.role}</td>
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
-                        <td><input type="checkbox" ${user.blocked ? 'checked' : ''} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${user.blocked ? 'checked' : ''} disabled/></td>
                     </tr>
                 </c:forEach>
                 </tbody>

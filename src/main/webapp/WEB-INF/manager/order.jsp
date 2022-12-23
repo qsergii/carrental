@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
@@ -34,13 +35,13 @@
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="orders.passport_valid"/>:</span>
                         <input class="form-control" type="text" name="name"
-                               value="${requestScope.order.passportValid}"/>
+                               value="<fmt:formatDate value="${requestScope.order.passportValid}"/>"/>
                     </div>
 
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="Price"/>:</span>
                         <input class="form-control" name="price" type="number" min="0.01" step="0.01"
-                               value="${requestScope.order.price}"/>
+                               value="<fmt:formatNumber value="${requestScope.order.price}" type="number" minFractionDigits="2"/>"/>
                     </div>
 
                     <div class="input-group">
@@ -52,7 +53,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="orders.rejected"/>:</span>
                         <input type="checkbox" class="form-check-input"
-                               name="blocked" ${requestScope.order.rejected ? 'checked':''} />
+                               name="blocked" ${requestScope.order.rejected ? 'checked':''}/>
                     </div>
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="orders.rejected_reason"/>:</span>
@@ -60,10 +61,23 @@
                                value="${requestScope.order.rejectReason}"/>
                     </div>
 
-                    <br>
                     <div class="input-group">
-                        <button class="btn btn-primary" type="submit"><fmt:message key="button.save"/></button>
+                        <span class="input-group-text"><fmt:message key="orders.return_date"/>:</span>
+                        <input class="form-control" type="text" name="return_date"
+                               value="<fmt:formatDate value="${requestScope.order.dateReturn}" pattern="dd.MM.yyyy"/>"
+                               readonly/>
                     </div>
+
+                    <div class="input-group">
+                        <span class="input-group-text"><fmt:message key="orders.return_damage"/>:</span>
+                        <input class="form-control" type="text" name="return_damage"
+                               value="${requestScope.order.returnDamage}" readonly/>
+                    </div>
+
+                    <br>
+                    <%--                    <div class="input-group">--%>
+                    <%--                        <button class="btn btn-primary" type="submit"><fmt:message key="button.save"/></button>--%>
+                    <%--                    </div>--%>
                 </form>
             </div>
         </div>
@@ -96,6 +110,7 @@
                 <span class="input-group-text" for="amount"><fmt:message key="Amount"/>:</span>
                 <input id="amount" class="form-control" type="number" name="amount"/><br/>
             </div>
+
             <br/>
             <button type="submit" class="btn btn-info"><fmt:message key="return.Return"/></button>
         </form>
@@ -105,13 +120,11 @@
 
 <section id="invoices">
     <div class="container content">
-
-
         <h2><fmt:message key="invoices.Invoices"/></h2>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
-                <tr>
+                <tr class="text-center">
                     <th><fmt:message key="invoices.Invoice"/></th>
                     <th><fmt:message key="Date"/></th>
                     <th><fmt:message key="Order"/></th>
@@ -124,13 +137,13 @@
                 <c:forEach items="${requestScope.invoices}" var="car">
                     <tr class='clickable-row' data-href='invoices?id=${car.getId()}'>
                         <td class="text-sm-end">${car.id}</td>
-                        <td>${car.getDate()}</td>
+                        <td><fmt:formatDate value="${car.getDate()}" pattern="dd.MM.yyyy"/></td>
                         <td class="text-sm-end">${car.getOrder().getId()}</td>
                         <td><fmt:message key="type.${car.type}"/></td>
                         <td class="text-sm-end">
                             <fmt:formatNumber value="${car.amount}" type="number" minFractionDigits="2"/>
                         </td>
-                        <td><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
                     </tr>
                 </c:forEach>
                 </tbody>

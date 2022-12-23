@@ -91,10 +91,11 @@ public class ManagerOrdersController implements Controller {
 
     private void returnCar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String orderIdString = request.getParameter("id");
-        String damage = request.getParameter("reason");
-        String amount = request.getParameter("amount");
+        String damage = request.getParameter("damage");
+        float amount = parseFloatParameter(request.getParameter("amount"));
+
         if (orderIdString == null || orderIdString.isEmpty()) {
-            response.sendError(400);
+            response.sendError(400, "Wrong parameters");
             return;
         }
 
@@ -103,16 +104,23 @@ public class ManagerOrdersController implements Controller {
         order.setDateReturn(new Date());
         order.setReturnDamage(damage);
         DAOFactory.getInstance().getOrderDAO().update(order);
-        if (amount != null && !amount.isEmpty()) {
+
+        // make invoice for damage
+        if (amount > 0) {
             Invoice invoice = new Invoice();
             invoice.setType(Invoice.Type.DAMAGE);
             invoice.setUser(order.getUser());
             invoice.setOrder(order);
-            invoice.setAmount(Float.parseFloat(amount));
+            invoice.setAmount(amount);
             DAOFactory.getInstance().getInvoiceDAO().insert(invoice, null);
         }
 
         response.sendRedirect("orders");
     }
 
+    private float parseFloatParameter(String value) {
+        if (value == null || value.isEmpty())
+            return 0;
+        return Float.parseFloat(value);
+    }
 }

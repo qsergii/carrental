@@ -31,7 +31,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="Amount"/>:</span>
                         <input class="form-control" type="text" name="name" readonly
-                               value="${requestScope.invoice.amount}"/>
+                               value="<fmt:formatNumber value="${requestScope.invoice.amount}" type="number" minFractionDigits="2"/>"/>
                     </div>
 
                     <div class="input-group">
@@ -42,7 +42,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="Payed"/>:</span>
                         <input class="form-control" type="text" name="name" readonly
-                               value="${requestScope.invoice.payedDate}"/>
+                               value="<fmt:formatDate value="${requestScope.invoice.payedDate}"  pattern="dd.MM.yyyy"/>"/>
                     </div>
                 </form>
 

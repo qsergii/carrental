@@ -46,12 +46,12 @@ public final class MysqlConstants {
 
     /* ORDERS */
 
-    public static final String ORDER_GET_ALL = "SELECT * FROM orders";
+    //    public static final String ORDER_GET_ALL = "SELECT * FROM orders ORDER BY id desc";
     public static final String ORDER_GET_BY_ID = "SELECT * FROM orders WHERE id=?";
-    public static final String ORDER_UPDATE = "UPDATE orders SET " +
-            "date=?, user_id=?, with_driver=?, lease_term=?, passport_number=?, passport_valid=?, car_id=?, price=?, " +
-            "rejected=?, reject_reason=? " +
-            "WHERE id=?";
+//    public static final String ORDER_UPDATE = "UPDATE orders SET " +
+//            "date=?, user_id=?, with_driver=?, lease_term=?, passport_number=?, passport_valid=?, car_id=?, price=?, " +
+//            "rejected=?, reject_reason=? " +
+//            "WHERE id=?";
 
     /* INVOICES */
     public static final String INVOICE_GET_ALL = "SELECT * FROM invoices";

@@ -10,7 +10,7 @@
 
 <section>
     <div class="container content">
-        <h2><fmt:message key="brands.brands"/></h2>
+        <h2><fmt:message key="brands.brand"/></h2>
         <filetags:message/>
         <div class="row row-cols-1">
             <custom:message/>
@@ -41,9 +41,9 @@
         <div class="container content">
             <h2><fmt:message key="cars.cars"/></h2>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-bordered">
                     <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th><fmt:message key="cars.quality"/></th>
                         <th><fmt:message key="cars.name"/></th>
                         <th><fmt:message key="cars.description"/></th>
@@ -57,7 +57,8 @@
                             <td>${car.getQuality().getName()}</td>
                             <td>${car.name}</td>
                             <td>${car.getDescription()}</td>
-                            <td><input type="checkbox" ${car.blocked ? "checked" : ""} disabled/></td>
+                            <td class="text-center"><input type="checkbox" ${car.blocked ? "checked" : ""} disabled/>
+                            </td>
                             <td class="text-sm-end"><fmt:formatNumber value="${car.price}" type="number"
                                                                       minFractionDigits="2"/></td>
                         </tr>

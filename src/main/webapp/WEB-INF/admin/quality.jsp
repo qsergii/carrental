@@ -32,9 +32,9 @@
         <div class="container content">
             <h2 class="card-title"><fmt:message key="cars.cars"/></h2>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-bordered">
                     <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th><fmt:message key="brands.brand"/></th>
                         <th><fmt:message key="cars.name"/></th>
                         <th><fmt:message key="cars.description"/></th>
@@ -49,7 +49,7 @@
                             <td>${car.getBrand().getName()}</td>
                             <td>${car.name}</td>
                             <td>${car.getDescription()}</td>
-                            <td>
+                            <td class="text-center">
                                 <input type="checkbox" ${car.isBlocked() ? "checked" : ""} disabled/></td>
                             <td class="text-sm-end"><fmt:formatNumber value="${car.price}" type="number"
                                                                       minFractionDigits="2"/></td>

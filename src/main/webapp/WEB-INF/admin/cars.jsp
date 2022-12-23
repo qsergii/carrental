@@ -13,7 +13,7 @@
         <div class="table-responsive">
             <table class="table">
                 <thead>
-                <tr>
+                <tr class="text-center">
                     <th><fmt:message key="cars.picture"/></th>
                     <th><fmt:message key="cars.brand"/></th>
                     <th><fmt:message key="cars.quality"/></th>
@@ -31,9 +31,9 @@
                         <td>${car.getQuality().getName()}</td>
                         <td>${car.name}</td>
                         <td>${car.getDescription()}</td>
-                        <td><input type="checkbox" ${car.blocked ? "checked" : ""} disabled></td>
-                        <td class="text-sm-end"><fmt:formatNumber value="${car.price}" type="number"
-                                                                  minFractionDigits="2"/></td>
+                        <td class="text-center"><input type="checkbox" ${car.blocked ? "checked" : ""} disabled></td>
+                        <td class="text-end"><fmt:formatNumber value="${car.price}" type="number"
+                                                               minFractionDigits="2"/></td>
                     </tr>
                 </c:forEach>
                 </tbody>

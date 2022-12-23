@@ -30,7 +30,7 @@ public class MysqlOrderDAO extends OrderDao {
             connection = Database.dataSource.getConnection();
             statement = connection.createStatement();
 
-            if (statement.execute(MysqlConstants.ORDER_GET_ALL)) {
+            if (statement.execute("SELECT * FROM orders ORDER BY id desc")) {
                 resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     list.add(extractOrder(resultSet));
@@ -176,22 +176,29 @@ public class MysqlOrderDAO extends OrderDao {
     public boolean update(Order order) {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = Database.dataSource.getConnection();
-            statement = connection.prepareStatement(MysqlConstants.ORDER_UPDATE);
+            statement = connection.prepareStatement(
+                    "UPDATE orders " +
+                            "SET date=?, user_id=?, with_driver=?, lease_term=?, " +
+                            "passport_number=?, passport_valid=?, car_id=?, price=?, " +
+                            "rejected=?, reject_reason=?, " +
+                            "return_date=?, return_damage=? " +
+                            "WHERE id=?");
 
             int i = 0;
-            statement.setDate(++i, new Date(order.getDate().getTime()));
+            statement.setDate(++i, MysqlUtils.getSqlDate(order.getDate()));
             statement.setInt(++i, order.getUser().getId());
             statement.setBoolean(++i, order.isWithDriver());
             statement.setInt(++i, order.getLeaseTerm());
             statement.setString(++i, order.getPassportNumber());
-            statement.setDate(++i, new java.sql.Date(order.getPassportValid().getTime()));
+            statement.setDate(++i, MysqlUtils.getSqlDate(order.getPassportValid()));
             statement.setInt(++i, order.getCar().getId());
             statement.setFloat(++i, order.getPrice());
             statement.setBoolean(++i, order.isRejected());
             statement.setString(++i, order.getRejectReason());
+            statement.setDate(++i, MysqlUtils.getSqlDate(order.getDateReturn()));
+            statement.setString(++i, order.getReturnDamage());
             statement.setInt(++i, order.getId());
 
             return statement.executeUpdate() > 0;
@@ -199,7 +206,7 @@ public class MysqlOrderDAO extends OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         } finally {
-            DbUtils.closeQuietly(connection, statement, resultSet);
+            DbUtils.closeQuietly(connection, statement, null);
         }
         return false;
     }
@@ -249,6 +256,8 @@ public class MysqlOrderDAO extends OrderDao {
             order.setPrice(resultSet.getFloat("price"));
             order.setRejected(resultSet.getBoolean("rejected"));
             order.setRejectReason(resultSet.getString("reject_reason"));
+            order.setDateReturn(MysqlUtils.getDate(resultSet.getDate("return_date")));
+            order.setReturnDamage(resultSet.getString("return_damage"));
             return order;
         } catch (SQLException e) {
             log.error(Logging.makeDescription(e));

@@ -13,18 +13,19 @@ import java.util.Properties;
  * Class for sending email using external server
  */
 public class Mail {
-
     private static final Session session;
+    private static final String username = System.getenv("smtp_username");
+    private static final String password = System.getenv("smtp_password");
 
     static {
-        Properties prop = new Properties();
-        prop.put("mail.smtp.auth", true);
-        prop.put("mail.smtp.starttls.enable", "true");
-        prop.put("mail.smtp.host", AppSettings.PROPERTIES.getProperty("mail.server"));
-        prop.put("mail.smtp.port", AppSettings.PROPERTIES.getProperty("mail.port"));
-        prop.put("mail.smtp.ssl.trust", AppSettings.PROPERTIES.getProperty("mail.server"));
+        Properties props = new Properties();
+        props.put("mail.smtp.host", System.getenv("smtp_server"));
+        props.put("mail.smtp.port", System.getenv("smtp_port"));
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", System.getenv("smtp_server"));
+        props.put("mail.smtp.auth", true);
 
-        session = Session.getInstance(prop, new Authenticator() {
+        session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -32,13 +33,9 @@ public class Mail {
         });
     }
 
-    private static final String username = AppSettings.PROPERTIES.getProperty("mail.username");
-    private static final String password = AppSettings.PROPERTIES.getProperty("mail.password");
-
     public static void send(String receiver, String subject, String msg) throws MessagingException {
-
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress("renar@qsergey.tk"));
+        message.setFrom(new InternetAddress(username));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
         message.setSubject(subject);
 
@@ -51,11 +48,9 @@ public class Mail {
         message.setContent(multipart);
 
         Transport.send(message);
-
     }
 
     public void addAttachment(Multipart multipart) throws MessagingException, IOException {
-
         MimeBodyPart attachmentBodyPart = new MimeBodyPart();
         attachmentBodyPart.attachFile(new File("path/to/file"));
         multipart.addBodyPart(attachmentBodyPart);

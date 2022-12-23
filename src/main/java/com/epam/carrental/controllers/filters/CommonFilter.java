@@ -20,7 +20,8 @@ public class CommonFilter extends HttpFilter {
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-        encoding = config.getInitParameter("encoding");
+//        encoding = config.getInitParameter("encoding");
+        encoding = "UTF-8";
     }
 
     @Override
@@ -58,18 +59,18 @@ public class CommonFilter extends HttpFilter {
                 }
             }
         }
-        if (language == null) {
+        if (language == null || language.isEmpty()) {
             language = "en";
         }
 
         session.setAttribute("language", language);
+        Config.set(session, Config.FMT_LOCALE, new Locale(language));
+
         if (user != null && (user.getLanguage() == null || !user.getLanguage().equals(language))) {
             user.setLanguage(language);
             DAOFactory.getInstance().getUserDAO().update(user);
         }
         LanguageBundle.setLanguage(language);
-
-        Config.set(session, Config.FMT_LOCALE, new java.util.Locale(language, language.toUpperCase(Locale.ROOT)));
     }
 
     private void authorizeUser(ServletRequest request) {
@@ -81,5 +82,4 @@ public class CommonFilter extends HttpFilter {
         }
         request.setAttribute("authUser", user);
     }
-
 }

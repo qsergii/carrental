@@ -15,14 +15,18 @@
 
                     <div id="name_group" class="input-group">
                         <span class="input-group-text"><fmt:message key="Car"/>:</span>
-                        <input class="form-control" type="text" name="name"
-                               value="${requestScope.order.car.brand.name} ${requestScope.order.car.name}"/>
+                        <input class="form-control clickable-row" type="text" name="name"
+                               data-href="cars?id=${requestScope.order.car.id}"
+                               value="${requestScope.order.car.brand.name} ${requestScope.order.car.name}"
+                               readonly/>
                     </div>
 
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="Client"/>:</span>
-                        <input class="form-control" type="text" name="name"
-                               value="${requestScope.order.user.login}"/>
+                        <input class="form-control clickable-row"
+                               data-href="users?id=${requestScope.order.user.id}" type="text" name="name"
+                               value="${requestScope.order.user.login}"
+                               readonly/>
                     </div>
 
                     <div class="input-group">
@@ -33,8 +37,8 @@
 
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="orders.passport_valid"/>:</span>
-                        <input class="form-control" type="text" name="name"
-                               value="${requestScope.order.passportValid}"/>
+                        <input class="form-control" type="date" pattern="\d{4}-\d{2}-\d{2}"
+                               name="name" value="${requestScope.order.passportValid}"/>
                     </div>
 
                     <div class="input-group">
@@ -43,7 +47,7 @@
                                value="${requestScope.order.price}"/>
                     </div>
 
-                    <div class="input-group">
+                    <div class=" input-group">
                         <span class="input-group-text"><fmt:message key="orders.with_driver"/>:</span>
                         <input type="checkbox" class="form-check-input"
                                name="blocked" ${requestScope.order.withDriver ? 'checked':''} />
@@ -103,15 +107,14 @@
 
 </section>
 
+<%--Invoices--%>
 <section id="invoices">
     <div class="container content">
-
-
         <h2><fmt:message key="invoices.Invoices"/></h2>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
-                <tr>
+                <tr class="text-center">
                     <th><fmt:message key="invoices.Invoice"/></th>
                     <th><fmt:message key="Date"/></th>
                     <th><fmt:message key="Order"/></th>
@@ -123,21 +126,19 @@
                 <tbody>
                 <c:forEach items="${requestScope.invoices}" var="car">
                     <tr class='clickable-row' data-href='invoices?id=${car.getId()}'>
-                        <td class="text-sm-end">${car.id}</td>
-                        <td>${car.getDate()}</td>
+                        <td class="text-end">${car.id}</td>
+                        <td><fmt:formatDate value="${car.getDate()}" pattern="dd.MM.yyyy"/></td>
                         <td class="text-sm-end">${car.getOrder().getId()}</td>
                         <td><fmt:message key="type.${car.type}"/></td>
                         <td class="text-sm-end">
                             <fmt:formatNumber value="${car.amount}" type="number" minFractionDigits="2"/>
                         </td>
-                        <td><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${car.payed ? "checked" : ""} disabled/></td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
-    </div>
-    </div>
     </div>
 </section>
 

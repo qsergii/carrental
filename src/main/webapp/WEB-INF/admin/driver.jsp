@@ -11,14 +11,16 @@
 
             <div class="input-group mb-3">
                 <span class="input-group-text" for="inBase"><fmt:message key="driver.current_price"/>:</span>
-                <input id="inBase" class="form-control" value="${requestScope.driverPrice}" readonly/>
+                <input id="inBase" class="form-control"
+                       value="<fmt:formatNumber value="${requestScope.driverPrice}" type="number" minFractionDigits="2"/>"
+                       readonly/>
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" for="price"><fmt:message key="driver.new_price"/>:</span>
                 <input id="price" class="form-control" name="price" type="number" required><br>
             </div>
-            
+
             <button class="btn btn-primary" type="submit"><fmt:message key="button.save"/></button>
         </form>
     </div>

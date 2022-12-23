@@ -44,11 +44,13 @@
                             <c:if test="${param.message != null}">
                                 <div class="alert alert-warning" role="alert">${param.message}</div>
                             </c:if>
+                            <%--                            <c:if test="${not sessionScope.trusted}">--%>
                             <div class="mb-3">
                                 <img src="${path}/captcha/image.jpg"/>
                                 <input class="form-control" type="text" name="captcha"
                                        placeholder="<fmt:message key="auth.captcha"/>" required>
                             </div>
+                            <%--                            </c:if>--%>
                             <div class="mb-3">
                                 <button class="btn btn-primary d-block w-100" type="submit"><fmt:message
                                         key="login.sign_in"/></button>

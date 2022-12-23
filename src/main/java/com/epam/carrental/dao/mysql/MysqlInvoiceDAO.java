@@ -191,7 +191,7 @@ public class MysqlInvoiceDAO extends InvoiceDao {
         try {
             connection = Database.dataSource.getConnection();
             statement = connection.prepareStatement(
-                    "SELECT * FROM invoices WHERE order_id = ?"
+                    "SELECT * FROM invoices WHERE order_id = ? ORDER BY id desc"
             );
             statement.setInt(1, order.getId());
             resultSet = statement.executeQuery();

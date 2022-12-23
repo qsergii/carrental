@@ -3,6 +3,8 @@ package com.epam.carrental;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -30,6 +32,10 @@ public class LanguageBundle {
             string = key;
         }
         return string;
+    }
+
+    public static String getStringEncoded(String key) {
+        return URLEncoder.encode(getString(key), StandardCharsets.UTF_8);
     }
 
     public static String lang(String key) {

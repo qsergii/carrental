@@ -11,7 +11,7 @@
         <h2><fmt:message key="brands.brands"/></h2>
         <a class="btn btn-primary" href="?id=0"><fmt:message key="button.add"/></a>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <tr>
                     <th><fmt:message key="brands.brand"/></th>
                 </tr>

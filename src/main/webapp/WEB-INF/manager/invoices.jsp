@@ -13,9 +13,9 @@
         <a href="?export=xlsx"><img src="${path}/assets/img/xlsx.png" alt="xlsx" width="64"/></a>
         <a href="?export=csv"><img src="${path}/assets/img/csv.webp" alt="csv" width="64"/></a>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
-                <tr>
+                <tr class="text-center">
                     <th><fmt:message key="invoices.Invoice"/></th>
                     <th><fmt:message key="Date"/></th>
                     <th><fmt:message key="Order"/></th>
@@ -28,12 +28,12 @@
                 <c:forEach items="${requestScope.invoices}" var="invoice">
                     <tr class='clickable-row' data-href='invoices?id=${invoice.getId()}'>
                         <td class="text-sm-end">${invoice.id}</td>
-                        <td>${invoice.getDate()}</td>
+                        <td><fmt:formatDate value="${invoice.getDate()}" pattern="dd.MM.yyyy"/></td>
                         <td class="text-sm-end">${invoice.getOrder().getId()}</td>
                         <td><fmt:message key="type.${invoice.type}"/></td>
                         <td class="text-sm-end">
                             <fmt:formatNumber value="${invoice.amount}" type="number" minFractionDigits="2"/></td>
-                        <td><input type="checkbox" ${invoice.payed ? "checked" : ""} disabled/></td>
+                        <td class="text-center"><input type="checkbox" ${invoice.payed ? "checked" : ""} disabled/></td>
                     </tr>
                 </c:forEach>
                 </tbody>
