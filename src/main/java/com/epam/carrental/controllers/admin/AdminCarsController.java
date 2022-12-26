@@ -179,12 +179,10 @@ public class AdminCarsController implements Controller {
         }
         try {
             DAOFactory.getInstance().getCarDAO().delete(car);
-//            response.sendRedirect("cars");
             response.getWriter().write("ok");
         } catch (DBException e) {
             log.error(Logging.makeDescription(e));
             String error = e.getMessage();
-//            response.sendRedirect("cars?id=" + id + "&message=" + error);
             response.getWriter().write(error);
         }
     }

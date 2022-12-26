@@ -40,14 +40,9 @@ public class Captcha implements Controller {
         /*
          * Possible random characters in the image
          */
-//        Set<Character> prohibitedChars = new HashSet(Arrays.asList("iI1l".toCharArray()));
         Set<Character> prohibitedChars = new HashSet(Arrays.asList("qwertyuopasdfghjkzxcvbnm23456789".toCharArray()));
         Random randChars = new Random();
         String sImageCode = (Long.toString(Math.abs(randChars.nextLong()), 36))
-//                .chars()
-//                .filter(i -> prohibitedChars.contains((char) i))
-//                .mapToObj(i -> "" + (char) i)
-//                .collect(Collectors.joining())
                 .substring(0, iTotalChars);
         /*
          * BufferedImage is used to create a create new image
@@ -60,13 +55,11 @@ public class Captcha implements Controller {
 
         // Draw background rectangle and noisey filled round rectangles
         int iCircle = 15;
-        //g2dImage.fillRect(0, 0, iWidth, iHeight);
         for (int i = 0; i < iCircle; i++) {
             g2dImage.setColor(new Color(randChars.nextInt(255), randChars.nextInt(255), randChars.nextInt(255)));
             int iRadius = (int) (Math.random() * iHeight / 2.0);
             int iX = (int) (Math.random() * iWidth - iRadius);
             int iY = (int) (Math.random() * iHeight - iRadius);
-            //g2dImage.fillRoundRect(iX, iY, iRadius * 2, iRadius * 2,100,100);
         }
         g2dImage.setFont(fntStyle1);
         for (int i = 0; i < iTotalChars; i++) {
@@ -83,7 +76,6 @@ public class Captcha implements Controller {
          */
         OutputStream osImage = response.getOutputStream();
         ImageIO.write(biImage, "jpeg", osImage);
-        //osImage.close();
 
         /*
          * Dispose function is used destory an image object
@@ -92,7 +84,6 @@ public class Captcha implements Controller {
 
         HttpSession session = request.getSession();
         session.setAttribute(sessionParamName, sImageCode);
-        //System.out.println("Captcha Page :"+session.getAttribute("dns_security_code"));
     }
 
     public static boolean isCorrect(HttpServletRequest request, String userInput) {

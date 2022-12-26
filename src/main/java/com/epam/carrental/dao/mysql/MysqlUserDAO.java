@@ -131,7 +131,6 @@ public class MysqlUserDAO extends UserDao {
             if (message.matches("^Duplicate entry '(.*)' for key 'users\\.login_UNIQUE'$")) {
                 log.error(user.getLogin() + " - Login already exist. Try different login");
                 throw new DBException(user.getLogin() + " - " + LanguageBundle.getStringEncoded("auth.login_exist"), e);
-//                throw new DBException("User " + user.getLogin() + " already exist. Try different login", e);
             } else {
                 throw new DBException("Can't create user", e);
             }

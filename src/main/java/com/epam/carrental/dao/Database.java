@@ -15,7 +15,6 @@ import java.sql.SQLException;
  * Class store connection link to database
  */
 public class Database {
-
     private static final Logger log = LogManager.getLogger(Database.class);
 
     public static DataSource dataSource;

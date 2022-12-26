@@ -20,7 +20,6 @@ public class CommonFilter extends HttpFilter {
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-//        encoding = config.getInitParameter("encoding");
         encoding = "UTF-8";
     }
 

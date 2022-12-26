@@ -33,10 +33,9 @@ public class InvoicesController implements Controller {
     private void export(HttpServletRequest request, HttpServletResponse response) {
         String export = request.getParameter("export");
         if (export != null) {
-            List<Invoice> invoices = DAOFactory.getInstance().getInvoiceDAO().getAll();
+            List<Invoice> invoices = DAOFactory.getInstance().getInvoiceDAO().getByUser((User) request.getAttribute("authUser"));
             Exporter exporter = Export.export(export);
             exporter.export(request, response, invoices);
-//            response.sendRedirect(file);
         }
     }
 

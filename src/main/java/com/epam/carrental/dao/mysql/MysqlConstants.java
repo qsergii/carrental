@@ -16,9 +16,6 @@ public final class MysqlConstants {
                     "            ON brands.id = cars.brand_id\n" +
                     "ORDER BY name";
     public static final String BRAND_GET_BY_ID = "SELECT * FROM brands WHERE id=?";
-//    public static final String BRAND_ADD = "INSERT INTO brands (name) VALUES (?)";
-//    public static final String BRAND_UPDATE = ;
-//    public static final String BRAND_DELETE_BY_ID = ;
 
     /* QUALITIES */
 
@@ -32,26 +29,15 @@ public final class MysqlConstants {
                     "            ON qualities.id = cars.quality_id\n" +
                     "ORDER BY name";
     public static final String QUALITY_GET_BY_ID = "SELECT * FROM qualities WHERE id=?";
-//    public static final String QUALITY_ADD = ;
-    //    public static final String QUALITY_UPDATE = ;
-//    public static final String QUALITY_DELETE_BY_ID = ;
 
     /* USERS */
 
     public static final String USERS_GET_ALL = "SELECT * FROM users";
-    //    public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id=?";
     public static final String GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login=?";
-//    public static final String INSERT_USER = "INSERT INTO users (login, password, role, blocked) VALUES (?, ?, ?, ?)";
-    //public static final String USER_UPDATE = "UPDATE users SET login=?, password=?, role=?, blocked=? WHERE id=?";
 
     /* ORDERS */
 
-    //    public static final String ORDER_GET_ALL = "SELECT * FROM orders ORDER BY id desc";
     public static final String ORDER_GET_BY_ID = "SELECT * FROM orders WHERE id=?";
-//    public static final String ORDER_UPDATE = "UPDATE orders SET " +
-//            "date=?, user_id=?, with_driver=?, lease_term=?, passport_number=?, passport_valid=?, car_id=?, price=?, " +
-//            "rejected=?, reject_reason=? " +
-//            "WHERE id=?";
 
     /* INVOICES */
     public static final String INVOICE_GET_ALL = "SELECT * FROM invoices";

@@ -26,14 +26,12 @@ public class LoginController implements Controller {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-//        if (!((boolean) Optional.ofNullable(session.getAttribute("trusted")).orElse(false))) {
         String captcha = request.getParameter("captcha");
         if (!Captcha.isCorrect(request, captcha)) {
             response.setCharacterEncoding("UTF-8");
             response.sendRedirect("login?message=" + encodeValue(LanguageBundle.getString("auth.captcha_incorrect")));
             return;
         }
-//        }
 
         String login = Optional.ofNullable(request.getParameter("login")).orElse("");
         if (login.isEmpty()) {
@@ -56,7 +54,6 @@ public class LoginController implements Controller {
             return;
         }
         request.getSession().setAttribute("userId", user.getId());
-        session.setAttribute("trusted", true);
 
         afterLoginRedirect(request, response);
     }

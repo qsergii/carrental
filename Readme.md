@@ -49,3 +49,9 @@ Architectural patterns:
     - for demo data run scripts from file /extra/sql/{table name}.sql for each table (if needed)
 - Make registration as user, in table users change data in column 'role' to 0. This user become admin.
 - Under admin get into Driver menu and set Driver price.
+- Set environment variables for smtp server:
+
+1. smtp_server
+2. smtp_port
+3. smtp_username
+4. smtp_password

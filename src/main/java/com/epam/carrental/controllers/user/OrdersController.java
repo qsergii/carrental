@@ -143,6 +143,12 @@ public class OrdersController implements Controller {
             return;
         }
 
+        float ammount = price;
+        if (withDriver) {
+            ammount += CarDriver.getPrice();
+        }
+        ammount *= leaseTerm;
+
         Order order = new Order();
         order.setUser(user);
         order.setLeaseBegin(leaseBegin);
@@ -152,7 +158,7 @@ public class OrdersController implements Controller {
         order.setPassportNumber(passportNumber);
         order.setPassportValid(passportValid);
         order.setCar(car);
-        order.setPrice(price);
+        order.setPrice(ammount);
 
         Connection connection = null;
         try {

@@ -14,7 +14,6 @@ function reloadWithParams(event) {
     let quality_id = document.getElementById("filter_quality").value;
     let sort_id = document.getElementById("sort_by").value;
 
-    // var url = window.location.href;
     var url = window.location.pathname;
     if (brand_id) {
         url = addParameter(url, "brand=" + brand_id);
@@ -52,7 +51,6 @@ function reloadWithParams(event) {
         if (this.classList.contains("page-link")) {
             page = this.text;
         } else if (params.has('page')) {
-            // page = params.get('page');
             page = 1;
         }
     }
